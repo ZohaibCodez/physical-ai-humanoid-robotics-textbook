@@ -1,55 +1,124 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+==================
+Version Change: Initial → 1.0.0
+Type: MAJOR - Initial constitution ratification
+
+Modified Principles:
+- All principles newly defined (8 core principles established)
+
+Added Sections:
+- Core Principles (8 principles)
+- Technology Standards
+- Quality & Deployment Standards
+- Governance
+
+Templates Status:
+✅ spec-template.md - Compatible (user stories align with Educational Excellence)
+✅ plan-template.md - Compatible (constitution check gates align)
+✅ tasks-template.md - Compatible (task organization supports curriculum structure)
+
+Follow-up TODOs:
+- None - all placeholders resolved
+-->
+
+# Physical AI & Humanoid Robotics Textbook Constitution
+
+**Mission**: Create a comprehensive, AI-native technical textbook for teaching a 13-week Physical AI & Humanoid Robotics course. The textbook will bridge the gap between digital AI and embodied intelligence, enabling students to design, simulate, and deploy humanoid robots.
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Educational Excellence
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Content MUST be technically accurate and research-backed. The textbook employs a progressive learning structure from foundations to advanced topics, with a practical, hands-on approach incorporating real-world examples. All explanations must be clear and suitable for students with AI background but new to robotics. Include diagrams, code examples, and visual aids where applicable to enhance comprehension.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rationale**: Educational quality is non-negotiable. Students investing time in this course deserve content that is both accurate and pedagogically sound, building confidence through structured progression.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Curriculum Alignment (NON-NEGOTIABLE)
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+The 13-week course structure MUST be followed strictly. All 4 modules (ROS 2, Gazebo/Unity, NVIDIA Isaac, VLA) MUST be covered completely. All specified learning outcomes and assessments MUST be included. The weekly breakdown MUST be preserved exactly as specified with no deviations.
 
-### [PRINCIPLE_6_NAME]
+**Rationale**: This textbook serves a specific curriculum with defined learning outcomes. Any deviation compromises the course's integrity and student success metrics.
 
+### III. Technical Depth
 
-[PRINCIPLE__DESCRIPTION]
+Balance theory with practical implementation. Provide working code examples for ROS 2, Python, and relevant frameworks. Include complete setup instructions for required tools and environments. Address hardware requirements and alternatives (cloud vs on-premise solutions).
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Robotics education fails when it is purely theoretical. Students need hands-on skills to succeed in industry roles or research positions.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Docusaurus Best Practices
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Use proper Markdown formatting for optimal rendering. Maintain logical sidebar navigation structure. Leverage MDX features for interactive components where beneficial. Ensure mobile-responsive and accessible design. Optimize for fast page load times and efficient image handling.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale**: Technical content loses value if presentation is poor. Modern web standards ensure the textbook is accessible across devices and user contexts.
+
+### V. AI-Native Design
+
+Structure content for easy RAG chatbot integration (future phase). Use clear section headings and semantic markup throughout. Maintain consistent terminology across all chapters. Design for future personalization and multi-language translation features.
+
+**Rationale**: AI-assisted learning is the future. Preparing the content structure now enables powerful enhancement features without costly refactoring later.
+
+### VI. Deployment Readiness
+
+Configuration MUST be GitHub Pages compatible. Automated deployment via GitHub Actions is required. Clean, professional URL structure MUST be maintained. Proper SEO and metadata MUST be implemented.
+
+**Rationale**: A textbook that cannot be reliably deployed and accessed fails its primary function. Automation ensures consistency and reduces maintenance burden.
+
+### VII. Code Quality
+
+All code examples MUST be tested and functional before publication. Follow industry best practices and conventions. Include comments and explanations within code blocks. Provide complete setup instructions for every code example.
+
+**Rationale**: Broken code examples destroy student confidence and waste instructional time. Quality code demonstrates professionalism and builds trust.
+
+### VIII. Maintainability
+
+Maintain clear directory structure. Create reusable components and templates. Ensure well-documented configuration. Design for easy content updates and extensions.
+
+**Rationale**: Educational content evolves. A maintainable structure allows updates to keep pace with technological advances in robotics and AI.
+
+## Technology Standards
+
+**Platform**: Docusaurus v3.x (REQUIRED)  
+**Hosting**: GitHub Pages (REQUIRED)  
+**Repository**: Public GitHub repository (REQUIRED)  
+**Languages**: Markdown/MDX for content; JavaScript/TypeScript for components  
+**Code Examples**: ROS 2, Python 3.10+, relevant robotics frameworks  
+**Version Control**: Git with semantic commits and clear history
+
+## Quality & Deployment Standards
+
+**Success Criteria**:
+- Complete textbook covering all 13 weeks of curriculum
+- Successfully deployed to GitHub Pages
+- Professional appearance and intuitive navigation
+- All code examples verified and functional
+- Submission deadline requirements met (Nov 30, 2025)
+
+**Performance Requirements**:
+- Page load times <3 seconds on standard connections
+- Mobile-responsive on devices 320px width and above
+- WCAG 2.1 Level AA accessibility compliance
+- SEO score >90 on Lighthouse audits
+
+**Testing Gates**:
+- All code examples must execute without errors
+- Navigation structure must be validated
+- Broken links detected and fixed before deployment
+- Spelling and grammar checked
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other project practices and decisions. Any amendments require:
+1. Documentation of the proposed change with rationale
+2. Impact assessment on existing content and templates
+3. Version bump following semantic versioning rules
+4. Update of LAST_AMENDED_DATE
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Versioning Policy**:
+- MAJOR: Backward incompatible changes (e.g., removing core principles, changing mission)
+- MINOR: New principles added or material expansions to guidance
+- PATCH: Clarifications, wording improvements, non-semantic refinements
+
+**Compliance**: All content contributions, pull requests, and reviews MUST verify compliance with these principles. Deviations require explicit justification and approval. For runtime development guidance, refer to `.github/copilot-instructions.md`.
+
+**Version**: 1.0.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-03

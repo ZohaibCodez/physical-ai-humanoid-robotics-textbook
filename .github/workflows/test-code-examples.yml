@@ -1,0 +1,38 @@
+name: Test Code Examples
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**/*.md'
+      - 'static/files/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**/*.md'
+
+jobs:
+  test-ros2-examples:
+    runs-on: ubuntu-latest
+    container:
+      image: osrf/ros:humble-desktop
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup ROS 2 environment
+        run: |
+          source /opt/ros/humble/setup.bash
+          echo "ROS_DISTRO=$ROS_DISTRO" >> $GITHUB_ENV
+      
+      - name: Extract and test Python code examples
+        run: |
+          echo "Extracting Python code blocks from Markdown files..."
+          # This is a placeholder - actual implementation would parse MD files
+          # and extract code blocks tagged with 'python' for testing
+          echo "Code example testing will be implemented in future iterations"
+      
+      - name: Test example compilation
+        run: |
+          echo "Testing C++ examples compilation..."
+          # Placeholder for future C++ example testing
+          echo "C++ testing will be implemented in future iterations"

@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "Physical AI & Humanoid Robotics Textbook - Content Creation & Deployment"
 
+## Clarifications
+
+### Session 2025-12-03
+
+- Q: Content creation and authoring workflow strategy → A: Progressive delivery with weekly milestones (deploy module-by-module as completed)
+- Q: Diagram and visual asset creation approach → A: Mix of existing open-source assets with custom diagrams created as needed
+- Q: Content review and quality assurance process → A: Technical peer review with domain expert sign-off per module
+- Q: Code example testing environment → A: Automated testing in Docker containers matching target environment (Ubuntu 22.04, ROS 2 Humble)
+- Q: Deployment strategy for incomplete modules → A: Show in navigation as "Coming Soon" with planned release date
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Core Navigation and Content Access (Priority: P1)
@@ -123,6 +133,7 @@ As a student completing the course, I want clear assessment descriptions, projec
 - **FR-003**: Sidebar navigation MUST display hierarchical structure with expandable/collapsible module groups
 - **FR-004**: Each page MUST display breadcrumb navigation showing current location in curriculum hierarchy
 - **FR-005**: Textbook MUST provide Previous/Next chapter navigation at bottom of each page
+- **FR-006**: Incomplete modules MUST appear in navigation marked as "Coming Soon" with planned release date to manage student expectations
 
 **Code and Technical Content**
 - **FR-006**: Code blocks MUST support syntax highlighting for Python, XML (URDF), YAML, Bash, and C++
@@ -164,6 +175,7 @@ As a student completing the course, I want clear assessment descriptions, projec
 - **FR-032**: Site MUST generate sitemap.xml for search engine indexing
 - **FR-033**: Site MUST load main content within 3 seconds on standard broadband (5 Mbps)
 - **FR-034**: Site MUST be usable without JavaScript for core reading functionality (progressive enhancement)
+- **FR-035**: Each module MUST undergo technical peer review with domain expert sign-off before deployment
 
 ### Key Entities
 
@@ -207,7 +219,7 @@ As a student completing the course, I want clear assessment descriptions, projec
 **Content Completeness**
 - **SC-009**: 100% of 13 weeks curriculum content is present and properly formatted
 - **SC-010**: Every chapter includes all required sections (objectives, content, examples, exercises, summary, resources)
-- **SC-011**: All code examples are tested and verified to run in target environments
+- **SC-011**: All code examples are tested and verified to run in Docker containers matching target environment (Ubuntu 22.04, ROS 2 Humble)
 - **SC-012**: All external links are validated and functional at deployment time
 
 **Accessibility and Quality**
@@ -239,6 +251,8 @@ As a student completing the course, I want clear assessment descriptions, projec
 - Modern web browsers (released within last 2 years) are used by 95%+ of students
 - Content will initially be in English only; translations are future work
 - Students are comfortable with command-line interfaces for ROS 2 and simulation tools
+- Content will be developed and deployed progressively with weekly milestones, allowing module-by-module delivery as each is completed
+- Visual assets will leverage existing open-source robotics diagrams (with proper attribution) supplemented by custom-created diagrams for course-specific concepts
 
 ## Dependencies
 
@@ -259,6 +273,7 @@ As a student completing the course, I want clear assessment descriptions, projec
 - Modern browser support (Chrome/Firefox/Safari/Edge, last 2 versions)
 - Markdown/MDX rendering capabilities
 - Syntax highlighting libraries (Prism.js, bundled with Docusaurus)
+- Docker for automated code example testing in CI/CD pipeline
 
 **Curriculum Dependencies**
 - Final course curriculum structure must be confirmed before content creation

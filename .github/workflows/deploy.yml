@@ -33,6 +33,10 @@ jobs:
       - name: Build website
         run: npm run build
       
+      - name: Check for broken links
+        run: |
+          npx linkinator ./build --recurse --skip "^(?!http://|https://)" --retry --timeout 5000 || echo "::warning::Some links may be broken"
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:

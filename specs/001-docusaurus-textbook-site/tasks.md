@@ -141,17 +141,17 @@
 - [X] T050 [P] [US2] Add XML URDF example to docs/week-03-05/03-robot-state-publisher.md with syntax highlighting and comments
 - [X] T051 [P] [US2] Add YAML launch file example to docs/week-03-05/04-tf2-transformations.md with parameter explanations
 - [X] T052 [P] [US2] Add Bash installation script example to docs/appendix/software-installation.md with step-by-step comments
-- [ ] T053 [P] [US2] Add C++ ROS 2 node example to docs/week-08-10/05-moveit2-integration.md with compilation instructions
-- [ ] T054 [P] [US2] Create MDX tabs component example in docs/week-06-07/01-computer-vision-for-robotics.md for Gazebo vs Unity alternatives
-- [ ] T055 [P] [US2] Add collapsible code blocks for longer examples (>30 lines) in docs/week-11-12/02-bipedal-locomotion.md
+- [X] T053 [P] [US2] Add C++ ROS 2 node example to docs/week-08-10/05-moveit2-integration.md with compilation instructions
+- [X] T054 [P] [US2] Create MDX tabs component example in docs/week-06-07/01-computer-vision-for-robotics.md for Gazebo vs Unity alternatives
+- [X] T055 [P] [US2] Add collapsible code blocks for longer examples (>30 lines) in docs/week-11-12/02-bipedal-locomotion.md
 - [X] T056 [P] [US2] Add troubleshooting section with error handling code examples in docs/appendix/troubleshooting.md
-- [ ] T057 [US2] Test syntax highlighting for all languages (Python, XML, YAML, Bash, C++) across chapters
-- [ ] T058 [US2] Test copy button functionality on all code blocks - verify clipboard works
-- [ ] T059 [US2] Test collapsible code sections - verify expand/collapse animations work
-- [ ] T060 [US2] Test tabs component - verify switching between alternatives works smoothly
+- [X] T057 [US2] Test syntax highlighting for all languages (Python, XML, YAML, Bash, C++) across chapters
+- [X] T058 [US2] Test copy button functionality on all code blocks - verify clipboard works
+- [X] T059 [US2] Test collapsible code sections - verify expand/collapse animations work
+- [X] T060 [US2] Test tabs component - verify switching between alternatives works smoothly
 - [X] T061 [US2] Create test script in .github/workflows/test-code-examples.yml to validate Python examples in Docker (osrf/ros:humble-desktop)
 - [ ] T062 [US2] Run Docker-based tests on sample ROS 2 code examples and verify they execute without errors
-- [ ] T063 [US2] Deploy updated site and verify all code examples display correctly with syntax highlighting
+- [X] T063 [US2] Deploy updated site and verify all code examples display correctly with syntax highlighting
 
 **Checkpoint**: User Story 2 complete - Code examples work, syntax highlighting correct, copy buttons functional
 
@@ -251,14 +251,14 @@
 - [ ] T112 [P] Fix any Lighthouse performance issues identified (image optimization, bundle size, caching)
 - [ ] T113 [P] Run WCAG 2.1 Level AA accessibility scan with axe-core - fix all violations
 - [ ] T114 [P] Test with screen readers (NVDA on Windows, VoiceOver on Mac) - verify all content accessible
-- [ ] T115 [P] Add social media preview image (og:image) to static/img/ and configure in docusaurus.config.js
-- [ ] T116 [P] Verify sitemap.xml generation in build/ directory for search engine indexing
-- [ ] T117 [P] Add robots.txt to static/ directory with appropriate crawl directives
-- [ ] T118 [P] Configure meta tags in docusaurus.config.js for SEO (description, keywords, author)
+- [X] T115 [P] Add social media preview image (og:image) to static/img/ and configure in docusaurus.config.js
+- [X] T116 [P] Verify sitemap.xml generation in build/ directory for search engine indexing
+- [X] T117 [P] Add robots.txt to static/ directory with appropriate crawl directives
+- [X] T118 [P] Configure meta tags in docusaurus.config.js for SEO (description, keywords, author)
 - [ ] T119 [P] Test print CSS - verify chapters are printable with proper page breaks
-- [ ] T120 [P] Add deployment status badge to repository README.md showing build status
-- [ ] T121 [P] Create CONTRIBUTING.md guide for future content contributors with style guidelines
-- [ ] T122 [P] Add link checking to GitHub Actions workflow to detect broken external references
+- [X] T120 [P] Add deployment status badge to repository README.md showing build status
+- [X] T121 [P] Create CONTRIBUTING.md guide for future content contributors with style guidelines
+- [X] T122 [P] Add link checking to GitHub Actions workflow to detect broken external references
 - [ ] T123 [US1] Verify homepage load time <2s on standard broadband (5 Mbps throttle test)
 - [ ] T124 [US1] Verify chapter page load time <3s including images and syntax highlighting
 - [ ] T125 [US1] Verify search response time <500ms for typical queries

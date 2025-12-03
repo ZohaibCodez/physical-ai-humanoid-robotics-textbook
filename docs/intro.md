@@ -1,124 +1,62 @@
 ---
 sidebar_position: 1
-slug: /
+title: Introduction
 ---
 
-# Physical AI & Humanoid Robotics
+# Welcome to Physical AI & Humanoid Robotics
 
-Welcome to the comprehensive textbook for Physical AI and Humanoid Robotics! This 13-week curriculum will guide you from foundational concepts to building intelligent physical agents.
+Master the art and science of building intelligent physical agents through this comprehensive 13-week curriculum.
 
-## Course Overview
+## What You'll Learn
 
-This textbook covers the complete spectrum of building intelligent physical systems:
+This textbook covers the complete stack for building autonomous humanoid robots:
 
-- **Weeks 1-2**: Foundations of Physical AI - Understanding embodied intelligence
-- **Weeks 3-5**: ROS 2 Fundamentals - Robot Operating System programming
-- **Weeks 6-7**: Perception Systems - Computer vision, sensors, and data fusion
-- **Weeks 8-10**: Motion Planning & Control - Path planning and manipulation
-- **Weeks 11-12**: Humanoid Robotics - Bipedal locomotion and human-robot interaction
-- **Week 13**: Integration - Simulation, digital twins, and capstone project
-
-## Learning Outcomes
-
-By completing this textbook, you will be able to:
-
-- **Design** autonomous robots with sophisticated perception and decision-making capabilities
-- **Implement** ROS 2 nodes, services, and launch files for robot control
-- **Simulate** robots in Gazebo and NVIDIA Isaac Sim environments
-- **Develop** humanoid robot controllers for bipedal locomotion and manipulation
-- **Integrate** AI models with physical systems for intelligent behavior
-- **Deploy** complete robotics systems from simulation to real hardware
+- **Foundations** (Weeks 1-2): AI principles, coordinate systems, kinematics, dynamics
+- **ROS 2 Development** (Weeks 3-5): Nodes, topics, services, URDF, transforms, launch files
+- **Perception** (Weeks 6-7): Computer vision, sensor fusion, SLAM, object detection
+- **Motion Planning** (Weeks 8-10): Path planning, inverse kinematics, MoveIt2, manipulation
+- **Humanoid Robotics** (Weeks 11-12): Bipedal locomotion, gait generation, balance control
+- **Integration** (Week 13): Complete autonomous system with navigation, manipulation, and walking
 
 ## Prerequisites
 
-This textbook assumes you have:
+**Required:**
+- Python programming (intermediate level)
+- Linear algebra and calculus basics
+- Command-line proficiency
+- Basic ML understanding
 
-- Strong foundation in AI/ML concepts and Python programming
-- Familiarity with linear algebra and calculus
-- Basic understanding of computer systems and command-line interfaces
-- Access to either physical hardware (Jetson/workstation) or cloud computing
+**Hardware Options:**
+- 💰 Laptop only (simulation) - $0
+- 💻 Jetson Orin Nano setup - $200-300
+- 🚀 Full workstation + hardware - $800-5,000
 
-See the [Setup Instructions](appendix/setup-instructions.md) in the Appendix for detailed hardware and software requirements.
+## Course Structure
 
-## How to Use This Textbook
+### 🧠 Weeks 1-2: Foundations of Physical AI
+Build your mental model of embodied intelligence and understand how AI in physical robots differs from software-only systems.
 
-### Chapter Structure
+### ⚙️ Weeks 3-5: ROS 2 & Robot Programming
+Master the Robot Operating System (ROS 2) — the industry standard for robot software development.
 
-Each chapter follows a consistent format:
+### 👁️ Weeks 6-7: Perception Systems
+Give your robot eyes and environmental awareness through computer vision and sensor fusion.
 
-1. **Learning Objectives** - What you'll master by chapter's end
-2. **Introduction** - Context and motivation for the topic
-3. **Core Content** - Detailed explanations with examples
-4. **Code Examples** - Runnable snippets you can try immediately
-5. **Hands-On Exercise** - Practice what you've learned
-6. **Summary** - Key takeaways and review
-7. **Further Reading** - Resources for deeper exploration
+### 🎯 Weeks 8-10: Motion Planning & Control
+Teach your robot to move intelligently and manipulate objects in complex environments.
 
-### Code Examples
+### 🚶 Weeks 11-12: Humanoid Robotics
+Master bipedal locomotion and human-like manipulation — the pinnacle of robotics.
 
-All code examples are:
-
-- ✅ **Tested** in Docker containers matching the target environment
-- ✅ **Runnable** with clear setup instructions
-- ✅ **Commented** to explain key concepts
-- ✅ **Complete** with expected output
-
-Look for this pattern:
-
-```python
-#!/usr/bin/env python3
-# Example: Hello ROS 2 Node
-import rclpy
-from rclpy.node import Node
-
-class HelloNode(Node):
-    def __init__(self):
-        super().__init__('hello_node')
-        self.get_logger().info('Hello, Physical AI!')
-
-def main():
-    rclpy.init()
-    node = HelloNode()
-    rclpy.spin(node)
-    rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()
-```
-
-### Interactive Elements
-
-Throughout the textbook, you'll find:
-
-:::tip Pro Tip
-Helpful insights from experienced robotics engineers
-:::
-
-:::warning Important
-Critical information that could save you hours of debugging
-:::
-
-:::danger Caution
-Common mistakes that could damage hardware or cause errors
-:::
+### 🔗 Week 13: Integration & Capstone
+Build a complete autonomous humanoid system for your final project.
 
 ## Getting Started
 
-Ready to begin? Here's your path forward:
-
-1. **Setup Your Environment** - Visit [Setup Instructions](appendix/setup-instructions.md) to install required software
-2. **Week 1 Chapter 1** - Start with [Introduction to Physical AI](week-01-02/01-introduction-to-physical-ai.md)
-3. **Join the Community** - Check out our [GitHub repository](https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook) for discussions and updates
-
-## About This Project
-
-This textbook is open-source and continuously improving. We welcome contributions from the robotics and AI community!
-
-- 📖 **Format**: Built with Docusaurus for modern web experience
-- 🔄 **Updates**: Content refined based on student feedback
-- 🌍 **Accessible**: WCAG 2.1 AA compliant, mobile-responsive
-- 🎯 **Practical**: Focus on real-world applications and working code
+1. **Set up your environment** → [Setup Guide](appendix/setup-instructions.md)
+2. **Start with Week 1** → [Introduction to Physical AI](week-01-02/01-introduction-to-physical-ai.md)
+3. **Join the community** → [GitHub Discussions](https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook/discussions)
 
 ---
 
-**Ready to build intelligent physical agents?** Let's begin with [Foundations of Physical AI](week-01-02/01-introduction-to-physical-ai.md) →
+**Ready to begin?** Head to [Week 1, Chapter 1: Introduction to Physical AI](week-01-02/01-introduction-to-physical-ai.md) to start your journey! 🚀

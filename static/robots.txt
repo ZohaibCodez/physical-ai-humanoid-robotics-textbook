@@ -1,0 +1,19 @@
+# robots.txt for Physical AI and Humanoid Robotics Textbook
+# https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+User-agent: *
+Allow: /
+
+# Disallow crawling of build artifacts and internal files
+Disallow: /build/
+Disallow: /.docusaurus/
+Disallow: /node_modules/
+
+# Allow crawling of all documentation pages
+Allow: /docs/
+Allow: /week-*/
+Allow: /appendix/
+Allow: /assessments
+
+# Sitemap location
+Sitemap: https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/sitemap.xml

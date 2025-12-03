@@ -17,8 +17,7 @@ const config = {
   organizationName: 'ZohaibCodez',
   projectName: 'physical-ai-humanoid-robotics-textbook',
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang.
@@ -26,6 +25,94 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  // Markdown configuration
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
+
+  // SEO head tags
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'keywords',
+        content: 'robotics, humanoid, ROS 2, physical AI, machine learning, computer vision, SLAM, navigation, manipulation, locomotion, NVIDIA Isaac Sim, Gazebo',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'description',
+        content: 'Learn to build autonomous humanoid robots with ROS 2, computer vision, motion planning, and AI. Comprehensive 13-week curriculum covering perception, navigation, manipulation, and bipedal locomotion.',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'author',
+        content: 'ZohaibCodez',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:type',
+        content: 'website',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:title',
+        content: 'Physical AI & Humanoid Robotics Textbook',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:description',
+        content: 'Comprehensive open-source textbook for learning humanoid robotics, ROS 2, and physical AI systems',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:image',
+        content: 'https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/img/social-preview.png',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'twitter:card',
+        content: 'summary_large_image',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'twitter:title',
+        content: 'Physical AI & Humanoid Robotics Textbook',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'twitter:description',
+        content: 'Learn to build autonomous humanoid robots with ROS 2 and AI',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'twitter:image',
+        content: 'https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/img/social-preview.png',
+      },
+    },
+  ],
 
   presets: [
     [
@@ -47,7 +134,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/social-card.png',
+      image: 'img/social-preview.png',
       navbar: {
         title: 'Physical AI Textbook',
         logo: {

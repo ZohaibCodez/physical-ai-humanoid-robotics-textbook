@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: User description: "Integrated RAG Chatbot: Use OpenAI Agents/ChatKit SDK, FastAPI, Neon Postgres, Qdrant. Answer questions from the textbook from selected text only. Embeddings: free embedding model (e.g., Google's). Agent model: Gemini."
 
+## Clarifications
+
+### Session 2025-12-03
+
+- Q: Maximum answer length for chatbot responses? → A: 500 words maximum
+- Q: How will users select text for context-scoped questions? → A: User highlights text in web UI
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Ask Question from Full Textbook (Priority: P1)
@@ -85,16 +92,16 @@ A student receives an answer from the chatbot and wants to verify the informatio
 - **FR-011**: System MUST process and index the full textbook content during initial setup
 - **FR-012**: System MUST support re-indexing of textbook content when updates occur
 - **FR-013**: System MUST handle API failures gracefully with user-friendly error messages
-- **FR-014**: System MUST limit answer length to [NEEDS CLARIFICATION: maximum answer length - 200 words, 500 words, or unlimited with scroll?]
-- **FR-015**: System MUST determine selected text scope [NEEDS CLARIFICATION: how is text selected - user highlights in web UI, provides chapter/section name, or uploads a snippet?]
+- **FR-014**: System MUST limit answer length to 500 words maximum to balance detail with readability
+- **FR-015**: System MUST allow users to highlight text in the web UI to define the selected context scope for question-answering
 
 ### Key Entities
 
 - **Question**: User's natural language query, timestamp, conversation thread ID, mode (full/selected)
 - **TextbookChunk**: A segment of textbook content (paragraph, section, or page), metadata (chapter, section, page number), vector embedding
-- **Answer**: Generated response text, list of cited chunks, confidence score, timestamp
+- **Answer**: Generated response text (max 500 words), list of cited chunks, confidence score, timestamp
 - **Conversation**: Session identifier, list of questions and answers, context mode setting
-- **SelectedContext**: User-defined text selection, start and end positions, associated textbook section metadata
+- **SelectedContext**: User-highlighted text from web UI, character/DOM range positions, associated textbook section metadata, extracted text content
 
 ## Success Criteria *(mandatory)*
 

@@ -1,0 +1,573 @@
+openapi: 3.0.3
+info:
+  title: RAG Chatbot API
+  description: |
+    RESTful API for the Physical AI & Humanoid Robotics Textbook RAG chatbot.
+    Provides endpoints for asking questions, retrieving conversation history,
+    and health checks. Uses Google Gemini for chat, text-embedding-004 for
+    embeddings, Qdrant for vector storage, and Neon Postgres for metadata.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server (Railway)
+  - url: http://localhost:8000/v1
+    description: Local development server
+
+tags:
+  - name: chat
+    description: Chat and question-answering endpoints
+  - name: history
+    description: Conversation history retrieval
+  - name: system
+    description: System health and metadata
+
+paths:
+  /chat/ask:
+    post:
+      tags:
+        - chat
+      summary: Ask a question to the chatbot
+      description: |
+        Submit a natural language question to the RAG chatbot. Supports two modes:
+        - **full**: Answer from entire textbook
+        - **selected**: Answer only from user-highlighted text
+        
+        Rate limit: 10 requests/minute per session, 50 requests/hour per IP.
+      operationId: askQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionRequest'
+            examples:
+              full_textbook:
+                summary: Full textbook question
+                value:
+                  session_id: "550e8400-e29b-41d4-a716-446655440000"
+                  question: "What is the difference between forward and inverse kinematics?"
+                  context_mode: "full"
+              selected_text:
+                summary: Selected text question
+                value:
+                  session_id: "550e8400-e29b-41d4-a716-446655440000"
+                  question: "How does the Jacobian matrix relate to this concept?"
+                  context_mode: "selected"
+                  selected_text: "Inverse kinematics solves for joint angles given a desired end-effector position..."
+                  selected_metadata:
+                    chapter: 11
+                    section: "Humanoid Kinematics"
+                    file_path: "docs/week-11-12/humanoid-kinematics.md"
+      responses:
+        '200':
+          description: Successful response with answer and citations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnswerResponse'
+              examples:
+                success:
+                  $ref: '#/components/examples/AnswerResponseExample'
+        '400':
+          description: Bad request (invalid input)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_question:
+                  value:
+                    error: "Validation error"
+                    message: "Question must be between 10 and 1000 characters"
+                    code: "INVALID_INPUT"
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                rate_limit:
+                  value:
+                    error: "Rate limit exceeded"
+                    message: "Maximum 10 requests per minute. Retry after 45 seconds."
+                    code: "RATE_LIMIT_EXCEEDED"
+                    retry_after: 45
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                gemini_error:
+                  value:
+                    error: "AI service unavailable"
+                    message: "Failed to generate answer. Please try again."
+                    code: "AI_SERVICE_ERROR"
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /chat/history/{session_id}:
+    get:
+      tags:
+        - history
+      summary: Get conversation history
+      description: |
+        Retrieve the full conversation history for a given session.
+        Returns last 10 turns (question-answer pairs) by default.
+        Older conversations may be auto-expired after 30 days.
+      operationId: getHistory
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: UUID of the conversation session
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of turns to return (default 10, max 50)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - name: offset
+          in: query
+          required: false
+          description: Pagination offset (default 0)
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Conversation history retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryResponse'
+              examples:
+                history:
+                  $ref: '#/components/examples/HistoryResponseExample'
+        '404':
+          description: Session not found or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                not_found:
+                  value:
+                    error: "Session not found"
+                    message: "No conversation found for session_id: 550e8400..."
+                    code: "SESSION_NOT_FOUND"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      tags:
+        - system
+      summary: Health check endpoint
+      description: |
+        Returns the health status of the API and its dependencies
+        (Gemini API, Qdrant, Neon Postgres).
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                healthy:
+                  value:
+                    status: "healthy"
+                    version: "1.0.0"
+                    timestamp: "2025-12-03T10:00:00Z"
+                    dependencies:
+                      gemini_api: "healthy"
+                      qdrant: "healthy"
+                      postgres: "healthy"
+        '503':
+          description: Service is degraded or unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                degraded:
+                  value:
+                    status: "degraded"
+                    version: "1.0.0"
+                    timestamp: "2025-12-03T10:00:00Z"
+                    dependencies:
+                      gemini_api: "healthy"
+                      qdrant: "unhealthy"
+                      postgres: "healthy"
+
+components:
+  schemas:
+    QuestionRequest:
+      type: object
+      required:
+        - session_id
+        - question
+        - context_mode
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: UUID identifying the conversation session
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        question:
+          type: string
+          minLength: 10
+          maxLength: 1000
+          description: User's natural language question
+          example: "What is inverse kinematics?"
+        context_mode:
+          type: string
+          enum: [full, selected]
+          description: Context scope for answering the question
+          example: "full"
+        selected_text:
+          type: string
+          minLength: 50
+          maxLength: 5000
+          description: User-highlighted text (required if context_mode=selected)
+          example: "Inverse kinematics solves for joint angles..."
+        selected_metadata:
+          type: object
+          description: Metadata about the selected text (required if context_mode=selected)
+          required:
+            - chapter
+            - section
+            - file_path
+          properties:
+            chapter:
+              type: integer
+              minimum: 1
+              maximum: 13
+              description: Chapter number
+              example: 11
+            section:
+              type: string
+              description: Section title
+              example: "Humanoid Kinematics"
+            file_path:
+              type: string
+              pattern: '^docs/week-\d+-\d+/.+\.md$'
+              description: Source markdown file path
+              example: "docs/week-11-12/humanoid-kinematics.md"
+
+    AnswerResponse:
+      type: object
+      required:
+        - answer
+        - citations
+        - confidence
+        - processing_time_ms
+      properties:
+        answer:
+          type: string
+          description: Generated answer text (max 500 words)
+          example: "Inverse kinematics (IK) is the process of determining the joint angles..."
+        citations:
+          type: array
+          minItems: 1
+          maxItems: 5
+          description: List of cited textbook chunks
+          items:
+            $ref: '#/components/schemas/Citation'
+        confidence:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          description: Model confidence score
+          example: 0.91
+        processing_time_ms:
+          type: integer
+          description: Time taken to generate answer (milliseconds)
+          example: 1450
+        context_used:
+          type: string
+          enum: [full, selected]
+          description: Context mode used for this answer
+          example: "full"
+
+    Citation:
+      type: object
+      required:
+        - chunk_id
+        - chapter
+        - section
+        - relevance_score
+        - link
+      properties:
+        chunk_id:
+          type: string
+          description: Unique identifier for the cited chunk
+          example: "docs/week-11-12/humanoid-kinematics.md#2"
+        chapter:
+          type: integer
+          minimum: 1
+          maximum: 13
+          description: Chapter number
+          example: 11
+        section:
+          type: string
+          description: Section title
+          example: "Humanoid Kinematics"
+        page:
+          type: integer
+          nullable: true
+          description: Page number (if applicable)
+          example: 245
+        relevance_score:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          description: Semantic similarity score
+          example: 0.94
+        link:
+          type: string
+          format: uri-reference
+          description: Deep link to the textbook section
+          example: "/week-11-12/humanoid-kinematics#inverse-kinematics"
+        text_snippet:
+          type: string
+          maxLength: 200
+          description: First 100-200 characters of cited chunk
+          example: "Inverse kinematics (IK) is the process of determining..."
+
+    HistoryResponse:
+      type: object
+      required:
+        - session_id
+        - context_mode
+        - messages
+        - total_count
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: UUID of the conversation
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        context_mode:
+          type: string
+          enum: [full, selected]
+          description: Current context mode for the session
+          example: "full"
+        messages:
+          type: array
+          description: Ordered list of messages (chronological)
+          items:
+            $ref: '#/components/schemas/Message'
+        total_count:
+          type: integer
+          description: Total number of turns in conversation
+          example: 5
+        created_at:
+          type: string
+          format: date-time
+          description: Session creation timestamp
+          example: "2025-12-03T10:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last activity timestamp
+          example: "2025-12-03T10:15:00Z"
+
+    Message:
+      type: object
+      required:
+        - role
+        - content
+        - timestamp
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+          description: Message sender role
+          example: "user"
+        content:
+          type: string
+          description: Message text content
+          example: "What is forward kinematics?"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the message was sent
+          example: "2025-12-03T10:05:00Z"
+        citations:
+          type: array
+          description: Citations (only for assistant messages)
+          items:
+            $ref: '#/components/schemas/Citation'
+        confidence:
+          type: number
+          format: float
+          nullable: true
+          description: Confidence score (only for assistant messages)
+          example: 0.91
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Overall service health status
+          example: "healthy"
+        version:
+          type: string
+          description: API version
+          example: "1.0.0"
+        timestamp:
+          type: string
+          format: date-time
+          description: Health check timestamp
+          example: "2025-12-03T10:00:00Z"
+        dependencies:
+          type: object
+          description: Health status of dependencies
+          properties:
+            gemini_api:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+              example: "healthy"
+            qdrant:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+              example: "healthy"
+            postgres:
+              type: string
+              enum: [healthy, degraded, unhealthy]
+              example: "healthy"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+        - code
+      properties:
+        error:
+          type: string
+          description: Human-readable error summary
+          example: "Validation error"
+        message:
+          type: string
+          description: Detailed error message
+          example: "Question must be between 10 and 1000 characters"
+        code:
+          type: string
+          description: Machine-readable error code
+          example: "INVALID_INPUT"
+        retry_after:
+          type: integer
+          nullable: true
+          description: Seconds to wait before retrying (for rate limits)
+          example: 45
+        details:
+          type: object
+          nullable: true
+          description: Additional error context (optional)
+          additionalProperties: true
+
+  examples:
+    AnswerResponseExample:
+      value:
+        answer: "Forward kinematics (FK) computes the position and orientation of a robot's end-effector given the joint angles. It uses the Denavit-Hartenberg (DH) convention to establish coordinate frames for each joint. Inverse kinematics (IK), conversely, solves for the joint angles needed to achieve a desired end-effector pose. IK is more complex than FK because it may have multiple solutions (or no solution) and often requires iterative numerical methods."
+        citations:
+          - chunk_id: "docs/week-11-12/humanoid-kinematics.md#2"
+            chapter: 11
+            section: "Humanoid Kinematics"
+            page: 245
+            relevance_score: 0.94
+            link: "/week-11-12/humanoid-kinematics#forward-kinematics"
+            text_snippet: "Forward kinematics (FK) is the process of determining the position and orientation of a robot's end-effector..."
+          - chunk_id: "docs/week-11-12/humanoid-kinematics.md#3"
+            chapter: 11
+            section: "Humanoid Kinematics"
+            page: 246
+            relevance_score: 0.89
+            link: "/week-11-12/humanoid-kinematics#inverse-kinematics"
+            text_snippet: "Inverse kinematics (IK), conversely, solves for the joint angles required to position..."
+        confidence: 0.91
+        processing_time_ms: 1450
+        context_used: "full"
+
+    HistoryResponseExample:
+      value:
+        session_id: "550e8400-e29b-41d4-a716-446655440000"
+        context_mode: "full"
+        messages:
+          - role: "user"
+            content: "What is forward kinematics?"
+            timestamp: "2025-12-03T10:00:00Z"
+          - role: "assistant"
+            content: "Forward kinematics is the process of determining the position and orientation..."
+            timestamp: "2025-12-03T10:00:02Z"
+            citations:
+              - chunk_id: "docs/week-11-12/humanoid-kinematics.md#2"
+                chapter: 11
+                section: "Humanoid Kinematics"
+                page: 245
+                relevance_score: 0.94
+                link: "/week-11-12/humanoid-kinematics#forward-kinematics"
+            confidence: 0.91
+          - role: "user"
+            content: "What about inverse kinematics?"
+            timestamp: "2025-12-03T10:05:00Z"
+          - role: "assistant"
+            content: "Inverse kinematics solves for the joint angles needed to achieve a desired end-effector pose..."
+            timestamp: "2025-12-03T10:05:03Z"
+            citations:
+              - chunk_id: "docs/week-11-12/humanoid-kinematics.md#3"
+                chapter: 11
+                section: "Humanoid Kinematics"
+                page: 246
+                relevance_score: 0.92
+                link: "/week-11-12/humanoid-kinematics#inverse-kinematics"
+            confidence: 0.89
+        total_count: 2
+        created_at: "2025-12-03T10:00:00Z"
+        updated_at: "2025-12-03T10:05:03Z"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (optional, for future use)
+
+security: []  # No authentication required in v1.0.0

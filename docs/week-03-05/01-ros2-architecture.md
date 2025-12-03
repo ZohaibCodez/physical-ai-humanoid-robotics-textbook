@@ -125,7 +125,7 @@ ROS 2 provides a robust, distributed middleware for building robot software. Its
 
 ## Hands-On Exercise
 
-1. Install ROS 2 Humble following [Setup Instructions](../../appendix/setup-instructions)
+1. Install ROS 2 Humble following [Setup Instructions](../appendix/setup-instructions.md)
 2. Run the example publisher above
 3. In another terminal, run: `ros2 topic echo /chatter`
 4. Observe the messages flowing
@@ -138,4 +138,4 @@ ROS 2 provides a robust, distributed middleware for building robot software. Its
 
 ---
 
-**Next Chapter**: [Nodes, Topics, and Services](./02-nodes-topics-services) →
+**Next Chapter**: [Nodes, Topics, and Services](./02-nodes-topics-services.md) →

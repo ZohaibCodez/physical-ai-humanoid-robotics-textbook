@@ -52,11 +52,11 @@
 
 **Purpose**: Project initialization and basic Docusaurus structure
 
-- [ ] T001 Initialize Docusaurus project with `npx create-docusaurus@latest physical-ai-humanoid-robotics-textbook classic` in repository root
-- [ ] T002 Install dependencies with `npm install` and verify project structure
-- [ ] T003 [P] Create .gitignore file to exclude node_modules/, .docusaurus/, build/
-- [ ] T004 [P] Update package.json with project metadata (name, description, repository, author)
-- [ ] T005 [P] Configure Git repository settings and branch protection rules for main branch
+- [X] T001 Initialize Docusaurus project with `npx create-docusaurus@latest physical-ai-humanoid-robotics-textbook classic` in repository root
+- [X] T002 Install dependencies with `npm install` and verify project structure
+- [X] T003 [P] Create .gitignore file to exclude node_modules/, .docusaurus/, build/
+- [X] T004 [P] Update package.json with project metadata (name, description, repository, author)
+- [X] T005 [P] Configure Git repository settings and branch protection rules for main branch
 
 **Checkpoint**: Basic Docusaurus project structure created, npm start works locally
 
@@ -68,22 +68,22 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 [P] Configure docusaurus.config.js with site metadata per contracts/docusaurus-config.md (title, tagline, url, baseUrl, organizationName, projectName)
-- [ ] T007 [P] Configure docusaurus.config.js preset-classic with docs at root (routeBasePath: '/'), no blog, custom CSS path
-- [ ] T008 [P] Configure docusaurus.config.js theme with navbar (logo, Textbook link, GitHub link) per contract
-- [ ] T009 [P] Configure docusaurus.config.js theme with footer (Learning Resources, Community sections) per contract
-- [ ] T010 [P] Configure docusaurus.config.js Prism syntax highlighting for python, xml, yaml, bash, cpp languages
-- [ ] T011 [P] Create sidebars.js with tutorialSidebar structure per contracts/sidebars-structure.md
-- [ ] T012 [P] Add module categories to sidebars.js for weeks 1-2, 3-5, 6-7, 8-10, 11-12, 13, appendix with collapsed states
-- [ ] T013 [P] Create placeholder logo.svg and favicon.ico in static/img/ directory
-- [ ] T014 [P] Create custom.css in src/css/ with basic brand colors and typography
-- [ ] T015 [P] Create directory structure: docs/week-01-02/, docs/week-03-05/, docs/week-06-07/, docs/week-08-10/, docs/week-11-12/, docs/week-13/, docs/appendix/
-- [ ] T016 [P] Create directory structure: static/img/diagrams/, static/img/screenshots/, static/img/robots/, static/files/
-- [ ] T017 [P] Create GitHub Actions workflow file .github/workflows/deploy.yml for automated GitHub Pages deployment using peaceiris/actions-gh-pages@v3
-- [ ] T018 [P] Create GitHub Actions workflow file .github/workflows/test-code-examples.yml for Docker-based code testing (Ubuntu 22.04, ROS 2 Humble)
-- [ ] T019 Configure GitHub Pages in repository settings to deploy from gh-pages branch
-- [ ] T020 Test local build with `npm run build` and verify no errors, check output in build/ directory
-- [ ] T021 Test production serve with `npm run serve` and verify site loads correctly at localhost:3000
+- [X] T006 [P] Configure docusaurus.config.js with site metadata per contracts/docusaurus-config.md (title, tagline, url, baseUrl, organizationName, projectName)
+- [X] T007 [P] Configure docusaurus.config.js preset-classic with docs at root (routeBasePath: '/'), no blog, custom CSS path
+- [X] T008 [P] Configure docusaurus.config.js theme with navbar (logo, Textbook link, GitHub link) per contract
+- [X] T009 [P] Configure docusaurus.config.js theme with footer (Learning Resources, Community sections) per contract
+- [X] T010 [P] Configure docusaurus.config.js Prism syntax highlighting for python, xml, yaml, bash, cpp languages
+- [X] T011 [P] Create sidebars.js with tutorialSidebar structure per contracts/sidebars-structure.md
+- [X] T012 [P] Add module categories to sidebars.js for weeks 1-2, 3-5, 6-7, 8-10, 11-12, 13, appendix with collapsed states
+- [X] T013 [P] Create placeholder logo.svg and favicon.ico in static/img/ directory
+- [X] T014 [P] Create custom.css in src/css/ with basic brand colors and typography
+- [X] T015 [P] Create directory structure: docs/week-01-02/, docs/week-03-05/, docs/week-06-07/, docs/week-08-10/, docs/week-11-12/, docs/week-13/, docs/appendix/
+- [X] T016 [P] Create directory structure: static/img/diagrams/, static/img/screenshots/, static/img/robots/, static/files/
+- [X] T017 [P] Create GitHub Actions workflow file .github/workflows/deploy.yml for automated GitHub Pages deployment using peaceiris/actions-gh-pages@v3
+- [X] T018 [P] Create GitHub Actions workflow file .github/workflows/test-code-examples.yml for Docker-based code testing (Ubuntu 22.04, ROS 2 Humble)
+- [X] T019 Configure GitHub Pages in repository settings to deploy from gh-pages branch
+- [X] T020 Test local build with `npm run build` and verify no errors, check output in build/ directory
+- [X] T021 Test production serve with `npm run serve` and verify site loads correctly at localhost:3000
 
 **Checkpoint**: Foundation ready - Docusaurus fully configured, builds successfully, GitHub Actions ready
 
@@ -97,26 +97,26 @@
 
 ### Implementation for User Story 1
 
-- [ ] T022 [P] [US1] Create docs/intro.md as landing page with course overview, learning outcomes, getting started guide
-- [ ] T023 [P] [US1] Create docs/week-01-02/_category_.json with label "Weeks 1-2: Foundations of Physical AI" and module description
-- [ ] T024 [P] [US1] Create docs/week-01-02/01-introduction-to-physical-ai.md with learning objectives, introduction section, summary
-- [ ] T025 [P] [US1] Create docs/week-01-02/02-ai-fundamentals-review.md with learning objectives, content, summary
-- [ ] T026 [P] [US1] Create docs/week-01-02/03-robotics-hardware-overview.md with learning objectives, content, summary
-- [ ] T027 [P] [US1] Create docs/week-01-02/04-sensors-and-actuators.md with learning objectives, content, summary
-- [ ] T028 [P] [US1] Create docs/week-01-02/05-coordinate-systems-and-kinematics.md with learning objectives, content, summary
-- [ ] T029 [P] [US1] Create docs/week-03-05/_category_.json with label "Weeks 3-5: ROS 2 and Robot Programming"
-- [ ] T030 [P] [US1] Create docs/week-03-05/01-ros2-architecture.md with frontmatter, learning objectives, sections
-- [ ] T031 [P] [US1] Create docs/week-03-05/02-nodes-topics-services.md with frontmatter, learning objectives, sections
-- [ ] T032 [P] [US1] Create docs/week-06-07/_category_.json with label "Weeks 6-7: Perception Systems"
-- [ ] T033 [P] [US1] Create docs/week-06-07/01-computer-vision-for-robotics.md with frontmatter, learning objectives, sections
-- [ ] T034 [P] [US1] Create docs/week-08-10/_category_.json with label "Weeks 8-10: Motion Planning and Control"
-- [ ] T035 [P] [US1] Create docs/week-08-10/01-motion-planning-fundamentals.md with frontmatter, learning objectives, sections
-- [ ] T036 [P] [US1] Create docs/week-11-12/_category_.json with label "Weeks 11-12: Humanoid Robotics"
-- [ ] T037 [P] [US1] Create docs/week-11-12/01-humanoid-kinematics.md with frontmatter, learning objectives, sections
-- [ ] T038 [P] [US1] Create docs/week-13/_category_.json with label "Week 13: Simulation and Integration"
-- [ ] T039 [P] [US1] Create docs/week-13/01-gazebo-simulation.md with frontmatter, learning objectives, sections
-- [ ] T040 [P] [US1] Create docs/appendix/_category_.json with label "Appendix" and collapsed: true
-- [ ] T041 [P] [US1] Add all created chapter references to sidebars.js in correct module categories
+- [X] T022 [P] [US1] Create docs/intro.md as landing page with course overview, learning outcomes, getting started guide
+- [X] T023 [P] [US1] Create docs/week-01-02/_category_.json with label "Weeks 1-2: Foundations of Physical AI" and module description
+- [X] T024 [P] [US1] Create docs/week-01-02/01-introduction-to-physical-ai.md with learning objectives, introduction section, summary
+- [X] T025 [P] [US1] Create docs/week-01-02/02-ai-fundamentals-review.md with learning objectives, content, summary
+- [X] T026 [P] [US1] Create docs/week-01-02/03-robotics-hardware-overview.md with learning objectives, content, summary
+- [X] T027 [P] [US1] Create docs/week-01-02/04-sensors-and-actuators.md with learning objectives, content, summary
+- [X] T028 [P] [US1] Create docs/week-01-02/05-coordinate-systems-and-kinematics.md with learning objectives, content, summary
+- [X] T029 [P] [US1] Create docs/week-03-05/_category_.json with label "Weeks 3-5: ROS 2 and Robot Programming"
+- [X] T030 [P] [US1] Create docs/week-03-05/01-ros2-architecture.md with frontmatter, learning objectives, sections
+- [X] T031 [P] [US1] Create docs/week-03-05/02-nodes-topics-services.md with frontmatter, learning objectives, sections
+- [X] T032 [P] [US1] Create docs/week-06-07/_category_.json with label "Weeks 6-7: Perception Systems"
+- [X] T033 [P] [US1] Create docs/week-06-07/01-computer-vision-for-robotics.md with frontmatter, learning objectives, sections
+- [X] T034 [P] [US1] Create docs/week-08-10/_category_.json with label "Weeks 8-10: Motion Planning and Control"
+- [X] T035 [P] [US1] Create docs/week-08-10/01-motion-planning-fundamentals.md with frontmatter, learning objectives, sections
+- [X] T036 [P] [US1] Create docs/week-11-12/_category_.json with label "Weeks 11-12: Humanoid Robotics"
+- [X] T037 [P] [US1] Create docs/week-11-12/01-humanoid-kinematics.md with frontmatter, learning objectives, sections
+- [X] T038 [P] [US1] Create docs/week-13/_category_.json with label "Week 13: Simulation and Integration"
+- [X] T039 [P] [US1] Create docs/week-13/01-gazebo-simulation.md with frontmatter, learning objectives, sections
+- [X] T040 [P] [US1] Create docs/appendix/_category_.json with label "Appendix" and collapsed: true
+- [X] T041 [P] [US1] Add all created chapter references to sidebars.js in correct module categories
 - [ ] T042 [US1] Test sidebar navigation - verify all chapters appear, expand/collapse works, breadcrumbs display
 - [ ] T043 [US1] Test search functionality with test queries ("ROS 2", "URDF", "humanoid") and verify results
 - [ ] T044 [US1] Test mobile responsiveness - verify layout works on 320px, 768px, 1024px widths
@@ -136,20 +136,20 @@
 
 ### Implementation for User Story 2
 
-- [ ] T048 [P] [US2] Add Python code example to docs/week-03-05/01-ros2-architecture.md with inline comments, expected output
-- [ ] T049 [P] [US2] Add ROS 2 publisher/subscriber code example to docs/week-03-05/02-nodes-topics-services.md with setup instructions
-- [ ] T050 [P] [US2] Add XML URDF example to docs/week-03-05/03-robot-state-publisher.md with syntax highlighting and comments
-- [ ] T051 [P] [US2] Add YAML launch file example to docs/week-03-05/04-tf2-transformations.md with parameter explanations
-- [ ] T052 [P] [US2] Add Bash installation script example to docs/appendix/software-installation.md with step-by-step comments
+- [X] T048 [P] [US2] Add Python code example to docs/week-03-05/01-ros2-architecture.md with inline comments, expected output
+- [X] T049 [P] [US2] Add ROS 2 publisher/subscriber code example to docs/week-03-05/02-nodes-topics-services.md with setup instructions
+- [X] T050 [P] [US2] Add XML URDF example to docs/week-03-05/03-robot-state-publisher.md with syntax highlighting and comments
+- [X] T051 [P] [US2] Add YAML launch file example to docs/week-03-05/04-tf2-transformations.md with parameter explanations
+- [X] T052 [P] [US2] Add Bash installation script example to docs/appendix/software-installation.md with step-by-step comments
 - [ ] T053 [P] [US2] Add C++ ROS 2 node example to docs/week-08-10/05-moveit2-integration.md with compilation instructions
 - [ ] T054 [P] [US2] Create MDX tabs component example in docs/week-06-07/01-computer-vision-for-robotics.md for Gazebo vs Unity alternatives
 - [ ] T055 [P] [US2] Add collapsible code blocks for longer examples (>30 lines) in docs/week-11-12/02-bipedal-locomotion.md
-- [ ] T056 [P] [US2] Add troubleshooting section with error handling code examples in docs/appendix/troubleshooting.md
+- [X] T056 [P] [US2] Add troubleshooting section with error handling code examples in docs/appendix/troubleshooting.md
 - [ ] T057 [US2] Test syntax highlighting for all languages (Python, XML, YAML, Bash, C++) across chapters
 - [ ] T058 [US2] Test copy button functionality on all code blocks - verify clipboard works
 - [ ] T059 [US2] Test collapsible code sections - verify expand/collapse animations work
 - [ ] T060 [US2] Test tabs component - verify switching between alternatives works smoothly
-- [ ] T061 [US2] Create test script in .github/workflows/test-code-examples.yml to validate Python examples in Docker (osrf/ros:humble-desktop)
+- [X] T061 [US2] Create test script in .github/workflows/test-code-examples.yml to validate Python examples in Docker (osrf/ros:humble-desktop)
 - [ ] T062 [US2] Run Docker-based tests on sample ROS 2 code examples and verify they execute without errors
 - [ ] T063 [US2] Deploy updated site and verify all code examples display correctly with syntax highlighting
 
@@ -165,20 +165,20 @@
 
 ### Implementation for User Story 3
 
-- [ ] T064 [P] [US3] Create docs/appendix/hardware-requirements.md with Economy Jetson Kit specifications and pricing
-- [ ] T065 [P] [US3] Add Digital Twin Workstation option to docs/appendix/hardware-requirements.md with component list
-- [ ] T066 [P] [US3] Add Robot Lab tier to docs/appendix/hardware-requirements.md with full setup details
-- [ ] T067 [P] [US3] Add cloud alternatives section to docs/appendix/hardware-requirements.md (Google Colab, AWS, etc.)
-- [ ] T068 [P] [US3] Create docs/appendix/software-installation.md with Ubuntu 22.04 LTS installation guide
-- [ ] T069 [P] [US3] Add ROS 2 Humble installation section to docs/appendix/software-installation.md with apt commands
-- [ ] T070 [P] [US3] Add Gazebo installation section to docs/appendix/software-installation.md with step-by-step instructions
-- [ ] T071 [P] [US3] Add NVIDIA Isaac Sim installation section to docs/appendix/software-installation.md with prerequisites
-- [ ] T072 [P] [US3] Add environment verification section to docs/appendix/software-installation.md with test commands
-- [ ] T073 [P] [US3] Create docs/appendix/troubleshooting.md with common installation errors organized by OS
-- [ ] T074 [P] [US3] Add "Hello ROS 2" test program to docs/appendix/software-installation.md for setup verification
+- [X] T064 [P] [US3] Create docs/appendix/hardware-requirements.md with Economy Jetson Kit specifications and pricing
+- [X] T065 [P] [US3] Add Digital Twin Workstation option to docs/appendix/hardware-requirements.md with component list
+- [X] T066 [P] [US3] Add Robot Lab tier to docs/appendix/hardware-requirements.md with full setup details
+- [X] T067 [P] [US3] Add cloud alternatives section to docs/appendix/hardware-requirements.md (Google Colab, AWS, etc.)
+- [X] T068 [P] [US3] Create docs/appendix/software-installation.md with Ubuntu 22.04 LTS installation guide
+- [X] T069 [P] [US3] Add ROS 2 Humble installation section to docs/appendix/software-installation.md with apt commands
+- [X] T070 [P] [US3] Add Gazebo installation section to docs/appendix/software-installation.md with step-by-step instructions
+- [X] T071 [P] [US3] Add NVIDIA Isaac Sim installation section to docs/appendix/software-installation.md with prerequisites
+- [X] T072 [P] [US3] Add environment verification section to docs/appendix/software-installation.md with test commands
+- [X] T073 [P] [US3] Create docs/appendix/troubleshooting.md with common installation errors organized by OS
+- [X] T074 [P] [US3] Add "Hello ROS 2" test program to docs/appendix/software-installation.md for setup verification
 - [ ] T075 [US3] Test all installation commands in clean Docker containers (Ubuntu 22.04) to verify accuracy
 - [ ] T076 [US3] Review hardware pricing and update if needed for accuracy
-- [ ] T077 [US3] Add comparison table to docs/appendix/hardware-requirements.md showing cost vs capabilities
+- [X] T077 [US3] Add comparison table to docs/appendix/hardware-requirements.md showing cost vs capabilities
 - [ ] T078 [US3] Deploy updated appendix and verify all setup documentation is complete and accurate
 
 **Checkpoint**: User Story 3 complete - Students can choose hardware option and install all required software

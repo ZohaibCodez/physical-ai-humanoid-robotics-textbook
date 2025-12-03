@@ -38,7 +38,7 @@ This textbook assumes you have:
 - Basic understanding of computer systems and command-line interfaces
 - Access to either physical hardware (Jetson/workstation) or cloud computing
 
-See the [Setup Instructions](appendix/setup-instructions) in the Appendix for detailed hardware and software requirements.
+See the [Setup Instructions](appendix/setup-instructions.md) in the Appendix for detailed hardware and software requirements.
 
 ## How to Use This Textbook
 
@@ -106,8 +106,8 @@ Common mistakes that could damage hardware or cause errors
 
 Ready to begin? Here's your path forward:
 
-1. **Setup Your Environment** - Visit [Setup Instructions](appendix/setup-instructions) to install required software
-2. **Week 1 Chapter 1** - Start with [Introduction to Physical AI](week-01-02/01-introduction-to-physical-ai)
+1. **Setup Your Environment** - Visit [Setup Instructions](appendix/setup-instructions.md) to install required software
+2. **Week 1 Chapter 1** - Start with [Introduction to Physical AI](week-01-02/01-introduction-to-physical-ai.md)
 3. **Join the Community** - Check out our [GitHub repository](https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook) for discussions and updates
 
 ## About This Project
@@ -121,4 +121,4 @@ This textbook is open-source and continuously improving. We welcome contribution
 
 ---
 
-**Ready to build intelligent physical agents?** Let's begin with [Foundations of Physical AI](week-01-02/01-introduction-to-physical-ai) →
+**Ready to build intelligent physical agents?** Let's begin with [Foundations of Physical AI](week-01-02/01-introduction-to-physical-ai.md) →

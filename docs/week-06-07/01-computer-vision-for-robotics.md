@@ -60,4 +60,4 @@ Computer vision transforms raw pixels into semantic understanding. Modern deep l
 
 ---
 
-**Next Chapter**: [Depth Cameras and LIDAR](./02-depth-cameras-and-lidar) →
+**Next Chapter**: [Depth Cameras and LIDAR](./02-depth-cameras-and-lidar.md) →

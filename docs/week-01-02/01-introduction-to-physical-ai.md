@@ -184,4 +184,4 @@ Physical AI combines artificial intelligence with physical embodiment to create 
 
 ---
 
-**Next Chapter**: [AI Fundamentals Review](./02-ai-fundamentals-review) →
+**Next Chapter**: [AI Fundamentals Review](./02-ai-fundamentals-review.md) →

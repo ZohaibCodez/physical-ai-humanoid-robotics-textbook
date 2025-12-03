@@ -66,4 +66,4 @@ This chapter reviewed AI/ML fundamentals with robotics applications in mind. Und
 
 ---
 
-**Next Chapter**: [Robotics Hardware Overview](./03-robotics-hardware-overview) →
+**Next Chapter**: [Robotics Hardware Overview](./03-robotics-hardware-overview.md) →

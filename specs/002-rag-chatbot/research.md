@@ -626,6 +626,114 @@ REACT_APP_CHAT_API_URL=https://your-railway-app.up.railway.app
 
 ---
 
+## 11. Agent Orchestration Framework
+
+### Question
+Should we use a framework to orchestrate the conversational agent, or directly call Gemini API?
+
+### Decision
+Use **OpenAI Agents SDK (Python)** with **LiteLLM + Google Gemini** backend
+
+### Rationale
+- **Multi-Model Support**: OpenAI Agents SDK supports "various LLMs" via LiteLLM, including Google Gemini
+- **Agent Primitives**: Built-in support for agents, tools (function calling), handoffs, guardrails, sessions, tracing
+- **Structured Orchestration**: Clean abstractions for agent lifecycle (`Runner.run`), tool definitions (`@function_tool`), context management
+- **Free Tracing**: OpenAI Traces dashboard for debugging (even with non-OpenAI models like Gemini)
+- **Future-Proof**: Easy to add multi-agent patterns (manager, handoffs), guardrails, MCP servers later
+- **Developer Experience**: Type-safe Pydantic models, async/await, minimal boilerplate
+
+### Implementation Pattern
+```python
+from agents import Agent, Runner, function_tool, ModelSettings
+from agents.extensions.models.litellm_model import LitellmModel
+
+# Configure Gemini via LiteLLM
+gemini_model = LitellmModel(
+    model="gemini/gemini-1.5-flash",
+    api_key=os.getenv("GOOGLE_API_KEY")
+)
+
+# Define RAG tools
+@function_tool
+async def search_textbook(query: str, selected_context: str | None = None) -> str:
+    """Search the robotics textbook for relevant content."""
+    # Vector search logic with Qdrant
+    if selected_context:
+        # Embed and search within selected text only
+        results = await vector_search_selected(query, selected_context)
+    else:
+        # Full textbook search
+        results = await vector_search_full(query)
+    
+    return format_search_results(results)
+
+# Create agent with tools
+rag_agent = Agent(
+    name="Robotics Textbook Assistant",
+    instructions=(
+        "You are a knowledgeable assistant for a Physical AI and Humanoid Robotics course. "
+        "Answer questions using ONLY the information from search results. "
+        "Always cite sources using the provided URLs. "
+        "Keep answers under 500 words. "
+        "If the answer is not in the search results, say so clearly."
+    ),
+    model=gemini_model,
+    model_settings=ModelSettings(
+        temperature=0.3,  # Lower for factual accuracy
+        include_usage=True  # Track token usage
+    ),
+    tools=[search_textbook]
+)
+
+# Run agent with session management
+from agents.memory import InMemorySession
+
+async def handle_question(session_id: str, question: str, selected_context: str | None):
+    session = InMemorySession(session_id=session_id)
+    
+    result = await Runner.run(
+        starting_agent=rag_agent,
+        input=question,
+        session=session,
+        max_turns=3  # Limit tool calls
+    )
+    
+    # Extract usage stats
+    usage = result.context_wrapper.usage
+    print(f"Tokens used: {usage.total_tokens}")
+    
+    return {
+        "answer": result.final_output,
+        "usage": usage.total_tokens
+    }
+```
+
+### Benefits for RAG
+- **Tool Calling**: Gemini's function calling seamlessly integrated via `@function_tool`
+- **Session Memory**: Built-in conversation history management (no manual DB calls for context)
+- **Citation Extraction**: Can use structured outputs (Pydantic models) for citations
+- **Rate Limiting**: Easier to implement with agent context/guardrails
+- **Testing**: Clean separation between agent logic and tool implementations
+
+### Alternatives
+- **Direct Gemini API calls**: Less structure; manual session management, tool calling format
+- **LangChain**: Heavier framework (~50MB); overlapping abstractions; more complexity
+- **Haystack**: Overkill for single-agent RAG; designed for multi-step pipelines
+- **Raw LiteLLM**: Loses agent patterns; still need session/tool management
+
+### Trade-offs
+- **Dependency**: Adds `openai-agents[litellm]` package (~5-8MB installed)
+- **Learning Curve**: Team needs to understand agent patterns (minimal for single-agent, ~1-2 hours docs)
+- **Abstraction Cost**: One extra layer vs. raw API calls (negligible for structured projects)
+- **Lock-in**: Tied to OpenAI Agents SDK patterns (but LiteLLM allows model swapping)
+
+### References
+- OpenAI Agents Python docs: https://github.com/openai/openai-agents-python
+- LiteLLM Gemini integration: https://docs.litellm.ai/docs/providers/gemini
+- OpenAI Agents SDK examples: https://github.com/openai/openai-agents-python/tree/main/examples
+
+---
+
 ## Summary of Resolved Unknowns
 
 | Unknown | Resolution |
@@ -635,6 +743,7 @@ REACT_APP_CHAT_API_URL=https://your-railway-app.up.railway.app
 | Vector database | Qdrant Cloud (1GB free tier) |
 | Conversation storage | Neon Postgres (0.5GB free tier) |
 | Backend framework | FastAPI 0.104+ with async patterns |
+| Agent orchestration | **OpenAI Agents SDK + LiteLLM + Gemini** |
 | Frontend UI | Custom React chat component using @chatscope/chat-ui-kit-react |
 | Text selection | DOM Range API with React state |
 | Chunking strategy | 300-500 tokens per chunk, 50-token overlap |

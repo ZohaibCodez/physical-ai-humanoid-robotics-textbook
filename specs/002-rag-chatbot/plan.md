@@ -14,9 +14,10 @@ Build an integrated RAG (Retrieval-Augmented Generation) chatbot that answers st
 **Language/Version**: Python 3.11+  
 **Primary Dependencies**: 
 - Backend: FastAPI 0.104+, Uvicorn, Pydantic v2
-- AI/ML: google-generativeai 0.3.2 (Gemini API SDK), sentence-transformers 2.2.2 (fallback embeddings)
+- Agent Framework: **openai-agents[litellm]** (agent orchestration with Gemini backend via LiteLLM)
+- AI/ML: google-generativeai 0.3.2 (Gemini API SDK via LiteLLM), sentence-transformers 2.2.2 (fallback embeddings)
 - Storage: qdrant-client 1.7.0 (vector DB), psycopg2-binary 2.9.9 (Postgres client), neon-serverless (Postgres provider)
-- Frontend: ChatKit UI (OpenAI SDK), React, TypeScript
+- Frontend: @chatscope/chat-ui-kit-react, React, TypeScript
 
 **Storage**: 
 - Qdrant Cloud (free tier) - vector embeddings (768-dimensional for text-embedding-004)
@@ -117,7 +118,8 @@ backend/
 │   │   └── context.py               # SelectedContext model
 │   ├── services/
 │   │   ├── __init__.py
-│   │   ├── gemini_service.py        # Gemini API wrapper for chat
+│   │   ├── agent_service.py         # OpenAI Agents SDK + Gemini (via LiteLLM)
+│   │   ├── tools.py                 # @function_tool definitions (search_textbook)
 │   │   ├── embeddings.py            # Google embedding API client
 │   │   ├── embeddings_local.py      # Sentence Transformers fallback
 │   │   ├── vector_store.py          # Qdrant client and search
@@ -290,7 +292,40 @@ frontend/
 
 ## Key Design Decisions
 
-### 1. Free-Tier Architecture
+### 1. Agent Orchestration with OpenAI Agents SDK + Gemini
+
+**Decision**: Use OpenAI Agents SDK (Python) with LiteLLM + Google Gemini 1.5 Flash backend.
+
+**Rationale**:
+- **Structured Framework**: Clean abstractions (`Agent`, `Runner`, `@function_tool`) for agent lifecycle
+- **Multi-Model Support**: LiteLLM enables using Gemini as backend: `LitellmModel(model="gemini/gemini-1.5-flash")`
+- **Built-in Primitives**: Session management, tool calling, guardrails, tracing included
+- **Free Tracing**: OpenAI Traces dashboard works with non-OpenAI models (Gemini)
+- **Future-Ready**: Easy to add multi-agent patterns, MCP servers, advanced guardrails
+- **Type Safety**: Pydantic models for structured outputs (citations)
+
+**Architecture**:
+```
+User Question → FastAPI Endpoint → OpenAI Agent (Gemini backend)
+                                     ↓
+                            @function_tool: search_textbook()
+                                     ↓
+                            Vector Search (Qdrant)
+                                     ↓
+                         Gemini generates answer with citations
+```
+
+**Tradeoffs**:
+- Adds `openai-agents[litellm]` dependency (~5-8MB)
+- Small learning curve for agent patterns (~1-2 hours)
+- One extra abstraction layer vs. raw Gemini API
+
+**Alternatives Considered**:
+- Direct Gemini API calls (rejected: manual session/tool management)
+- LangChain (rejected: heavier framework, overlapping abstractions)
+- Haystack (rejected: overkill for single-agent RAG)
+
+### 2. Free-Tier Architecture
 
 **Decision**: Use only free services with no credit card required.
 
@@ -308,7 +343,7 @@ frontend/
 - Paid OpenAI API (rejected: cost prohibitive for educational use)
 - Self-hosted LLMs (rejected: complex infrastructure, GPU requirements)
 
-### 2. Dual Embedding Strategy
+### 3. Dual Embedding Strategy
 
 **Decision**: Primary Google embeddings (768-dim) with Sentence Transformer fallback (384-dim).
 
@@ -340,7 +375,7 @@ results = qdrant.search(
 )
 ```
 
-### 3. Selected-Text Mode Architecture
+### 4. Selected-Text Mode Architecture
 
 **Decision**: Store selected text in Question entity (JSONB), not as separate TextbookChunk.
 
@@ -359,7 +394,7 @@ results = qdrant.search(
 3. Backend embeds selected text, searches only within matching chunks (filtered by chapter/section)
 4. Answer generated from filtered context only
 
-### 4. Citation Linking Strategy
+### 5. Citation Linking Strategy
 
 **Decision**: Generate Docusaurus URLs from chunk metadata (file path + heading).
 
@@ -385,7 +420,7 @@ def generate_citation_link(chunk_metadata):
     return f"/{url_path}#{fragment}"
 ```
 
-### 5. Rate Limiting Strategy
+### 6. Rate Limiting Strategy
 
 **Decision**: Two-tier rate limiting (per-session and per-IP).
 
@@ -400,7 +435,7 @@ def generate_citation_link(chunk_metadata):
 
 **Implementation**: Token bucket algorithm with Redis (optional) or in-memory cache.
 
-### 6. Conversation Retention Policy
+### 7. Conversation Retention Policy
 
 **Decision**: Auto-delete conversations after 30 days of inactivity.
 

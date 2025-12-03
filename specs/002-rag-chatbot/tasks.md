@@ -11,6 +11,27 @@ description: "Implementation tasks for RAG chatbot feature"
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
+---
+
+## ⚠️ IMPORTANT: OpenAI Agents SDK Integration
+
+**Update**: This implementation uses **OpenAI Agents SDK (Python) + LiteLLM + Google Gemini** instead of direct Gemini API calls.
+
+**Key Changes from Initial Plan**:
+1. **agent_service.py**: Initializes `Agent` with `LitellmModel(model="gemini/gemini-1.5-flash")`
+2. **tools.py**: Defines RAG tools using `@function_tool` decorator (e.g., `search_textbook()`)
+3. **chat.py endpoint**: Calls `Runner.run(agent, input=question, session=session_obj)` instead of direct Gemini API
+4. **Session management**: Uses OpenAI Agents SDK session primitives (can integrate with Postgres for persistence)
+5. **Tracing**: Optional OpenAI Traces dashboard integration for debugging (even with Gemini backend)
+
+**Why This Change**:
+- Structured orchestration of agent lifecycle and tool calling
+- Built-in session management, guardrails, and tracing
+- Future-ready for multi-agent patterns and advanced features
+- Clean separation between agent logic (instructions) and tools (RAG search)
+
+**Developer Note**: Review `research.md` section 11 and `plan.md` Key Decision #1 for full rationale and implementation patterns.
+
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
@@ -30,7 +51,7 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 **Purpose**: Project initialization and basic structure for both backend and frontend
 
 - [ ] T001 Create backend project structure per plan.md (backend/app/, backend/tests/, backend/scripts/)
-- [ ] T002 Initialize Python 3.11+ project with requirements.txt (FastAPI, google-generativeai, qdrant-client, psycopg2-binary)
+- [ ] T002 Initialize Python 3.11+ project with requirements.txt (FastAPI, openai-agents[litellm], google-generativeai, qdrant-client, psycopg2-binary, sentence-transformers)
 - [ ] T003 [P] Create backend/.env.example with all required environment variables (GEMINI_API_KEY, QDRANT_URL, QDRANT_API_KEY, NEON_DATABASE_URL)
 - [ ] T004 [P] Create backend/Dockerfile for containerized deployment
 - [ ] T005 [P] Initialize backend/app/__init__.py and backend/app/main.py with FastAPI app
@@ -83,47 +104,58 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 ### Services for User Story 1
 
-- [ ] T026 [US1] Implement backend/app/services/gemini_service.py with Gemini 1.5 Flash API wrapper (generate_answer method with context, error handling, rate limit retry)
-- [ ] T027 [US1] Implement backend/app/services/citation_resolver.py to generate Docusaurus URLs from chunk metadata (format: /week-##-##/topic#heading-slug)
-- [ ] T028 [US1] Extend backend/app/services/vector_store.py with semantic search method (search by query embedding, return top-5 chunks with relevance scores)
-- [ ] T029 [US1] Extend backend/app/services/postgres_service.py with methods to create/retrieve conversations, save questions, save answers
+- [ ] T026 [US1] Implement backend/app/services/agent_service.py with OpenAI Agents SDK + Gemini backend
+  - Initialize LitellmModel with gemini/gemini-1.5-flash and API key from config
+  - Create Agent with instructions for RAG (answer from context only, cite sources, max 500 words, identify out-of-scope)
+  - Configure ModelSettings (temperature=0.3 for factual accuracy, include_usage=True)
+  - Expose run_agent() async method accepting question, session_id, search_results
+- [ ] T027 [US1] Implement backend/app/services/tools.py with @function_tool definitions
+  - Create search_textbook() function tool with parameters: query (str), selected_context (str | None)
+  - Tool calls vector_store.py search methods and returns formatted results
+  - Tool uses citation_resolver to generate Docusaurus URLs from chunk metadata
+  - Return format: list of dicts with {text, citation_link, relevance_score}
+- [ ] T028 [US1] Implement backend/app/services/citation_resolver.py to generate Docusaurus URLs from chunk metadata (format: /week-##-##/topic#heading-slug)
+- [ ] T029 [US1] Extend backend/app/services/vector_store.py with semantic search method (search by query embedding, return top-5 chunks with relevance scores)
+- [ ] T030 [US1] Extend backend/app/services/postgres_service.py with methods to create/retrieve conversations, save questions, save answers
 
 ### API Endpoints for User Story 1
 
-- [ ] T030 [US1] Implement POST /v1/chat/ask endpoint in backend/app/api/routes/chat.py for full-textbook mode
+- [ ] T031 [US1] Implement POST /v1/chat/ask endpoint in backend/app/api/routes/chat.py for full-textbook mode
   - Validate QuestionRequest (10-1000 chars, session_id format)
   - Apply rate limiting (call rate_limiter service)
-  - Generate query embedding (call embeddings service with fallback)
-  - Search vector store for relevant chunks (top-5)
-  - Assemble context from chunks
-  - Call Gemini API to generate answer (max 500 words)
-  - Generate citations with links (call citation_resolver)
+  - Create or retrieve session from postgres_service (get session history for context)
+  - Initialize Agent with tools (search_textbook) from agent_service
+  - Run Agent via Runner.run(agent, input=question, session=session_obj, max_turns=3)
+  - Agent automatically calls search_textbook tool as needed (OpenAI Agents SDK handles tool orchestration)
+  - Extract final_output and usage statistics from result
+  - Parse citations from agent output (structured response via Pydantic models)
   - Save question and answer to Postgres
-  - Return AnswerResponse with answer, citations, confidence, processing_time_ms
-- [ ] T031 [US1] Add error handling for all failure modes in chat.py (no relevant content found, Gemini timeout, rate limit exceeded, embedding API failure)
-- [ ] T032 [US1] Implement GET /v1/health endpoint in backend/app/api/routes/health.py (check Gemini API, Qdrant, Postgres health)
+  - Return AnswerResponse with answer, citations, confidence, processing_time_ms, usage_tokens
+- [ ] T032 [US1] Add error handling for all failure modes in chat.py (no relevant content found, Gemini timeout via LiteLLM, rate limit exceeded, embedding API failure, agent tool execution errors)
+- [ ] T033 [US1] Implement GET /v1/health endpoint in backend/app/api/routes/health.py (check Gemini API via LiteLLM, Qdrant, Postgres health)
 
 ### Frontend Integration for User Story 1
 
-- [ ] T033 [US1] Create src/components/ChatWidget/index.tsx with chat UI using @chatscope/chat-ui-kit-react
+- [ ] T034 [US1] Create src/components/ChatWidget/index.tsx with chat UI using @chatscope/chat-ui-kit-react
   - State management for messages, typing indicator, session ID
   - handleSend function to call POST /v1/chat/ask
   - Display user messages and assistant responses
   - Show typing indicator during API call
   - Error handling with user-friendly messages
-- [ ] T034 [US1] Create src/components/ChatWidget/styles.css for chat widget styling (fixed position bottom-right, toggle button, responsive design)
-- [ ] T035 [US1] Create src/components/CitationLink.tsx to render clickable citations that navigate to textbook sections
-- [ ] T036 [US1] Integrate ChatWidget in src/theme/Layout/index.tsx to appear on all Docusaurus pages
-- [ ] T037 [US1] Configure environment variables in .env and docusaurus.config.js for REACT_APP_CHAT_API_URL
+- [ ] T035 [US1] Create src/components/ChatWidget/styles.css for chat widget styling (fixed position bottom-right, toggle button, responsive design)
+- [ ] T036 [US1] Create src/components/CitationLink.tsx to render clickable citations that navigate to textbook sections
+- [ ] T037 [US1] Integrate ChatWidget in src/theme/Layout/index.tsx to appear on all Docusaurus pages
+- [ ] T038 [US1] Configure environment variables in .env and docusaurus.config.js for REACT_APP_CHAT_API_URL
 
 ### Setup & Validation for User Story 1
 
-- [ ] T038 [US1] Run backend/scripts/index_textbook.py to embed and index all docs/ content into Qdrant (~500-1000 chunks expected)
-- [ ] T039 [US1] Run backend/scripts/migrate_db.py to initialize Neon Postgres schema
-- [ ] T040 [US1] Start backend server (uvicorn app.main:app --reload) and verify /v1/health returns healthy
-- [ ] T041 [US1] Test POST /v1/chat/ask with curl/Postman using 3 sample questions (verify 200 response, citations present)
-- [ ] T042 [US1] Start Docusaurus frontend (npm start) and verify chat widget appears and responds to questions
-- [ ] T043 [US1] Manual validation against acceptance scenarios:
+- [ ] T039 [US1] Run backend/scripts/index_textbook.py to embed and index all docs/ content into Qdrant (~500-1000 chunks expected)
+- [ ] T040 [US1] Run backend/scripts/migrate_db.py to initialize Neon Postgres schema
+- [ ] T041 [US1] Start backend server (uvicorn app.main:app --reload) and verify /v1/health returns healthy
+- [ ] T042 [US1] Test POST /v1/chat/ask with curl/Postman using 3 sample questions (verify 200 response, citations present, agent tool calls logged)
+- [ ] T043 [US1] Verify OpenAI Traces dashboard shows agent execution traces (optional: set OPENAI_API_KEY for tracing even with Gemini backend)
+- [ ] T044 [US1] Start Docusaurus frontend (npm start) and verify chat widget appears and responds to questions
+- [ ] T045 [US1] Manual validation against acceptance scenarios:
   - Test textbook-covered question (e.g., "What are ROS2 components?") → Verify accurate answer with citations
   - Test out-of-scope question (e.g., "What is quantum computing?") → Verify "not covered" response
   - Test vague question (e.g., "Tell me about robots") → Verify structured overview or clarifying response
@@ -145,47 +177,51 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 ### Data Models for User Story 2
 
-- [ ] T044 [P] [US2] Create backend/app/models/context.py with SelectedContext Pydantic model (text, range with startOffset/endOffset, metadata with chapter/section/file_path)
-- [ ] T045 [P] [US2] Extend QuestionRequest schema in backend/app/types/chat.py to include optional selected_text and selected_metadata fields
+- [ ] T046 [P] [US2] Create backend/app/models/context.py with SelectedContext Pydantic model (text, range with startOffset/endOffset, metadata with chapter/section/file_path)
+- [ ] T047 [P] [US2] Extend QuestionRequest schema in backend/app/types/chat.py to include optional selected_text and selected_metadata fields
 
 ### Services for User Story 2
 
-- [ ] T046 [US2] Extend backend/app/services/vector_store.py with filtered search method (search within specific chapter/section using Qdrant payload filters)
-- [ ] T047 [US2] Update backend/app/services/postgres_service.py to store selected_context JSONB in questions table
+- [ ] T048 [US2] Extend backend/app/services/tools.py search_textbook() function tool to handle selected_context parameter
+  - When selected_context provided: embed selected text, use Qdrant payload filters for chapter/section
+  - Return results scoped to selected content only
+  - Add context mode indicator in tool response
+- [ ] T049 [US2] Extend backend/app/services/vector_store.py with filtered search method (search within specific chapter/section using Qdrant payload filters)
+- [ ] T050 [US2] Update backend/app/services/postgres_service.py to store selected_context JSONB in questions table
 
 ### API Endpoints for User Story 2
 
-- [ ] T048 [US2] Extend POST /v1/chat/ask endpoint in backend/app/api/routes/chat.py to handle selected-text mode
+- [ ] T051 [US2] Extend POST /v1/chat/ask endpoint in backend/app/api/routes/chat.py to handle selected-text mode
   - Validate selected_text (50-5000 chars if provided)
   - Validate selected_metadata (chapter 1-13, section, file_path format)
-  - If context_mode='selected': embed selected_text, search vector store with chapter/section filter
-  - Generate answer from filtered context only
+  - Pass selected_text to Agent's search_textbook tool via context
+  - Agent tool automatically handles filtering via vector store
   - Add "context_used" field to response indicating which mode was used
-- [ ] T049 [US2] Add validation to reject questions where selected_text is too short (<50 chars) with helpful error message
+- [ ] T052 [US2] Add validation to reject questions where selected_text is too short (<50 chars) with helpful error message
 
 ### Frontend Integration for User Story 2
 
-- [ ] T050 [US2] Create frontend/src/hooks/useTextSelection.ts hook to capture DOM selections
+- [ ] T053 [US2] Create frontend/src/hooks/useTextSelection.ts hook to capture DOM selections
   - Listen for mouseup events on document
   - Use window.getSelection() to get selected text
   - Extract metadata from parent elements (data-chapter, data-section attributes)
   - Validate selection length (minimum 50 chars)
   - Return selectedText and metadata
-- [ ] T051 [US2] Create src/components/ContextSelector.tsx component to display selected text and mode toggle
+- [ ] T054 [US2] Create src/components/ContextSelector.tsx component to display selected text and mode toggle
   - Show selected text snippet with character count
   - Toggle button to switch between full/selected mode
   - Clear selection button
   - Visual indicator of current mode
-- [ ] T052 [US2] Integrate useTextSelection hook in ChatWidget/index.tsx
+- [ ] T055 [US2] Integrate useTextSelection hook in ChatWidget/index.tsx
   - Pass selected_text and selected_metadata to API when mode is 'selected'
   - Display context mode indicator in chat interface
   - Show warning if selection is too short
-- [ ] T053 [US2] Update Docusaurus markdown pages to include data attributes (data-chapter, data-section) in section wrappers
+- [ ] T056 [US2] Update Docusaurus markdown pages to include data attributes (data-chapter, data-section) in section wrappers
 
 ### Validation for User Story 2
 
-- [ ] T054 [US2] Test selected-text mode with curl/Postman (send selected_text and selected_metadata in request body)
-- [ ] T055 [US2] Manual validation against acceptance scenarios:
+- [ ] T057 [US2] Test selected-text mode with curl/Postman (send selected_text and selected_metadata in request body)
+- [ ] T058 [US2] Manual validation against acceptance scenarios:
   - Select "TF2 Transformations" section → Ask "How do coordinate frames work?" → Verify answer references only that section
   - Same selection → Ask about unrelated topic → Verify "cannot answer from selected content" response
   - Clear selection → Ask same question → Verify answer now references full textbook

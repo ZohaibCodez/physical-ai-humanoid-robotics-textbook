@@ -224,20 +224,20 @@
 
 ### Implementation for User Story 5
 
-- [ ] T097 [P] [US5] Create docs/assessments.md with overview of assessment structure and grading philosophy
-- [ ] T098 [P] [US5] Add Week 5 (ROS 2) assessment section to docs/assessments.md with project requirements and rubric
-- [ ] T099 [P] [US5] Add Week 7 (Simulation) assessment section to docs/assessments.md with deliverables and grading criteria
-- [ ] T100 [P] [US5] Add Week 10 (NVIDIA Isaac) assessment section to docs/assessments.md with evaluation rubric
-- [ ] T101 [P] [US5] Add Week 12 (Humanoid) assessment section to docs/assessments.md with project requirements
-- [ ] T102 [P] [US5] Create capstone project description in docs/week-13/05-capstone-project.md with autonomous humanoid requirements
-- [ ] T103 [P] [US5] Add project timeline to docs/week-13/05-capstone-project.md with milestones and deadlines
-- [ ] T104 [P] [US5] Add capstone rubric to docs/week-13/05-capstone-project.md with specific grading criteria for each grade level
-- [ ] T105 [P] [US5] Add implementation tips section to docs/week-13/05-capstone-project.md with suggested approaches (not complete solutions)
-- [ ] T106 [P] [US5] Add submission guidelines to docs/assessments.md with format requirements and delivery instructions
-- [ ] T107 [US5] Review all rubrics for clarity and measurability - verify each criterion has specific description
-- [ ] T108 [US5] Test rubric usability - verify students can self-assess using provided criteria
-- [ ] T109 [US5] Add assessments.md to sidebars.js navigation for easy access
-- [ ] T110 [US5] Deploy updated site and verify all assessment documentation is complete and accessible
+- [X] T097 [P] [US5] Create docs/assessments.md with overview of assessment structure and grading philosophy
+- [X] T098 [P] [US5] Add Week 5 (ROS 2) assessment section to docs/assessments.md with project requirements and rubric
+- [X] T099 [P] [US5] Add Week 7 (Simulation) assessment section to docs/assessments.md with deliverables and grading criteria
+- [X] T100 [P] [US5] Add Week 10 (NVIDIA Isaac) assessment section to docs/assessments.md with evaluation rubric
+- [X] T101 [P] [US5] Add Week 12 (Humanoid) assessment section to docs/assessments.md with project requirements
+- [X] T102 [P] [US5] Create capstone project description in docs/week-13/05-capstone-project.md with autonomous humanoid requirements
+- [X] T103 [P] [US5] Add project timeline to docs/week-13/05-capstone-project.md with milestones and deadlines
+- [X] T104 [P] [US5] Add capstone rubric to docs/week-13/05-capstone-project.md with specific grading criteria for each grade level
+- [X] T105 [P] [US5] Add implementation tips section to docs/week-13/05-capstone-project.md with suggested approaches (not complete solutions)
+- [X] T106 [P] [US5] Add submission guidelines to docs/assessments.md with format requirements and delivery instructions
+- [X] T107 [US5] Review all rubrics for clarity and measurability - verify each criterion has specific description
+- [X] T108 [US5] Test rubric usability - verify students can self-assess using provided criteria
+- [X] T109 [US5] Add assessments.md to sidebars.js navigation for easy access
+- [X] T110 [US5] Deploy updated site and verify all assessment documentation is complete and accessible
 
 **Checkpoint**: All user stories complete - Students can navigate, see code examples, set up environment, view diagrams, understand assessments
 

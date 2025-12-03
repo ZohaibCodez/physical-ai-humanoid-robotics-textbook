@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#2e8555">Bipedal Locomotion: Gait Cycle</text>
+  
+  <!-- Double Support Phase -->
+  <g id="double-support-1">
+    <rect x="50" y="100" width="180" height="250" fill="#E8F5E9" stroke="#4CAF50" stroke-width="3" rx="5"/>
+    <text x="140" y="130" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e7d32">Double Support</text>
+    <text x="140" y="150" text-anchor="middle" font-size="12" fill="#666">(10-15% of cycle)</text>
+    
+    <!-- Simplified humanoid figure -->
+    <circle cx="140" cy="200" r="15" fill="#1976D2"/>
+    <line x1="140" y1="215" x2="140" y2="270" stroke="#1976D2" stroke-width="4"/>
+    <line x1="140" y1="230" x2="120" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <line x1="140" y1="230" x2="160" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <!-- Both feet on ground -->
+    <line x1="140" y1="270" x2="120" y2="315" stroke="#1976D2" stroke-width="4"/>
+    <line x1="140" y1="270" x2="160" y2="315" stroke="#1976D2" stroke-width="4"/>
+    <rect x="115" y="315" width="10" height="15" fill="#333"/>
+    <rect x="155" y="315" width="10" height="15" fill="#333"/>
+    
+    <text x="140" y="345" text-anchor="middle" font-size="11" fill="#666">Both feet</text>
+    <text x="140" y="360" text-anchor="middle" font-size="11" fill="#666">on ground</text>
+  </g>
+  
+  <!-- Single Support Phase (Right) -->
+  <g id="single-support-right">
+    <rect x="280" y="100" width="180" height="250" fill="#FFF3E0" stroke="#FF9800" stroke-width="3" rx="5"/>
+    <text x="370" y="130" text-anchor="middle" font-size="16" font-weight="bold" fill="#E65100">Single Support (R)</text>
+    <text x="370" y="150" text-anchor="middle" font-size="12" fill="#666">(35-40% of cycle)</text>
+    
+    <circle cx="370" cy="200" r="15" fill="#1976D2"/>
+    <line x1="370" y1="215" x2="370" y2="270" stroke="#1976D2" stroke-width="4"/>
+    <line x1="370" y1="230" x2="350" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <line x1="370" y1="230" x2="390" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <!-- Right foot on ground, left swinging forward -->
+    <line x1="370" y1="270" x2="390" y2="315" stroke="#1976D2" stroke-width="4"/>
+    <line x1="370" y1="270" x2="340" y2="280" stroke="#1976D2" stroke-width="4" stroke-dasharray="5,5"/>
+    <rect x="385" y="315" width="10" height="15" fill="#333"/>
+    <circle cx="340" cy="280" r="5" fill="#FF5252"/>
+    
+    <text x="370" y="345" text-anchor="middle" font-size="11" fill="#666">Right foot</text>
+    <text x="370" y="360" text-anchor="middle" font-size="11" fill="#666">on ground</text>
+  </g>
+  
+  <!-- Double Support Phase 2 -->
+  <g id="double-support-2">
+    <rect x="510" y="100" width="180" height="250" fill="#E8F5E9" stroke="#4CAF50" stroke-width="3" rx="5"/>
+    <text x="600" y="130" text-anchor="middle" font-size="16" font-weight="bold" fill="#2e7d32">Double Support</text>
+    <text x="600" y="150" text-anchor="middle" font-size="12" fill="#666">(10-15% of cycle)</text>
+    
+    <circle cx="600" cy="200" r="15" fill="#1976D2"/>
+    <line x1="600" y1="215" x2="600" y2="270" stroke="#1976D2" stroke-width="4"/>
+    <line x1="600" y1="230" x2="580" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <line x1="600" y1="230" x2="620" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <line x1="600" y1="270" x2="580" y2="315" stroke="#1976D2" stroke-width="4"/>
+    <line x1="600" y1="270" x2="620" y2="315" stroke="#1976D2" stroke-width="4"/>
+    <rect x="575" y="315" width="10" height="15" fill="#333"/>
+    <rect x="615" y="315" width="10" height="15" fill="#333"/>
+    
+    <text x="600" y="345" text-anchor="middle" font-size="11" fill="#666">Both feet</text>
+    <text x="600" y="360" text-anchor="middle" font-size="11" fill="#666">on ground</text>
+  </g>
+  
+  <!-- Single Support Phase (Left) -->
+  <g id="single-support-left">
+    <rect x="740" y="100" width="180" height="250" fill="#E1F5FE" stroke="#2196F3" stroke-width="3" rx="5"/>
+    <text x="830" y="130" text-anchor="middle" font-size="16" font-weight="bold" fill="#0D47A1">Single Support (L)</text>
+    <text x="830" y="150" text-anchor="middle" font-size="12" fill="#666">(35-40% of cycle)</text>
+    
+    <circle cx="830" cy="200" r="15" fill="#1976D2"/>
+    <line x1="830" y1="215" x2="830" y2="270" stroke="#1976D2" stroke-width="4"/>
+    <line x1="830" y1="230" x2="810" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <line x1="830" y1="230" x2="850" y2="255" stroke="#1976D2" stroke-width="3"/>
+    <!-- Left foot on ground, right swinging forward -->
+    <line x1="830" y1="270" x2="810" y2="315" stroke="#1976D2" stroke-width="4"/>
+    <line x1="830" y1="270" x2="860" y2="280" stroke="#1976D2" stroke-width="4" stroke-dasharray="5,5"/>
+    <rect x="805" y="315" width="10" height="15" fill="#333"/>
+    <circle cx="860" cy="280" r="5" fill="#FF5252"/>
+    
+    <text x="830" y="345" text-anchor="middle" font-size="11" fill="#666">Left foot</text>
+    <text x="830" y="360" text-anchor="middle" font-size="11" fill="#666">on ground</text>
+  </g>
+  
+  <!-- Timeline arrow -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+  </defs>
+  <line x1="50" y1="420" x2="920" y2="420" stroke="#333" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="500" y="445" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Time →</text>
+  
+  <!-- Phase markers -->
+  <line x1="140" y1="410" x2="140" y2="430" stroke="#4CAF50" stroke-width="2"/>
+  <line x1="370" y1="410" x2="370" y2="430" stroke="#FF9800" stroke-width="2"/>
+  <line x1="600" y1="410" x2="600" y2="430" stroke="#4CAF50" stroke-width="2"/>
+  <line x1="830" y1="410" x2="830" y2="430" stroke="#2196F3" stroke-width="2"/>
+  
+  <!-- Key Metrics Box -->
+  <rect x="50" y="480" width="900" height="180" fill="#F5F5F5" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="60" y="510" font-size="16" font-weight="bold" fill="#333">Key Gait Parameters:</text>
+  
+  <text x="60" y="540" font-size="13" fill="#333">• <tspan font-weight="bold">Stride Length:</tspan> Distance between successive contacts of same foot (typ. 0.6-0.8m)</text>
+  <text x="60" y="565" font-size="13" fill="#333">• <tspan font-weight="bold">Step Length:</tspan> Distance between left and right foot contacts (typ. 0.3-0.4m)</text>
+  <text x="60" y="590" font-size="13" fill="#333">• <tspan font-weight="bold">Cadence:</tspan> Steps per minute (humanoid: 90-120 steps/min)</text>
+  <text x="60" y="615" font-size="13" fill="#333">• <tspan font-weight="bold">Double Support:</tspan> ~10-15% of gait cycle (critical for stability)</text>
+  <text x="60" y="640" font-size="13" fill="#333">• <tspan font-weight="bold">Swing Phase:</tspan> ~35-40% per leg (foot clearance and forward motion)</text>
+  
+  <!-- Control Challenges note -->
+  <rect x="550" y="505" width="380" height="145" fill="#FFF3E0" stroke="#FF9800" stroke-width="2" rx="5"/>
+  <text x="560" y="530" font-size="14" font-weight="bold" fill="#E65100">Control Challenges:</text>
+  <text x="560" y="555" font-size="12" fill="#333">1. Dynamic balance during single support</text>
+  <text x="560" y="575" font-size="12" fill="#333">2. Smooth transition between phases</text>
+  <text x="560" y="595" font-size="12" fill="#333">3. Zero Moment Point (ZMP) management</text>
+  <text x="560" y="615" font-size="12" fill="#333">4. Foot placement precision (±5mm)</text>
+  <text x="560" y="635" font-size="12" fill="#333">5. Disturbance rejection (pushes, terrain)</text>
+</svg>

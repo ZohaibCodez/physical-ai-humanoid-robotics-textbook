@@ -117,12 +117,12 @@
 - [X] T039 [P] [US1] Create docs/week-13/01-gazebo-simulation.md with frontmatter, learning objectives, sections
 - [X] T040 [P] [US1] Create docs/appendix/_category_.json with label "Appendix" and collapsed: true
 - [X] T041 [P] [US1] Add all created chapter references to sidebars.js in correct module categories
-- [ ] T042 [US1] Test sidebar navigation - verify all chapters appear, expand/collapse works, breadcrumbs display
-- [ ] T043 [US1] Test search functionality with test queries ("ROS 2", "URDF", "humanoid") and verify results
-- [ ] T044 [US1] Test mobile responsiveness - verify layout works on 320px, 768px, 1024px widths
-- [ ] T045 [US1] Test dark mode toggle - verify all pages render correctly in both themes
-- [ ] T046 [US1] Test Next/Previous navigation buttons at bottom of chapters
-- [ ] T047 [US1] Deploy to GitHub Pages and verify live site navigation works end-to-end
+- [X] T042 [US1] Test sidebar navigation - verify all chapters appear, expand/collapse works, breadcrumbs display
+- [X] T043 [US1] Test search functionality with test queries ("ROS 2", "URDF", "humanoid") and verify results
+- [X] T044 [US1] Test mobile responsiveness - verify layout works on 320px, 768px, 1024px widths
+- [X] T045 [US1] Test dark mode toggle - verify all pages render correctly in both themes
+- [X] T046 [US1] Test Next/Previous navigation buttons at bottom of chapters
+- [X] T047 [US1] Deploy to GitHub Pages and verify live site navigation works end-to-end
 
 **Checkpoint**: User Story 1 complete - Students can navigate entire curriculum structure, search works, mobile-responsive
 
@@ -176,10 +176,10 @@
 - [X] T072 [P] [US3] Add environment verification section to docs/appendix/software-installation.md with test commands
 - [X] T073 [P] [US3] Create docs/appendix/troubleshooting.md with common installation errors organized by OS
 - [X] T074 [P] [US3] Add "Hello ROS 2" test program to docs/appendix/software-installation.md for setup verification
-- [ ] T075 [US3] Test all installation commands in clean Docker containers (Ubuntu 22.04) to verify accuracy
-- [ ] T076 [US3] Review hardware pricing and update if needed for accuracy
+- [X] T075 [US3] Test all installation commands in clean Docker containers (Ubuntu 22.04) to verify accuracy
+- [X] T076 [US3] Review hardware pricing and update if needed for accuracy
 - [X] T077 [US3] Add comparison table to docs/appendix/hardware-requirements.md showing cost vs capabilities
-- [ ] T078 [US3] Deploy updated appendix and verify all setup documentation is complete and accurate
+- [X] T078 [US3] Deploy updated appendix and verify all setup documentation is complete and accurate
 
 **Checkpoint**: User Story 3 complete - Students can choose hardware option and install all required software
 

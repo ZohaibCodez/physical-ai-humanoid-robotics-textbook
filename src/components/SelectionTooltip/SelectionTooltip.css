@@ -1,0 +1,190 @@
+.selection-tooltip {
+  position: absolute;
+  z-index: 10000;
+  transform: translateX(-50%);
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.tooltip-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 2px solid #0EA5E9;
+  padding: 0.75rem;
+  min-width: 280px;
+}
+
+.tooltip-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tooltip-btn {
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ask-btn {
+  background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+  color: white;
+  flex: 1;
+  justify-content: center;
+}
+
+.ask-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.ask-btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  font-size: 1.125rem;
+}
+
+.close-btn {
+  background: #F1F5F9;
+  color: #64748B;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  justify-content: center;
+  font-size: 1.125rem;
+}
+
+.close-btn:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.tooltip-input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.tooltip-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.tooltip-input:focus {
+  outline: none;
+  border-color: #0EA5E9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.tooltip-input::placeholder {
+  color: #94A3B8;
+}
+
+.tooltip-input-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.tooltip-submit-btn,
+.tooltip-cancel-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tooltip-submit-btn {
+  background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+  color: white;
+}
+
+.tooltip-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+}
+
+.tooltip-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tooltip-cancel-btn {
+  background: #F1F5F9;
+  color: #64748B;
+}
+
+.tooltip-cancel-btn:hover {
+  background: #E2E8F0;
+  color: #475569;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #0EA5E9;
+}
+
+.tooltip-arrow::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: -7px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .tooltip-content {
+    min-width: 240px;
+    padding: 0.625rem;
+  }
+
+  .tooltip-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .tooltip-input {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}

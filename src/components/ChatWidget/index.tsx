@@ -10,6 +10,7 @@ import {
   TypingIndicator,
 } from '@chatscope/chat-ui-kit-react';
 import { useTextSelection } from '../../hooks/useTextSelection';
+import SelectionTooltip from '../SelectionTooltip';
 import CitationLink from '../CitationLink';
 import './styles.css';
 
@@ -156,16 +157,41 @@ const ChatWidget = ({ apiUrl }) => {
     setIsOpen(!isOpen);
   };
 
+  const handleTooltipAsk = (question: string) => {
+    // Open chat if closed
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+    
+    // Format message with question and selected text
+    const formattedMessage = `${question}\n\n**Selected Text:**\n> ${selectedContext?.text.substring(0, 300)}${selectedContext?.text.length > 300 ? '...' : ''}`;
+    
+    // Set to selected mode and send
+    setContextMode('selected');
+    handleSendMessage(formattedMessage);
+    
+    // Keep selection for context but don't show tooltip
+  };
+
   return (
     <>
-      {/* Chat Toggle Button with selection badge */}
+      {/* Selection Tooltip */}
+      {selectedContext && !isOpen && (
+        <SelectionTooltip
+          selectedText={selectedContext.text}
+          onAsk={handleTooltipAsk}
+          onClose={clearSelection}
+        />
+      )}
+
+      {/* Chat Toggle Button */}
       <button
         className="chat-toggle-button"
         onClick={toggleChat}
         aria-label="Toggle chat"
       >
         {isOpen ? '✕' : '💬'}
-        {selectedContext && !isOpen && (
+        {selectedContext && (
           <span className="selection-badge" title="Text selected">
             📌
           </span>
@@ -178,54 +204,16 @@ const ChatWidget = ({ apiUrl }) => {
           <div className="chat-widget-header">
             <div className="header-left">
               <h3>Textbook Assistant</h3>
+              {selectedContext && (
+                <span className="selection-indicator" title="Text selected - will be used as context">
+                  📌 Selection Active
+                </span>
+              )}
             </div>
             <button onClick={toggleChat} className="chat-close-button">
               ✕
             </button>
           </div>
-          
-          {/* Integrated Selection Controls */}
-          {selectedContext && (
-            <div className="selection-controls">
-              <div className="selection-info">
-                <span className="selection-icon">📌</span>
-                <div className="selection-text">
-                  <strong>Text Selected</strong>
-                  <span className="selection-length">{selectedContext.text.length} characters</span>
-                </div>
-              </div>
-              
-              <div className="mode-toggle">
-                <button
-                  className={`mode-btn ${contextMode === 'full' ? 'active' : ''}`}
-                  onClick={() => setContextMode('full')}
-                  title="Search entire textbook"
-                >
-                  <span className="mode-icon">📚</span>
-                  Full Textbook
-                </button>
-                <button
-                  className={`mode-btn ${contextMode === 'selected' ? 'active' : ''}`}
-                  onClick={() => setContextMode('selected')}
-                  title="Search only selected text"
-                >
-                  <span className="mode-icon">🎯</span>
-                  Selected Text
-                </button>
-              </div>
-              
-              <button
-                className="clear-selection-btn"
-                onClick={() => {
-                  clearSelection();
-                  setContextMode('full');
-                }}
-                title="Clear selection"
-              >
-                ✕
-              </button>
-            </div>
-          )}
 
           <MainContainer>
             <ChatContainer>

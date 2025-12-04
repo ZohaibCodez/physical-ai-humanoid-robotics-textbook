@@ -6,6 +6,8 @@ RAG Chatbot backend using OpenAI Agents SDK + Google Gemini via LiteLLM.
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from app.config import settings
 from app.api.routes import chat, health
 import logging
@@ -80,6 +82,26 @@ app.add_middleware(
 # Include routers with /v1 prefix
 app.include_router(chat.router, prefix="/v1", tags=["chat"])
 app.include_router(health.router, prefix="/v1", tags=["health"])
+
+# Add validation error handler for better debugging
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Log and format validation errors for debugging."""
+    error_details = exc.errors()
+    logger.error(
+        f"Validation error on {request.method} {request.url.path}",
+        extra={
+            "errors": error_details,
+            "body": await request.body() if request.method in ["POST", "PUT", "PATCH"] else None
+        }
+    )
+    return JSONResponse(
+        status_code=422,
+        content={
+            "detail": error_details,
+            "message": "Request validation failed. Check your input data."
+        }
+    )
 
 @app.on_event("startup")
 async def startup_event():

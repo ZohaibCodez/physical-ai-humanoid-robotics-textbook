@@ -11,8 +11,10 @@ from typing import Optional, Dict, Any
 class TextRange(BaseModel):
     """Represents the position range of selected text in the document."""
     
-    start_offset: int = Field(..., ge=0, description="Starting character offset in document")
-    end_offset: int = Field(..., ge=0, description="Ending character offset in document")
+    start_offset: int = Field(..., ge=0, description="Starting character offset in document", alias="startOffset")
+    end_offset: int = Field(..., ge=0, description="Ending character offset in document", alias="endOffset")
+    
+    model_config = {"populate_by_name": True}  # Allow both snake_case and camelCase
     
     @field_validator('end_offset')
     @classmethod
@@ -28,8 +30,10 @@ class ContextMetadata(BaseModel):
     
     chapter: Optional[int] = Field(None, ge=1, le=13, description="Textbook chapter number (1-13)")
     section: Optional[str] = Field(None, max_length=200, description="Section name")
-    file_path: Optional[str] = Field(None, max_length=500, description="Relative path to markdown file")
+    file_path: Optional[str] = Field(None, max_length=500, description="Relative path to markdown file", alias="filePath")
     heading: Optional[str] = Field(None, max_length=200, description="Heading text where selection is located")
+    
+    model_config = {"populate_by_name": True}  # Allow both snake_case and camelCase
 
 
 class SelectedContext(BaseModel):

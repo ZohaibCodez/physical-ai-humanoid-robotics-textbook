@@ -6,6 +6,7 @@ Handles question answering and conversation history.
 
 from fastapi import APIRouter, HTTPException, status, Request
 from fastapi.responses import StreamingResponse
+from fastapi.exceptions import RequestValidationError
 from app.models.chat import QuestionRequest, AnswerResponse, ErrorResponse, HistoryResponse
 from app.models.textbook import Citation
 from app.services.agent_service import agent_service
@@ -21,6 +22,7 @@ from datetime import datetime
 import time
 import json
 from typing import AsyncGenerator
+from pydantic import ValidationError
 
 router = APIRouter()
 
@@ -51,6 +53,11 @@ async def ask_question(request_body: QuestionRequest, request: Request):
     start_time = time.time()
     
     try:
+        # Debug log the request
+        logger.info(f"Received request - context_mode: {request_body.context_mode}, has_selected_context: {request_body.selected_context is not None}")
+        if request_body.selected_context:
+            logger.info(f"Selected context text length: {len(request_body.selected_context.text)} chars")
+        
         # Get user IP
         user_ip = request.client.host if request.client else "unknown"
         
@@ -256,6 +263,11 @@ async def ask_question_stream(request_body: QuestionRequest, request: Request):
     async def generate_stream() -> AsyncGenerator[str, None]:
         """Generate SSE formatted stream events."""
         try:
+            # Debug log the request
+            logger.info(f"Stream request - context_mode: {request_body.context_mode}, has_selected_context: {request_body.selected_context is not None}")
+            if request_body.selected_context:
+                logger.info(f"Stream selected context text length: {len(request_body.selected_context.text)} chars")
+            
             # Get user IP
             user_ip = request.client.host if request.client else "unknown"
             

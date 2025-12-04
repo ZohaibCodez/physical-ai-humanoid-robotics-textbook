@@ -131,11 +131,15 @@
   font-size: 0.875rem;
   color: #0369A1;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .selection-length {
   font-size: 0.75rem;
   color: #64748B;
+  white-space: nowrap;
 }
 
 .mode-toggle {

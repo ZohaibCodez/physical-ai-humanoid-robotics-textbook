@@ -1,11 +1,17 @@
 [phases.setup]
-nixPkgs = ["python312", "postgresql"]
+nixPkgs = ["python312"]
+aptPkgs = ["libpq-dev"]
 
 [phases.install]
 cmds = [
-  "pip install --upgrade pip",
-  "pip install --no-cache-dir -r requirements.txt"
+  "pip install --upgrade pip setuptools wheel",
+  "pip install --no-cache-dir --no-deps -r requirements.txt",
+  "pip check"
 ]
 
 [start]
 cmd = "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+
+[build]
+# Optimize for smaller image size
+cacheDirectories = [".cache/pip"]

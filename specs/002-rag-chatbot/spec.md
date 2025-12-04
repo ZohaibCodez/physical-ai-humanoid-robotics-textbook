@@ -12,6 +12,14 @@
 - Q: Maximum answer length for chatbot responses? → A: 500 words maximum
 - Q: How will users select text for context-scoped questions? → A: User highlights text in web UI
 
+### Session 2025-12-04
+
+- Q: Rate limiting strategy for development and production? → A: Session-based (10 requests/minute per session ID)
+- Q: Which embedding model for development? → A: Sentence Transformers local (all-MiniLM-L6-v2, no API keys needed)
+- Q: Vector database setup for development? → A: Qdrant local Docker container (http://localhost:6333)
+- Q: Database for conversation history? → A: Neon Postgres (cloud-hosted, free tier for both dev and production)
+- Q: Conversation history retention limit? → A: Last 10 turns per session (balanced context window)
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Ask Question from Full Textbook (Priority: P1)
@@ -84,9 +92,9 @@ A student receives an answer from the chatbot and wants to verify the informatio
 - **FR-003**: System MUST generate accurate answers using a conversational AI agent with retrieved textbook context
 - **FR-004**: System MUST support two modes: (1) full textbook question-answering, and (2) selected-text-only question-answering
 - **FR-005**: System MUST cite the specific textbook sections (chapter, section, page) used to generate each answer
-- **FR-006**: System MUST use a free embedding model for converting text and questions into vector embeddings
-- **FR-007**: System MUST store textbook content embeddings in a vector database for efficient semantic retrieval
-- **FR-008**: System MUST store conversation history for context-aware follow-up questions
+- **FR-006**: System MUST use Sentence Transformers (all-MiniLM-L6-v2) local model for converting text and questions into vector embeddings (384-dimensional vectors)
+- **FR-007**: System MUST store textbook content embeddings in Qdrant vector database (local Docker for development, cloud for production) for efficient semantic retrieval
+- **FR-008**: System MUST store conversation history in Neon Postgres database for context-aware follow-up questions, retaining the last 10 question-answer turns per session
 - **FR-009**: System MUST handle cases where no relevant content is found (e.g., out-of-scope questions)
 - **FR-010**: System MUST display clickable citations that link to the original textbook sections
 - **FR-011**: System MUST process and index the full textbook content during initial setup
@@ -94,6 +102,7 @@ A student receives an answer from the chatbot and wants to verify the informatio
 - **FR-013**: System MUST handle API failures gracefully with user-friendly error messages
 - **FR-014**: System MUST limit answer length to 500 words maximum to balance detail with readability
 - **FR-015**: System MUST allow users to highlight text in the web UI to define the selected context scope for question-answering
+- **FR-016**: System MUST enforce rate limiting of 10 requests per minute per session ID to prevent abuse
 
 ### Key Entities
 

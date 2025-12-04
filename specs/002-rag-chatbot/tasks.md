@@ -50,12 +50,12 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 **Purpose**: Project initialization and basic structure for both backend and frontend
 
-- [ ] T001 Create backend project structure per plan.md (backend/app/, backend/tests/, backend/scripts/)
-- [ ] T002 Initialize Python 3.11+ project with requirements.txt (FastAPI, openai-agents[litellm], google-generativeai, qdrant-client, psycopg2-binary, sentence-transformers)
-- [ ] T003 [P] Create backend/.env.example with all required environment variables (GEMINI_API_KEY, QDRANT_URL, QDRANT_API_KEY, NEON_DATABASE_URL)
-- [ ] T004 [P] Create backend/Dockerfile for containerized deployment
-- [ ] T005 [P] Initialize backend/app/__init__.py and backend/app/main.py with FastAPI app
-- [ ] T006 [P] Create requirements-dev.txt for development dependencies (pytest, pytest-asyncio, httpx, black, flake8)
+- [X] T001 Create backend project structure per plan.md (backend/app/, backend/tests/, backend/scripts/)
+- [X] T002 Initialize Python 3.11+ project with requirements.txt (FastAPI, openai-agents[litellm], google-generativeai, qdrant-client, psycopg2-binary, sentence-transformers)
+- [X] T003 [P] Create backend/.env.example with all required environment variables (GEMINI_API_KEY, QDRANT_URL, QDRANT_API_KEY, NEON_DATABASE_URL)
+- [X] T004 [P] Create backend/Dockerfile for containerized deployment
+- [X] T005 [P] Initialize backend/app/__init__.py and backend/app/main.py with FastAPI app
+- [X] T006 [P] Create requirements-dev.txt for development dependencies (pytest, pytest-asyncio, httpx, black, flake8)
 - [ ] T007 Create frontend ChatWidget component structure in src/components/ChatWidget/
 - [ ] T008 Install frontend dependencies (npm install @chatscope/chat-ui-kit-react react-markdown remark-gfm)
 
@@ -67,9 +67,9 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T009 Create backend/app/config.py for environment configuration (load from .env, validate required keys)
-- [ ] T010 [P] Implement backend/app/utils/logger.py with structured JSON logging
-- [ ] T011 [P] Implement backend/app/utils/exceptions.py with custom exception classes (RateLimitError, EmbeddingError, VectorStoreError)
+- [X] T009 Create backend/app/config.py for environment configuration (load from .env, validate required keys)
+- [X] T010 [P] Implement backend/app/utils/logger.py with structured JSON logging
+- [X] T011 [P] Implement backend/app/utils/exceptions.py with custom exception classes (RateLimitError, EmbeddingError, VectorStoreError)
 - [ ] T012 Create database schema in backend/scripts/migrate_db.py (conversations, questions, answers tables with indexes)
 - [ ] T013 Implement backend/app/services/postgres_service.py with Neon Postgres connection pooling and CRUD operations
 - [ ] T014 [P] Implement backend/app/services/embeddings.py for Google text-embedding-004 API client
@@ -78,9 +78,9 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 - [ ] T017 [P] Implement backend/app/services/rate_limiter.py with token bucket algorithm (10 req/min per session, 50 req/hour per IP)
 - [ ] T018 Implement backend/app/services/indexer.py for textbook chunking (300-500 tokens, 50-token overlap) and embedding generation
 - [ ] T019 Create backend/scripts/index_textbook.py CLI script to index docs/ directory into Qdrant
-- [ ] T020 [P] Implement backend/app/api/dependencies.py with FastAPI dependency injection for services
-- [ ] T021 Configure CORS middleware in backend/app/main.py for frontend origins
-- [ ] T022 Setup API versioning and prefix (/v1) in backend/app/main.py
+- [X] T020 [P] Implement backend/app/api/dependencies.py with FastAPI dependency injection for services
+- [X] T021 Configure CORS middleware in backend/app/main.py for frontend origins
+- [X] T022 Setup API versioning and prefix (/v1) in backend/app/main.py
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -98,9 +98,9 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 ### Data Models for User Story 1
 
-- [ ] T023 [P] [US1] Create backend/app/models/conversation.py with Conversation Pydantic model (id, session_id, user_ip, context_mode, created_at, updated_at)
-- [ ] T024 [P] [US1] Create backend/app/models/textbook.py with TextbookChunk and Citation Pydantic models (chunk_id, text, chapter, section, embeddings, metadata)
-- [ ] T025 [P] [US1] Create backend/app/types/chat.py with QuestionRequest and AnswerResponse schemas matching OpenAPI spec
+- [X] T023 [P] [US1] Create backend/app/models/conversation.py with Conversation Pydantic model (id, session_id, user_ip, context_mode, created_at, updated_at)
+- [X] T024 [P] [US1] Create backend/app/models/textbook.py with TextbookChunk and Citation Pydantic models (chunk_id, text, chapter, section, embeddings, metadata)
+- [X] T025 [P] [US1] Create backend/app/models/chat.py with QuestionRequest and AnswerResponse schemas matching OpenAPI spec
 
 ### Services for User Story 1
 
@@ -131,8 +131,8 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
   - Parse citations from agent output (structured response via Pydantic models)
   - Save question and answer to Postgres
   - Return AnswerResponse with answer, citations, confidence, processing_time_ms, usage_tokens
-- [ ] T032 [US1] Add error handling for all failure modes in chat.py (no relevant content found, Gemini timeout via LiteLLM, rate limit exceeded, embedding API failure, agent tool execution errors)
-- [ ] T033 [US1] Implement GET /v1/health endpoint in backend/app/api/routes/health.py (check Gemini API via LiteLLM, Qdrant, Postgres health)
+- [X] T032 [US1] Add error handling for all failure modes in chat.py (no relevant content found, Gemini timeout via LiteLLM, rate limit exceeded, embedding API failure, agent tool execution errors)
+- [X] T033 [US1] Implement GET /v1/health endpoint in backend/app/api/routes/health.py (check Gemini API via LiteLLM, Qdrant, Postgres health)
 
 ### Frontend Integration for User Story 1
 

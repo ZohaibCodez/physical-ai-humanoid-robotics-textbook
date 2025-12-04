@@ -144,6 +144,7 @@ backend/
 - ✅ Environment variables management
 - ✅ Automatic deployments from GitHub
 - ✅ Built-in PostgreSQL (if needed)
+- ✅ **Monorepo support with root directory configuration**
 
 **Step-by-Step Deployment:**
 
@@ -157,9 +158,22 @@ backend/
    - Choose your `physical-ai-humanoid-robotics-textbook` repository
    - Select `002-rag-chatbot` branch
 
-3. **Configure Root Directory:**
-   - In project settings, set **Root Directory** to `backend`
-   - This tells Railway to deploy only the backend folder
+3. **Configure Root Directory (MONOREPO SETUP):**
+   
+   **Method 1: Railway Dashboard (Easiest)**
+   - After creating the service, go to **Settings** tab
+   - Scroll to **Source** section
+   - Set **Root Directory** to `backend`
+   - Click **Save**
+   
+   **Method 2: Using railway.json (Already included)**
+   - The `backend/railway.json` file is already configured
+   - Railway will automatically detect it when deploying from the backend folder
+   
+   **Method 3: Environment Variable**
+   - Set `RAILWAY_ROOT_DIRECTORY=backend` in Variables tab
+   
+   > **Note:** Railway has built-in support for monorepos. The `railway.json` and `nixpacks.toml` files in the backend folder tell Railway exactly how to build and deploy just the backend.
 
 4. **Set Environment Variables:**
    Click "Variables" tab and add:

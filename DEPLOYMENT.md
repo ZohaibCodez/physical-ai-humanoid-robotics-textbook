@@ -71,13 +71,18 @@ Complete guide to deploy your Physical AI & Humanoid Robotics chatbot for FREE.
 5. Select branch: 002-rag-chatbot
 ```
 
-#### 3. Configure Backend
+#### 3. Configure Backend (MONOREPO SETUP)
 ```bash
 1. After project is created, click on the service
 2. Go to "Settings" tab
-3. Set Root Directory: backend
-   (This tells Railway to only deploy the backend folder)
-4. Set Start Command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+3. Scroll to "Source" section
+4. Set Root Directory: backend
+   (This tells Railway to only deploy the backend folder from your monorepo)
+5. Click "Save"
+
+Note: The backend/railway.json and backend/nixpacks.toml files are 
+already configured to handle the build and start commands automatically.
+Railway will detect these configuration files and use them.
 ```
 
 #### 4. Add Environment Variables

@@ -10,7 +10,6 @@ import {
   TypingIndicator,
 } from '@chatscope/chat-ui-kit-react';
 import { useTextSelection } from '../../hooks/useTextSelection';
-import ContextSelector from '../ContextSelector';
 import CitationLink from '../CitationLink';
 import './styles.css';
 
@@ -121,15 +120,30 @@ const ChatWidget = ({ apiUrl }) => {
       setIsTyping(false);
     } catch (err) {
       console.error('Error sending message:', err);
-      setError(err instanceof Error ? err.message : 'Failed to send message');
       
-      // Update assistant message with error
+      // Better error messages
+      let errorMessage = 'Failed to send message';
+      if (err instanceof Error) {
+        if (err.message.includes('422')) {
+          errorMessage = 'Your selection is too short. Please select at least 20 characters (about 4-5 words) to use selected-text mode.';
+        } else if (err.message.includes('429')) {
+          errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+        } else if (err.message.includes('Failed to fetch')) {
+          errorMessage = 'Cannot connect to server. Please check if the backend is running.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      setError(errorMessage);
+      
+      // Update assistant message with user-friendly error
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantMessageId
             ? {
                 ...msg,
-                content: `Sorry, I encountered an error: ${err instanceof Error ? err.message : 'Unknown error'}. Please try again.`,
+                content: `⚠️ ${errorMessage}\n\nTip: Make sure your selection is at least 20 characters if using selected-text mode.`,
               }
             : msg
         )
@@ -144,36 +158,73 @@ const ChatWidget = ({ apiUrl }) => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button with selection badge */}
       <button
         className="chat-toggle-button"
         onClick={toggleChat}
         aria-label="Toggle chat"
       >
         {isOpen ? '✕' : '💬'}
+        {selectedContext && !isOpen && (
+          <span className="selection-badge" title="Text selected">
+            📌
+          </span>
+        )}
       </button>
 
       {/* Chat Window */}
       {isOpen && (
         <div className="chat-widget-container">
           <div className="chat-widget-header">
-            <h3>Textbook Assistant</h3>
+            <div className="header-left">
+              <h3>Textbook Assistant</h3>
+            </div>
             <button onClick={toggleChat} className="chat-close-button">
               ✕
             </button>
           </div>
           
-          {/* Context Selector for User Story 2 */}
+          {/* Integrated Selection Controls */}
           {selectedContext && (
-            <ContextSelector
-              selectedContext={selectedContext}
-              contextMode={contextMode}
-              onModeChange={setContextMode}
-              onClear={() => {
-                clearSelection();
-                setContextMode('full');
-              }}
-            />
+            <div className="selection-controls">
+              <div className="selection-info">
+                <span className="selection-icon">📌</span>
+                <div className="selection-text">
+                  <strong>Text Selected</strong>
+                  <span className="selection-length">{selectedContext.text.length} characters</span>
+                </div>
+              </div>
+              
+              <div className="mode-toggle">
+                <button
+                  className={`mode-btn ${contextMode === 'full' ? 'active' : ''}`}
+                  onClick={() => setContextMode('full')}
+                  title="Search entire textbook"
+                >
+                  <span className="mode-icon">📚</span>
+                  Full Textbook
+                </button>
+                <button
+                  className={`mode-btn ${contextMode === 'selected' ? 'active' : ''}`}
+                  onClick={() => setContextMode('selected')}
+                  title="Search only selected text"
+                >
+                  <span className="mode-icon">🎯</span>
+                  Selected Text
+                </button>
+              </div>
+              
+              <button
+                className="clear-selection-btn"
+                onClick={() => {
+                  clearSelection();
+                  setContextMode('full');
+                }}
+                title="Clear selection"
+              >
+                ✕
+              </button>
+            </div>
           )}
 
           <MainContainer>
@@ -225,7 +276,7 @@ const ChatWidget = ({ apiUrl }) => {
                     
                     {selectedContext && (
                       <div className="context-notice">
-                        📌 You have text selected. Switch to "Selected Text Only" mode to focus your questions!
+                        💡 You've selected text! Use the controls above to switch between <strong>Full Textbook</strong> or <strong>Selected Text</strong> mode.
                       </div>
                     )}
                   </div>

@@ -41,7 +41,7 @@ const ContextSelector: React.FC<ContextSelectorProps> = ({
     ? `${selectedContext.text.substring(0, 100)}...` 
     : selectedContext.text;
 
-  const isValidSelection = textLength >= 50;
+  const isValidSelection = textLength >= 20;
 
   return (
     <div className="context-selector">
@@ -94,7 +94,7 @@ const ContextSelector: React.FC<ContextSelectorProps> = ({
 
       {!isValidSelection && (
         <div className="context-warning">
-          ⚠️ Selection too short. Select at least 50 characters to enable "Selected Text Only" mode.
+          ⚠️ Selection too short. Select at least 20 characters (about 4-5 words) to enable "Selected Text Only" mode.
         </div>
       )}
     </div>

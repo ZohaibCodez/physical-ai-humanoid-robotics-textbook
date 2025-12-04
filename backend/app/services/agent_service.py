@@ -84,7 +84,7 @@ Remember: Only use information from the textbook. Do not use external knowledge.
         search_results: Optional[List[Dict]] = None,
         context_mode: str = "full",
         conversation_history: Optional[List[Dict]] = None
-    ) -> Dict[str, Any]:  # type: ignore
+    ) -> Dict[str, Any]:
         """
         Run agent to answer a question.
         
@@ -125,13 +125,13 @@ Remember: Only use information from the textbook. Do not use external knowledge.
             # Run agent with Runner
             logger.info(f"Running agent for session {session_id}")
             
-            result = await Runner.run(
+            run_result = await Runner.run(
                 starting_agent=self.agent,
                 input=input_message
             )
             
             # Extract result
-            answer = result.final_output if hasattr(result, 'final_output') else str(result)
+            answer = run_result.final_output if hasattr(run_result, 'final_output') else str(run_result)
             
             # Extract usage information (if available)
             usage = {
@@ -140,11 +140,11 @@ Remember: Only use information from the textbook. Do not use external knowledge.
                 "total_tokens": 0
             }
             
-            if hasattr(result, 'usage') and result.usage:
+            if hasattr(run_result, 'usage') and run_result.usage:
                 usage = {
-                    "prompt_tokens": getattr(result.usage, 'prompt_tokens', 0),
-                    "completion_tokens": getattr(result.usage, 'completion_tokens', 0),
-                    "total_tokens": getattr(result.usage, 'total_tokens', 0)
+                    "prompt_tokens": getattr(run_result.usage, 'prompt_tokens', 0),
+                    "completion_tokens": getattr(run_result.usage, 'completion_tokens', 0),
+                    "total_tokens": getattr(run_result.usage, 'total_tokens', 0)
                 }
             
             logger.info(
@@ -155,7 +155,7 @@ Remember: Only use information from the textbook. Do not use external knowledge.
             return {
                 "answer": answer,
                 "usage": usage,
-                "tool_calls": getattr(result, 'tool_calls', []),
+                "tool_calls": getattr(run_result, 'tool_calls', []),
                 "metadata": {
                     "model": settings.litellm_model,
                     "temperature": 0.3  # Default temperature

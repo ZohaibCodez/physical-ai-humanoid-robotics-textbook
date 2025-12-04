@@ -41,7 +41,7 @@ class SelectedContext(BaseModel):
     
     text: str = Field(
         ...,
-        min_length=50,
+        min_length=20,
         max_length=5000,
         description="Selected text content from textbook"
     )

@@ -41,7 +41,26 @@ Quick links:
 
 MIT
 
+## 🤖 RAG Chatbot Feature
+
+This textbook includes an AI-powered chatbot that answers questions about the content!
+
+**Features:**
+- 💬 Ask questions about any topic in the textbook
+- 📚 Get answers with citations to specific sections
+- 📝 Select text and ask focused questions
+- 🔄 Conversation history across sessions
+
+**Try it:** Click the 💬 button in the bottom-right corner on any page!
+
+**Learn More:**
+- [Chatbot Specification](specs/002-rag-chatbot/spec.md)
+- [Technical Implementation](specs/002-rag-chatbot/plan.md)
+- [Deployment Guide](DEPLOYMENT.md) - Deploy your own chatbot for FREE!
+
 ## Deployment
 
-The site is automatically deployed to GitHub Pages on every push to the main branch. View the live site at:
-https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/
+**Frontend:** Automatically deployed to GitHub Pages on every push to main branch  
+**Backend:** See [DEPLOYMENT.md](DEPLOYMENT.md) for complete FREE deployment guide (Railway + Qdrant + Neon)
+
+**Live Site:** https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/

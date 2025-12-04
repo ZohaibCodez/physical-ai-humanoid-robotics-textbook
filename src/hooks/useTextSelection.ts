@@ -81,8 +81,8 @@ export function useTextSelection(): UseTextSelectionReturn {
 
     const text = selection.toString().trim();
     
-    // Minimum 50 characters for valid selection
-    if (text.length < 50) {
+    // Minimum 20 characters for valid selection
+    if (text.length < 20) {
       return;
     }
 

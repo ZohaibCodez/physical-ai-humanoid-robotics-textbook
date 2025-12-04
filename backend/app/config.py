@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     )
     
     # OpenAI Agents SDK / LiteLLM
-    litellm_model: str = Field(default="gemini/gemini-1.5-flash", alias="LITELLM_MODEL")
+    litellm_model: str = Field(default="gemini-1.5-flash", alias="LITELLM_MODEL")
     
     @property
     def cors_origins_list(self) -> List[str]:

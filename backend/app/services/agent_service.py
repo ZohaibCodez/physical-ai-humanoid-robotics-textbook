@@ -215,9 +215,23 @@ Remember: Only use information from the textbook. Do not use external knowledge.
             
             # Stream events following OpenAI Agents SDK pattern
             async for event in stream_result.stream_events():
-                # Skip raw response events (internal model events)
+                logger.debug(f"Event type: {event.type}")
+                
+                # Handle raw response events (actual LLM token deltas)
                 if event.type == "raw_response_event":
-                    continue
+                    logger.debug(f"Raw response event: {event}")
+                    # Try to extract content from the raw response
+                    try:
+                        if hasattr(event, 'data') and event.data:
+                            chunk = event.data
+                            logger.debug(f"Chunk: {chunk}")
+                            if hasattr(chunk, 'choices') and len(chunk.choices) > 0:
+                                delta = chunk.choices[0].delta
+                                if hasattr(delta, 'content') and delta.content:
+                                    logger.debug(f"Yielding token: {delta.content}")
+                                    yield delta.content
+                    except Exception as e:
+                        logger.debug(f"Error extracting from raw_response_event: {e}")
                 # Handle agent updates
                 elif event.type == "agent_updated_stream_event":
                     logger.debug(f"Agent updated: {event.new_agent.name}")
@@ -229,10 +243,13 @@ Remember: Only use information from the textbook. Do not use external knowledge.
                     elif event.item.type == "tool_call_output_item":
                         logger.debug(f"Tool output: {event.item.output}")
                     elif event.item.type == "message_output_item":
-                        # Extract and yield text from message output
+                        # Fallback: use complete message if raw events don't work
                         message_text = ItemHelpers.text_message_output(event.item)
                         if message_text:
-                            yield message_text
+                            logger.info(f"Using message_output_item fallback, yielding: {len(message_text)} chars")
+                            # Yield in chunks to simulate streaming
+                            for i in range(0, len(message_text), 10):
+                                yield message_text[i:i+10]
             
             logger.info(f"Streamed agent completed for session {session_id}")
             

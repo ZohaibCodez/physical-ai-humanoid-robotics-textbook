@@ -132,12 +132,25 @@ class VectorStoreService:
             List of matching chunks with metadata and relevance scores
         """
         try:
-            results = self.client.search(
+            logger.info(f"Searching Qdrant: vector_name={vector_name}, limit={limit}, threshold={score_threshold}")
+            logger.info(f"Query vector length: {len(query_vector)}, first 5 values: {query_vector[:5]}")
+            
+            # Query without score threshold first to see what we get
+            all_results = self.client.query_points(
                 collection_name=self.collection_name,
-                query_vector=(vector_name, query_vector),
-                limit=limit,
-                score_threshold=score_threshold
-            )
+                query=query_vector,
+                using=vector_name,  # Specify which named vector to use
+                limit=limit
+            ).points
+            
+            logger.info(f"Qdrant returned {len(all_results)} results (before threshold)")
+            if all_results:
+                scores = [r.score for r in all_results]
+                logger.info(f"Scores: min={min(scores):.4f}, max={max(scores):.4f}, scores={scores}")
+            
+            # Filter by threshold
+            results = [r for r in all_results if r.score >= score_threshold]
+            logger.info(f"After threshold {score_threshold}: {len(results)} results")
             
             chunks = []
             for result in results:
@@ -196,13 +209,14 @@ class VectorStoreService:
             # Create filter if conditions exist
             query_filter = Filter(must=conditions) if conditions else None  # type: ignore
             
-            results = self.client.search(
+            results = self.client.query_points(
                 collection_name=self.collection_name,
-                query_vector=(vector_name, query_vector),
+                query=query_vector,
+                using=vector_name,  # Specify which named vector to use
                 query_filter=query_filter,
                 limit=limit,
                 score_threshold=score_threshold
-            )
+            ).points
             
             chunks = []
             for result in results:

@@ -56,12 +56,12 @@ async def health_check():
         if postgres_service.pool:
             services["postgres"] = "healthy"
         else:
-            services["postgres"] = "unhealthy"
-            overall_status = "unhealthy"
+            services["postgres"] = "disabled"
+            # Don't mark overall status as unhealthy - postgres is optional
+            logger.info("Postgres is not connected - running without conversation history")
     except Exception as e:
         logger.error(f"Postgres health check failed: {str(e)}")
-        services["postgres"] = "unhealthy"
-        overall_status = "unhealthy"
+        services["postgres"] = "disabled"
     
     return HealthResponse(
         status=overall_status,

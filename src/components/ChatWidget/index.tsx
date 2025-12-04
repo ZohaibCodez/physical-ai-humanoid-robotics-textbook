@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {
   MainContainer,
@@ -8,6 +9,8 @@ import {
   MessageInput,
   TypingIndicator,
 } from '@chatscope/chat-ui-kit-react';
+import { useTextSelection } from '../../hooks/useTextSelection';
+import ContextSelector from '../ContextSelector';
 import CitationLink from '../CitationLink';
 import './styles.css';
 
@@ -17,6 +20,10 @@ const ChatWidget = ({ apiUrl }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId] = useState(() => `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const [error, setError] = useState(null);
+  const [contextMode, setContextMode] = useState('full');
+  
+  // Text selection hook for User Story 2
+  const { selectedText, selectedContext, clearSelection } = useTextSelection();
   
   const API_URL = apiUrl || 'http://localhost:8000';
 
@@ -40,21 +47,26 @@ const ChatWidget = ({ apiUrl }) => {
       role: 'assistant',
       content: '',
       timestamp: new Date().toISOString(),
-      citations: [],
     };
     setMessages((prev) => [...prev, assistantMessage]);
 
     try {
+      // Prepare request body with optional selected_context
+      const requestBody = {
+        session_id: sessionId,
+        question_text: text,
+        context_mode: contextMode,
+        ...(contextMode === 'selected' && selectedContext ? {
+          selected_context: selectedContext
+        } : {})
+      };
+
       const response = await fetch(`${API_URL}/v1/chat/ask/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          session_id: sessionId,
-          question_text: text,
-          context_mode: 'full',
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -69,14 +81,13 @@ const ChatWidget = ({ apiUrl }) => {
       const decoder = new TextDecoder();
       let buffer = '';
       let streamedContent = '';
-      let citations = [];
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\\n');
+        const lines = buffer.split('\n');
         buffer = lines.pop() || '';
 
         for (const line of lines) {
@@ -85,7 +96,7 @@ const ChatWidget = ({ apiUrl }) => {
               const eventData = JSON.parse(line.slice(6));
               
               if (eventData.type === 'delta') {
-                // Append text delta to content
+                // Append text delta to content (each delta is a token)
                 streamedContent += eventData.data;
                 setMessages((prev) =>
                   prev.map((msg) =>
@@ -94,18 +105,9 @@ const ChatWidget = ({ apiUrl }) => {
                       : msg
                   )
                 );
-              } else if (eventData.type === 'citations') {
-                // Store citations
-                citations = eventData.data;
               } else if (eventData.type === 'done') {
-                // Update final message with citations
-                setMessages((prev) =>
-                  prev.map((msg) =>
-                    msg.id === assistantMessageId
-                      ? { ...msg, citations }
-                      : msg
-                  )
-                );
+                // Stream completed
+                console.log('Streaming completed');
               } else if (eventData.type === 'error') {
                 throw new Error(eventData.data);
               }
@@ -161,6 +163,19 @@ const ChatWidget = ({ apiUrl }) => {
             </button>
           </div>
           
+          {/* Context Selector for User Story 2 */}
+          {selectedContext && (
+            <ContextSelector
+              selectedContext={selectedContext}
+              contextMode={contextMode}
+              onModeChange={setContextMode}
+              onClear={() => {
+                clearSelection();
+                setContextMode('full');
+              }}
+            />
+          )}
+
           <MainContainer>
             <ChatContainer>
               <MessageList
@@ -169,36 +184,70 @@ const ChatWidget = ({ apiUrl }) => {
               >
                 {messages.length === 0 && (
                   <div className="chat-welcome">
-                    <p>👋 Hi! I'm your textbook assistant.</p>
-                    <p>Ask me anything about Physical AI and Humanoid Robotics!</p>
+                    <div className="welcome-header">
+                      <span className="welcome-icon">🤖</span>
+                      <h4>Welcome! I'm here to help you learn Physical AI & Humanoid Robotics</h4>
+                    </div>
+                    
+                    <div className="quick-actions">
+                      <button 
+                        className="quick-action-btn"
+                        onClick={() => handleSendMessage("What are the key components of ROS2?")}
+                      >
+                        <span className="action-icon">🔧</span>
+                        <span>What are the key components of ROS2?</span>
+                      </button>
+                      
+                      <button 
+                        className="quick-action-btn"
+                        onClick={() => handleSendMessage("Explain forward kinematics")}
+                      >
+                        <span className="action-icon">📐</span>
+                        <span>Explain forward kinematics</span>
+                      </button>
+                      
+                      <button 
+                        className="quick-action-btn"
+                        onClick={() => handleSendMessage("How does sensor fusion work?")}
+                      >
+                        <span className="action-icon">📡</span>
+                        <span>How does sensor fusion work?</span>
+                      </button>
+                      
+                      <button 
+                        className="quick-action-btn"
+                        onClick={() => handleSendMessage("What is trajectory planning?")}
+                      >
+                        <span className="action-icon">📊</span>
+                        <span>What is trajectory planning?</span>
+                      </button>
+                    </div>
+                    
+                    {selectedContext && (
+                      <div className="context-notice">
+                        📌 You have text selected. Switch to "Selected Text Only" mode to focus your questions!
+                      </div>
+                    )}
                   </div>
                 )}
                 
                 {messages.map((msg, index) => (
                   <div key={index}>
-                    <Message
-                      model={{
-                        message: msg.content,
-                        sentTime: msg.timestamp || '',
-                        sender: msg.role === 'user' ? 'You' : 'Assistant',
-                        direction: msg.role === 'user' ? 'outgoing' : 'incoming',
-                        position: 'single',
-                      }}
-                    />
-                    
-                    {/* Display citations for assistant messages */}
-                    {msg.role === 'assistant' && msg.citations && msg.citations.length > 0 && (
-                      <div className="chat-citations">
-                        <p className="citations-label">📚 Sources:</p>
-                        {msg.citations.map((citation, idx) => (
-                          <CitationLink
-                            key={idx}
-                            text={citation.text}
-                            url={citation.url}
-                            relevance_score={citation.relevance_score}
-                            snippet={citation.snippet}
-                          />
-                        ))}
+                    {msg.role === 'user' ? (
+                      <Message
+                        model={{
+                          message: msg.content,
+                          sentTime: msg.timestamp || '',
+                          sender: 'You',
+                          direction: 'outgoing',
+                          position: 'single',
+                        }}
+                      />
+                    ) : (
+                      <div className="assistant-message-wrapper">
+                        <div className="assistant-message">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </div>
                       </div>
                     )}
                   </div>

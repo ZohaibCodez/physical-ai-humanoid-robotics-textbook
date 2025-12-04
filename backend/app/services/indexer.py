@@ -36,9 +36,18 @@ class IndexerService:
         """
         self.chunk_size = chunk_size
         self.overlap = overlap
-        self.docs_dir = Path(docs_dir)
+        
+        # Resolve docs directory relative to repository root
+        docs_path = Path(docs_dir)
+        if not docs_path.is_absolute():
+            # Get repository root (parent of backend directory)
+            repo_root = Path(__file__).parent.parent.parent.parent
+            docs_path = repo_root / docs_dir
+        
+        self.docs_dir = docs_path
         self.encoding = tiktoken.get_encoding("cl100k_base")
         logger.info(f"✅ Indexer initialized (chunk_size={chunk_size}, overlap={overlap})")
+        logger.info(f"   Docs directory: {self.docs_dir}")
     
     def extract_metadata_from_path(self, file_path: Path) -> Dict:
         """

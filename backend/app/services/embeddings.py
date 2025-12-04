@@ -42,6 +42,8 @@ class GoogleEmbeddingService:
             EmbeddingError: If embedding generation fails
         """
         try:
+            logger.info(f"Generating Google embedding: task_type={task_type}, text_length={len(text)}")
+            
             # Run in thread pool to avoid blocking
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
@@ -54,11 +56,11 @@ class GoogleEmbeddingService:
             )
             
             embedding = result['embedding']
-            logger.debug(f"Generated embedding with dimension {len(embedding)}")
+            logger.info(f"✅ Generated Google embedding: dimension={len(embedding)}, first 5 values={embedding[:5]}")
             return embedding
             
         except Exception as e:
-            logger.error(f"Failed to generate Google embedding: {str(e)}")
+            logger.error(f"❌ Failed to generate Google embedding: {str(e)}")
             raise EmbeddingError(f"Google embedding failed: {str(e)}", provider="google")
     
     async def generate_embeddings_batch(

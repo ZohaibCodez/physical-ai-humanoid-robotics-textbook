@@ -4,11 +4,13 @@ FastAPI Application Entry Point
 RAG Chatbot backend using OpenAI Agents SDK + Google Gemini via LiteLLM.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.api.routes import chat, health
 import logging
+import uuid
+import time
 
 # Configure logging
 logging.basicConfig(
@@ -27,6 +29,44 @@ app = FastAPI(
     redoc_url="/v1/redoc",
     openapi_url="/v1/openapi.json"
 )
+
+# Request ID middleware for traceability
+@app.middleware("http")
+async def add_request_id_middleware(request: Request, call_next):
+    """Add unique request ID to all requests and responses."""
+    request_id = str(uuid.uuid4())
+    request.state.request_id = request_id
+    
+    start_time = time.time()
+    
+    try:
+        response = await call_next(request)
+    except Exception as e:
+        logger.error(
+            f"Request failed: {str(e)}",
+            extra={"request_id": request_id, "path": request.url.path}
+        )
+        raise
+    
+    process_time = (time.time() - start_time) * 1000  # milliseconds
+    
+    # Add headers
+    response.headers["X-Request-ID"] = request_id
+    response.headers["X-Process-Time"] = f"{process_time:.2f}ms"
+    
+    # Log request completion
+    logger.info(
+        f"Request completed: {request.method} {request.url.path}",
+        extra={
+            "request_id": request_id,
+            "method": request.method,
+            "path": request.url.path,
+            "status_code": response.status_code,
+            "process_time_ms": round(process_time, 2)
+        }
+    )
+    
+    return response
 
 # Configure CORS
 app.add_middleware(

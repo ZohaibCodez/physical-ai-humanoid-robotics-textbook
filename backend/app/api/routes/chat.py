@@ -73,45 +73,68 @@ async def ask_question(request_body: QuestionRequest, request: Request):
             extra={"session_id": request_body.session_id, "context_mode": request_body.context_mode}
         )
         
-        # Create or get conversation
-        conversation_id = await postgres_service.create_or_get_conversation(
-            session_id=request_body.session_id,
-            user_ip=user_ip,
-            context_mode=request_body.context_mode
-        )
+        # Create or get conversation (with graceful fallback)
+        conversation_id = None
+        history = []
         
-        # Get conversation history for context
-        history = await postgres_service.get_conversation_history(
-            session_id=request_body.session_id,
-            limit=10
-        )
+        if postgres_service.pool:
+            try:
+                conversation_id = await postgres_service.create_or_get_conversation(
+                    session_id=request_body.session_id,
+                    user_ip=user_ip,
+                    context_mode=request_body.context_mode
+                )
+                
+                # Get conversation history for context
+                history = await postgres_service.get_conversation_history(
+                    session_id=request_body.session_id,
+                    limit=10
+                )
+            except Exception as e:
+                logger.warning(f"Failed to access conversation history: {str(e)}")
+        else:
+            logger.info("Postgres not available - running without conversation history")
         
         # Generate query embedding and search
         try:
             # Try Google embeddings first
+            logger.info(f"🔍 Generating embedding for question: '{request_body.question_text[:50]}...'")
             query_embedding = await google_embedding_service.generate_embedding(
                 request_body.question_text,
                 task_type="RETRIEVAL_QUERY"
             )
             vector_name = "google"
-        except EmbeddingError:
+            logger.info(f"✅ Using Google embeddings (768-dim) for search")
+        except EmbeddingError as e:
             # Fallback to local embeddings
-            logger.warning("Using local embeddings fallback")
+            logger.warning(f"⚠️ Google embeddings failed: {str(e)}, using local fallback")
             query_embedding = await local_embedding_service.generate_embedding(
                 request_body.question_text
             )
             vector_name = "local"
+            logger.info(f"✅ Using local embeddings (384-dim) for search")
         
         # Search vector database
-        if request_body.context_mode == "selected" and request_body.selected_metadata:
+        if request_body.context_mode == "selected":
+            # Determine filter parameters from either selected_context or selected_metadata
+            if request_body.selected_context and request_body.selected_context.metadata:
+                chapter = request_body.selected_context.metadata.chapter
+                section = request_body.selected_context.metadata.section
+            elif request_body.selected_metadata:
+                chapter = request_body.selected_metadata.get("chapter")
+                section = request_body.selected_metadata.get("section")
+            else:
+                chapter = None
+                section = None
+            
             # Filtered search for selected text
             search_results = await vector_store_service.search_filtered(
                 query_vector=query_embedding,
-                chapter=request_body.selected_metadata.get("chapter"),
-                section=request_body.selected_metadata.get("section"),
+                chapter=chapter,
+                section=section,
                 vector_name=vector_name,
                 limit=5,
-                score_threshold=0.7
+                score_threshold=0.3
             )
         else:
             # Full textbook search
@@ -119,7 +142,7 @@ async def ask_question(request_body: QuestionRequest, request: Request):
                 query_vector=query_embedding,
                 vector_name=vector_name,
                 limit=5,
-                score_threshold=0.7
+                score_threshold=0.3
             )
         
         # Run agent with search results
@@ -147,21 +170,32 @@ async def ask_question(request_body: QuestionRequest, request: Request):
         # Calculate processing time
         processing_time_ms = int((time.time() - start_time) * 1000)
         
-        # Save question and answer to database
-        question_id = await postgres_service.save_question(
-            conversation_id=conversation_id,
-            question_text=request_body.question_text,
-            selected_context=request_body.selected_metadata
-        )
-        
-        await postgres_service.save_answer(
-            question_id=question_id,
-            answer_text=agent_result["answer"],
-            citations=[c.dict() for c in citations],
-            confidence_score=confidence_score,
-            processing_time_ms=processing_time_ms,
-            tokens_used=agent_result["usage"]["total_tokens"]
-        )
+        # Save question and answer to database (if postgres is available)
+        if conversation_id and postgres_service.pool:
+            try:
+                # Prepare selected_context for storage
+                selected_ctx = None
+                if request_body.selected_context:
+                    selected_ctx = request_body.selected_context.model_dump()
+                elif request_body.selected_metadata:
+                    selected_ctx = request_body.selected_metadata
+                
+                question_id = await postgres_service.save_question(
+                    conversation_id=conversation_id,
+                    question_text=request_body.question_text,
+                    selected_context=selected_ctx
+                )
+                
+                await postgres_service.save_answer(
+                    question_id=question_id,
+                    answer_text=agent_result["answer"],
+                    citations=[c.dict() for c in citations],
+                    confidence_score=confidence_score,
+                    processing_time_ms=processing_time_ms,
+                    tokens_used=agent_result["usage"]["total_tokens"]
+                )
+            except Exception as e:
+                logger.warning(f"Failed to save conversation to database: {str(e)}")
         
         logger.info(
             f"Answer generated for session {request_body.session_id}: "
@@ -237,18 +271,29 @@ async def ask_question_stream(request_body: QuestionRequest, request: Request):
                 extra={"session_id": request_body.session_id, "context_mode": request_body.context_mode}
             )
             
-            # Create or get conversation
-            conversation_id = await postgres_service.create_or_get_conversation(
-                session_id=request_body.session_id,
-                user_ip=user_ip,
-                context_mode=request_body.context_mode
-            )
+            # Create or get conversation (with graceful fallback)
+            conversation_id = None
+            history = []
             
-            # Get conversation history
-            history = await postgres_service.get_conversation_history(
-                session_id=request_body.session_id,
-                limit=10
-            )
+            if postgres_service.pool:
+                try:
+                    conversation_id = await postgres_service.create_or_get_conversation(
+                        session_id=request_body.session_id,
+                        user_ip=user_ip,
+                        context_mode=request_body.context_mode
+                    )
+                    
+                    # Get conversation history
+                    history = await postgres_service.get_conversation_history(
+                        session_id=request_body.session_id,
+                        limit=10
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to access conversation history: {str(e)}")
+                    yield f"data: {{\"type\": \"warning\", \"data\": \"Running without conversation history\"}}\n\n"
+            else:
+                logger.info("Postgres not available - running without conversation history")
+                yield f"data: {{\"type\": \"warning\", \"data\": \"Running without conversation history\"}}\n\n"
             
             # Generate query embedding and search
             try:
@@ -265,36 +310,35 @@ async def ask_question_stream(request_body: QuestionRequest, request: Request):
                 vector_name = "local"
             
             # Search vector database
-            if request_body.context_mode == "selected" and request_body.selected_metadata:
+            if request_body.context_mode == "selected":
+                # Determine filter parameters from either selected_context or selected_metadata
+                if request_body.selected_context and request_body.selected_context.metadata:
+                    chapter = request_body.selected_context.metadata.chapter
+                    section = request_body.selected_context.metadata.section
+                elif request_body.selected_metadata:
+                    chapter = request_body.selected_metadata.get("chapter")
+                    section = request_body.selected_metadata.get("section")
+                else:
+                    chapter = None
+                    section = None
+                
                 search_results = await vector_store_service.search_filtered(
                     query_vector=query_embedding,
-                    chapter=request_body.selected_metadata.get("chapter"),
-                    section=request_body.selected_metadata.get("section"),
+                    chapter=chapter,
+                    section=section,
                     vector_name=vector_name,
                     limit=5,
-                    score_threshold=0.7
+                    score_threshold=0.3
                 )
             else:
                 search_results = await vector_store_service.search(
                     query_vector=query_embedding,
                     vector_name=vector_name,
                     limit=5,
-                    score_threshold=0.7
+                    score_threshold=0.3
                 )
             
-            # Send search results as initial event
-            citations = []
-            for result in search_results[:3]:
-                citation = citation_resolver.create_citation(
-                    chunk=result,
-                    relevance_score=result["relevance_score"],
-                    snippet_length=150
-                )
-                citations.append(citation)
-            
-            yield f"data: {json.dumps({'type': 'citations', 'data': citations})}\n\n"
-            
-            # Stream agent response
+            # Stream agent response token-by-token
             full_answer = ""
             async for text_delta in agent_service.run_agent_streamed(
                 question=request_body.question_text,
@@ -306,22 +350,32 @@ async def ask_question_stream(request_body: QuestionRequest, request: Request):
                 full_answer += text_delta
                 yield f"data: {json.dumps({'type': 'delta', 'data': text_delta})}\n\n"
             
-            # Save to database
-            question_id = await postgres_service.save_question(
-                conversation_id=conversation_id,
-                question_text=request_body.question_text,
-                selected_text=request_body.selected_text,
-                selected_metadata=request_body.selected_metadata
-            )
-            
-            await postgres_service.save_answer(
-                question_id=question_id,
-                answer_text=full_answer,
-                citations=[Citation(**c) for c in citations],
-                confidence_score=search_results[0]["relevance_score"] if search_results else 0.5,
-                processing_time_ms=0,  # Not tracked in streaming mode
-                tokens_used=0  # Not tracked in streaming mode
-            )
+            # Save to database (if postgres is available)
+            if conversation_id and postgres_service.pool:
+                try:
+                    # Prepare selected_context for storage
+                    selected_ctx = None
+                    if request_body.selected_context:
+                        selected_ctx = request_body.selected_context.model_dump()
+                    elif request_body.selected_metadata:
+                        selected_ctx = request_body.selected_metadata
+                    
+                    question_id = await postgres_service.save_question(
+                        conversation_id=conversation_id,
+                        question_text=request_body.question_text,
+                        selected_context=selected_ctx
+                    )
+                    
+                    await postgres_service.save_answer(
+                        question_id=question_id,
+                        answer_text=full_answer,
+                        citations=[],  # Not tracking citations in streaming mode
+                        confidence_score=search_results[0]["relevance_score"] if search_results else 0.5,
+                        processing_time_ms=0,  # Not tracked in streaming mode
+                        tokens_used=0  # Not tracked in streaming mode
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to save conversation to database: {str(e)}")
             
             # Send completion event
             yield f"data: {json.dumps({'type': 'done'})}\n\n"
@@ -354,6 +408,15 @@ async def get_history(session_id: str):
     """
     try:
         logger.info(f"Retrieving history for session {session_id}")
+        
+        # Check if postgres is available
+        if not postgres_service.pool:
+            return HistoryResponse(
+                session_id=session_id,
+                messages=[],
+                total_questions=0,
+                context_mode="full"
+            )
         
         messages = await postgres_service.get_conversation_history(
             session_id=session_id,

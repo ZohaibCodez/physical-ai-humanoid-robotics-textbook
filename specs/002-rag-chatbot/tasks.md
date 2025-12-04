@@ -56,8 +56,8 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 - [X] T004 [P] Create backend/Dockerfile for containerized deployment
 - [X] T005 [P] Initialize backend/app/__init__.py and backend/app/main.py with FastAPI app
 - [X] T006 [P] Create requirements-dev.txt for development dependencies (pytest, pytest-asyncio, httpx, black, flake8)
-- [ ] T007 Create frontend ChatWidget component structure in src/components/ChatWidget/
-- [ ] T008 Install frontend dependencies (npm install @chatscope/chat-ui-kit-react react-markdown remark-gfm)
+- [X] T007 Create frontend ChatWidget component structure in src/components/ChatWidget/
+- [X] T008 Install frontend dependencies (npm install @chatscope/chat-ui-kit-react react-markdown remark-gfm)
 
 ---
 
@@ -70,14 +70,14 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 - [X] T009 Create backend/app/config.py for environment configuration (load from .env, validate required keys)
 - [X] T010 [P] Implement backend/app/utils/logger.py with structured JSON logging
 - [X] T011 [P] Implement backend/app/utils/exceptions.py with custom exception classes (RateLimitError, EmbeddingError, VectorStoreError)
-- [ ] T012 Create database schema in backend/scripts/migrate_db.py (conversations, questions, answers tables with indexes)
-- [ ] T013 Implement backend/app/services/postgres_service.py with Neon Postgres connection pooling and CRUD operations
-- [ ] T014 [P] Implement backend/app/services/embeddings.py for Google text-embedding-004 API client
-- [ ] T015 [P] Implement backend/app/services/embeddings_local.py for Sentence Transformers fallback (all-MiniLM-L6-v2)
-- [ ] T016 Implement backend/app/services/vector_store.py with Qdrant client (create collection with named vectors: google 768-dim, local 384-dim)
-- [ ] T017 [P] Implement backend/app/services/rate_limiter.py with token bucket algorithm (10 req/min per session, 50 req/hour per IP)
-- [ ] T018 Implement backend/app/services/indexer.py for textbook chunking (300-500 tokens, 50-token overlap) and embedding generation
-- [ ] T019 Create backend/scripts/index_textbook.py CLI script to index docs/ directory into Qdrant
+- [X] T012 Create database schema in backend/scripts/migrate_db.py (conversations, questions, answers tables with indexes)
+- [X] T013 Implement backend/app/services/postgres_service.py with Neon Postgres connection pooling and CRUD operations
+- [X] T014 [P] Implement backend/app/services/embeddings.py for Google text-embedding-004 API client
+- [X] T015 [P] Implement backend/app/services/embeddings_local.py for Sentence Transformers fallback (all-MiniLM-L6-v2)
+- [X] T016 Implement backend/app/services/vector_store.py with Qdrant client (create collection with named vectors: google 768-dim, local 384-dim)
+- [X] T017 [P] Implement backend/app/services/rate_limiter.py with token bucket algorithm (10 req/min per session, 50 req/hour per IP)
+- [X] T018 Implement backend/app/services/indexer.py for textbook chunking (300-500 tokens, 50-token overlap) and embedding generation
+- [X] T019 Create backend/scripts/index_textbook.py CLI script to index docs/ directory into Qdrant
 - [X] T020 [P] Implement backend/app/api/dependencies.py with FastAPI dependency injection for services
 - [X] T021 Configure CORS middleware in backend/app/main.py for frontend origins
 - [X] T022 Setup API versioning and prefix (/v1) in backend/app/main.py
@@ -104,23 +104,23 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 ### Services for User Story 1
 
-- [ ] T026 [US1] Implement backend/app/services/agent_service.py with OpenAI Agents SDK + Gemini backend
+- [X] T026 [US1] Implement backend/app/services/agent_service.py with OpenAI Agents SDK + Gemini backend
   - Initialize LitellmModel with gemini/gemini-1.5-flash and API key from config
   - Create Agent with instructions for RAG (answer from context only, cite sources, max 500 words, identify out-of-scope)
   - Configure ModelSettings (temperature=0.3 for factual accuracy, include_usage=True)
   - Expose run_agent() async method accepting question, session_id, search_results
-- [ ] T027 [US1] Implement backend/app/services/tools.py with @function_tool definitions
+- [X] T027 [US1] Implement backend/app/services/tools.py with @function_tool definitions
   - Create search_textbook() function tool with parameters: query (str), selected_context (str | None)
   - Tool calls vector_store.py search methods and returns formatted results
   - Tool uses citation_resolver to generate Docusaurus URLs from chunk metadata
   - Return format: list of dicts with {text, citation_link, relevance_score}
-- [ ] T028 [US1] Implement backend/app/services/citation_resolver.py to generate Docusaurus URLs from chunk metadata (format: /week-##-##/topic#heading-slug)
-- [ ] T029 [US1] Extend backend/app/services/vector_store.py with semantic search method (search by query embedding, return top-5 chunks with relevance scores)
-- [ ] T030 [US1] Extend backend/app/services/postgres_service.py with methods to create/retrieve conversations, save questions, save answers
+- [X] T028 [US1] Implement backend/app/services/citation_resolver.py to generate Docusaurus URLs from chunk metadata (format: /week-##-##/topic#heading-slug)
+- [X] T029 [US1] Extend backend/app/services/vector_store.py with semantic search method (search by query embedding, return top-5 chunks with relevance scores)
+- [X] T030 [US1] Extend backend/app/services/postgres_service.py with methods to create/retrieve conversations, save questions, save answers
 
 ### API Endpoints for User Story 1
 
-- [ ] T031 [US1] Implement POST /v1/chat/ask endpoint in backend/app/api/routes/chat.py for full-textbook mode
+- [X] T031 [US1] Implement POST /v1/chat/ask endpoint in backend/app/api/routes/chat.py for full-textbook mode
   - Validate QuestionRequest (10-1000 chars, session_id format)
   - Apply rate limiting (call rate_limiter service)
   - Create or retrieve session from postgres_service (get session history for context)
@@ -136,16 +136,16 @@ This is a web application with separate backend (Python/FastAPI) and frontend (R
 
 ### Frontend Integration for User Story 1
 
-- [ ] T034 [US1] Create src/components/ChatWidget/index.tsx with chat UI using @chatscope/chat-ui-kit-react
+- [X] T034 [US1] Create src/components/ChatWidget/index.tsx with chat UI using @chatscope/chat-ui-kit-react
   - State management for messages, typing indicator, session ID
   - handleSend function to call POST /v1/chat/ask
   - Display user messages and assistant responses
   - Show typing indicator during API call
   - Error handling with user-friendly messages
-- [ ] T035 [US1] Create src/components/ChatWidget/styles.css for chat widget styling (fixed position bottom-right, toggle button, responsive design)
-- [ ] T036 [US1] Create src/components/CitationLink.tsx to render clickable citations that navigate to textbook sections
-- [ ] T037 [US1] Integrate ChatWidget in src/theme/Layout/index.tsx to appear on all Docusaurus pages
-- [ ] T038 [US1] Configure environment variables in .env and docusaurus.config.js for REACT_APP_CHAT_API_URL
+- [X] T035 [US1] Create src/components/ChatWidget/styles.css for chat widget styling (fixed position bottom-right, toggle button, responsive design)
+- [X] T036 [US1] Create src/components/CitationLink.tsx to render clickable citations that navigate to textbook sections
+- [X] T037 [US1] Integrate ChatWidget in src/theme/Layout/index.tsx to appear on all Docusaurus pages
+- [X] T038 [US1] Configure environment variables in .env and docusaurus.config.js for REACT_APP_CHAT_API_URL
 
 ### Setup & Validation for User Story 1
 

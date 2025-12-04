@@ -35,24 +35,26 @@ class Settings(BaseSettings):
     rate_limit_per_hour: int = Field(default=50, alias="RATE_LIMIT_PER_HOUR")
     
     # CORS
-    cors_origins: List[str] = Field(
-        default=["http://localhost:3000", "http://localhost:8000"],
+    cors_origins: str = Field(
+        default="http://localhost:3000,http://localhost:8000",
         alias="CORS_ORIGINS"
     )
     
     # OpenAI Agents SDK / LiteLLM
     litellm_model: str = Field(default="gemini/gemini-1.5-flash", alias="LITELLM_MODEL")
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
-        
-        @classmethod
-        def parse_env_var(cls, field_name: str, raw_val: str):
-            if field_name == "cors_origins":
-                return [origin.strip() for origin in raw_val.split(",")]
-            return raw_val
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Parse CORS origins from comma-separated string."""
+        return [origin.strip() for origin in self.cors_origins.split(",")]
+    
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": False,
+        "extra": "ignore"  # Ignore extra fields in .env
+    }
 
 
 # Global settings instance
-settings = Settings()
+# Pydantic BaseSettings will automatically load from environment variables
+settings = Settings(_env_file='.env', _env_file_encoding='utf-8')  # type: ignore

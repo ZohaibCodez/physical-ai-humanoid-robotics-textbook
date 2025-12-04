@@ -1,0 +1,169 @@
+.chat-toggle-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-toggle-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.chat-toggle-button:active {
+  transform: scale(0.95);
+}
+
+.chat-widget-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 400px;
+  height: 600px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-widget-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-widget-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.chat-close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.chat-close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.chat-welcome {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: #666;
+}
+
+.chat-welcome p {
+  margin: 0.5rem 0;
+}
+
+.chat-welcome p:first-child {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.chat-citations {
+  background: #f8f9fa;
+  border-left: 3px solid #667eea;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 1rem 1rem 3.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.citations-label {
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.chat-error {
+  background: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 0.75rem;
+  margin: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chat-widget-container {
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+
+  .chat-toggle-button {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Override chat-ui-kit styles */
+.cs-main-container {
+  height: 100%;
+}
+
+.cs-chat-container {
+  height: 100%;
+}
+
+.cs-message-list {
+  padding: 1rem;
+}
+
+.cs-message-input {
+  border-top: 1px solid #e0e0e0;
+}
+
+.cs-message__content {
+  max-width: 80%;
+}
+
+.cs-message--incoming .cs-message__content {
+  background-color: #f1f3f4;
+  color: #202124;
+}
+
+.cs-message--outgoing .cs-message__content {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.cs-typing-indicator {
+  padding-left: 1rem;
+}

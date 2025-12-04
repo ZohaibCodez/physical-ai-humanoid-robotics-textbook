@@ -31,7 +31,7 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -46,12 +46,37 @@ async def startup_event():
     """Initialize services on startup."""
     logger.info("Starting RAG Chatbot API...")
     logger.info(f"Environment: {settings.environment}")
-    logger.info(f"CORS Origins: {settings.cors_origins}")
+    logger.info(f"CORS Origins: {settings.cors_origins_list}")
+    
+    # Initialize Postgres connection pool (non-blocking)
+    try:
+        import asyncio
+        from app.services.postgres_service import postgres_service
+        # Try to connect with 10 second timeout
+        await asyncio.wait_for(postgres_service.connect(), timeout=10.0)
+        logger.info("✅ Postgres service initialized")
+    except asyncio.TimeoutError:
+        logger.warning("⚠️ Postgres connection timed out - conversation history will be disabled")
+    except Exception as e:
+        logger.warning(f"⚠️ Failed to initialize Postgres: {str(e)} - conversation history will be disabled")
+    
+    # Initialize other services (they self-initialize on import)
+    logger.info("✅ All services initialized")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Cleanup on shutdown."""
     logger.info("Shutting down RAG Chatbot API...")
+    
+    # Disconnect Postgres
+    try:
+        from app.services.postgres_service import postgres_service
+        await postgres_service.disconnect()
+        logger.info("✅ Postgres disconnected")
+    except Exception as e:
+        logger.error(f"Error disconnecting Postgres: {str(e)}")
+    
+    logger.info("Shutdown complete")
 
 @app.get("/")
 async def root():

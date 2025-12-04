@@ -1,0 +1,246 @@
+"""
+Qdrant Vector Store Service
+
+Manages vector embeddings storage and semantic search using Qdrant.
+"""
+
+from qdrant_client import QdrantClient
+from qdrant_client.models import (
+    Distance,
+    VectorParams,
+    PointStruct,
+    Filter,
+    FieldCondition,
+    MatchValue,
+    SearchRequest
+)
+from typing import List, Dict, Optional, Any
+from app.config import settings
+from app.utils.logger import app_logger as logger
+from app.utils.exceptions import VectorStoreError
+from app.models.textbook import TextbookChunk
+
+
+class VectorStoreService:
+    """Service for managing Qdrant vector database operations."""
+    
+    def __init__(self):
+        """Initialize Qdrant client."""
+        try:
+            self.client = QdrantClient(
+                url=settings.qdrant_url,
+                api_key=settings.qdrant_api_key,
+                timeout=60
+            )
+            self.collection_name = settings.qdrant_collection_name
+            logger.info(f"✅ Connected to Qdrant at {settings.qdrant_url}")
+        except Exception as e:
+            logger.error(f"❌ Failed to connect to Qdrant: {str(e)}")
+            raise VectorStoreError(f"Connection failed: {str(e)}")
+    
+    async def create_collection(self):
+        """
+        Create Qdrant collection with named vectors for Google and local embeddings.
+        
+        The collection stores two embedding types:
+        - google: 768-dimensional (text-embedding-004)
+        - local: 384-dimensional (all-MiniLM-L6-v2)
+        """
+        try:
+            # Check if collection exists
+            collections = self.client.get_collections().collections
+            exists = any(c.name == self.collection_name for c in collections)
+            
+            if exists:
+                logger.info(f"Collection '{self.collection_name}' already exists")
+                return
+            
+            # Create collection with named vectors
+            self.client.create_collection(
+                collection_name=self.collection_name,
+                vectors_config={
+                    "google": VectorParams(size=768, distance=Distance.COSINE),
+                    "local": VectorParams(size=384, distance=Distance.COSINE)
+                }
+            )
+            
+            logger.info(f"✅ Created collection '{self.collection_name}' with named vectors")
+            
+        except Exception as e:
+            logger.error(f"Failed to create collection: {str(e)}")
+            raise VectorStoreError(f"Collection creation failed: {str(e)}")
+    
+    async def upsert_chunks(self, chunks: List[TextbookChunk]):
+        """
+        Insert or update textbook chunks in Qdrant.
+        
+        Args:
+            chunks: List of TextbookChunk objects with embeddings
+        """
+        try:
+            points = []
+            
+            for chunk in chunks:
+                # Prepare payload
+                payload = {
+                    "chunk_id": chunk.chunk_id,
+                    "text": chunk.text,
+                    "chapter": chunk.chapter,
+                    "section": chunk.section,
+                    "file_path": chunk.file_path,
+                    "heading": chunk.heading,
+                    "metadata": chunk.metadata
+                }
+                
+                # Create point with named vectors
+                point = PointStruct(
+                    id=hash(chunk.chunk_id) & 0x7FFFFFFF,  # Convert to positive int
+                    vector=chunk.embeddings,  # type: ignore  # Dict with 'google' and 'local' keys
+                    payload=payload
+                )
+                points.append(point)
+            
+            # Upsert points
+            self.client.upsert(
+                collection_name=self.collection_name,
+                points=points
+            )
+            
+            logger.info(f"✅ Upserted {len(chunks)} chunks to Qdrant")
+            
+        except Exception as e:
+            logger.error(f"Failed to upsert chunks: {str(e)}")
+            raise VectorStoreError(f"Upsert failed: {str(e)}")
+    
+    async def search(
+        self,
+        query_vector: List[float],
+        vector_name: str = "google",
+        limit: int = 5,
+        score_threshold: float = 0.7
+    ) -> List[Dict[str, Any]]:
+        """
+        Semantic search for relevant chunks.
+        
+        Args:
+            query_vector: Query embedding vector
+            vector_name: Which named vector to search ('google' or 'local')
+            limit: Maximum number of results
+            score_threshold: Minimum relevance score (0.0-1.0)
+        
+        Returns:
+            List of matching chunks with metadata and relevance scores
+        """
+        try:
+            results = self.client.search(
+                collection_name=self.collection_name,
+                query_vector=(vector_name, query_vector),
+                limit=limit,
+                score_threshold=score_threshold
+            )
+            
+            chunks = []
+            for result in results:
+                chunks.append({
+                    "text": result.payload.get("text", ""),
+                    "chapter": result.payload.get("chapter"),
+                    "section": result.payload.get("section"),
+                    "file_path": result.payload.get("file_path"),
+                    "heading": result.payload.get("heading"),
+                    "relevance_score": result.score,
+                    "chunk_id": result.payload.get("chunk_id")
+                })
+            
+            logger.info(f"Found {len(chunks)} relevant chunks")
+            return chunks
+            
+        except Exception as e:
+            logger.error(f"Search failed: {str(e)}")
+            raise VectorStoreError(f"Search failed: {str(e)}", operation="search")
+    
+    async def search_filtered(
+        self,
+        query_vector: List[float],
+        chapter: Optional[int] = None,
+        section: Optional[str] = None,
+        vector_name: str = "google",
+        limit: int = 5,
+        score_threshold: float = 0.7
+    ) -> List[Dict[str, Any]]:
+        """
+        Semantic search with metadata filters (for selected-text mode).
+        
+        Args:
+            query_vector: Query embedding vector
+            chapter: Filter by chapter number
+            section: Filter by section name
+            vector_name: Which named vector to search
+            limit: Maximum number of results
+            score_threshold: Minimum relevance score
+        
+        Returns:
+            List of matching chunks from specified chapter/section
+        """
+        try:
+            # Build filter conditions
+            conditions = []
+            if chapter is not None:
+                conditions.append(
+                    FieldCondition(key="chapter", match=MatchValue(value=chapter))
+                )
+            if section is not None:
+                conditions.append(
+                    FieldCondition(key="section", match=MatchValue(value=section))
+                )
+            
+            # Create filter if conditions exist
+            query_filter = Filter(must=conditions) if conditions else None  # type: ignore
+            
+            results = self.client.search(
+                collection_name=self.collection_name,
+                query_vector=(vector_name, query_vector),
+                query_filter=query_filter,
+                limit=limit,
+                score_threshold=score_threshold
+            )
+            
+            chunks = []
+            for result in results:
+                chunks.append({
+                    "text": result.payload.get("text", ""),
+                    "chapter": result.payload.get("chapter"),
+                    "section": result.payload.get("section"),
+                    "file_path": result.payload.get("file_path"),
+                    "heading": result.payload.get("heading"),
+                    "relevance_score": result.score,
+                    "chunk_id": result.payload.get("chunk_id")
+                })
+            
+            logger.info(f"Found {len(chunks)} filtered chunks (chapter={chapter}, section={section})")
+            return chunks
+            
+        except Exception as e:
+            logger.error(f"Filtered search failed: {str(e)}")
+            raise VectorStoreError(f"Filtered search failed: {str(e)}", operation="search_filtered")
+    
+    async def get_collection_info(self) -> Dict[str, Any]:
+        """
+        Get collection statistics.
+        
+        Returns:
+            Dictionary with collection info (vector count, status, etc.)
+        """
+        try:
+            info = self.client.get_collection(self.collection_name)
+            return {
+                "name": info.config.params.vectors,
+                "points_count": info.points_count,
+                "status": info.status
+            }
+        except Exception as e:
+            logger.error(f"Failed to get collection info: {str(e)}")
+            raise VectorStoreError(f"Get collection info failed: {str(e)}")
+
+
+# Global service instance
+vector_store_service = VectorStoreService()

@@ -3,8 +3,8 @@
 # 250MB limit - this deployment: ~100-120MB
 # ==========================================
 
-fastapi==0.104.1
-pydantic==2.10.3
+fastapi>=0.115.0            # Updated for anyio>=4.5 compatibility
+pydantic>=2.10.3
 python-dotenv==1.0.0
 
 # AI: Cloud-only (no local models)

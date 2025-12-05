@@ -4,9 +4,9 @@
 # ==========================================
 
 # Core Framework (Lightweight)
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.10.3
+fastapi>=0.115.0           # Updated for anyio>=4.5 compatibility
+uvicorn[standard]>=0.24.0
+pydantic>=2.10.3
 python-dotenv==1.0.0
 
 # AI/ML - Cloud-only (NO local models, NO heavy frameworks)

@@ -17,7 +17,7 @@ qdrant-client==1.7.1         # Vector DB cloud access
 psycopg2-binary==2.9.10      # Postgres client
 
 # Utilities
-httpx==0.25.2
+httpx>=0.27.0              # Required by mcp>=0.27
 tiktoken==0.5.2
 python-multipart==0.0.6
 

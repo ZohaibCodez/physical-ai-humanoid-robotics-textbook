@@ -22,7 +22,7 @@ psycopg2-binary==2.9.10     # Neon Postgres (~5MB)
 asyncpg==0.29.0             # Async Postgres (~2MB)
 
 # HTTP Client
-httpx==0.25.2               # HTTP requests (~3MB)
+httpx>=0.27.0               # HTTP requests (~3MB) - Required by mcp>=0.27
 
 # Utilities
 tiktoken==0.5.2             # Token counting (~2MB)

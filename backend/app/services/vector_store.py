@@ -135,13 +135,13 @@ class VectorStoreService:
             logger.info(f"Searching Qdrant: vector_name={vector_name}, limit={limit}, threshold={score_threshold}")
             logger.info(f"Query vector length: {len(query_vector)}, first 5 values: {query_vector[:5]}")
             
-            # Query without score threshold first to see what we get
-            all_results = self.client.query_points(
+            # Search using the correct API for Qdrant client 1.7.1
+            all_results = self.client.search(
                 collection_name=self.collection_name,
-                query=query_vector,
-                using=vector_name,  # Specify which named vector to use
-                limit=limit
-            ).points
+                query_vector=(vector_name, query_vector),  # Tuple for named vectors
+                limit=limit,
+                score_threshold=score_threshold
+            )
             
             logger.info(f"Qdrant returned {len(all_results)} results (before threshold)")
             if all_results:
@@ -209,14 +209,14 @@ class VectorStoreService:
             # Create filter if conditions exist
             query_filter = Filter(must=conditions) if conditions else None  # type: ignore
             
-            results = self.client.query_points(
+            # Search with filters using the correct API for Qdrant client 1.7.1
+            results = self.client.search(
                 collection_name=self.collection_name,
-                query=query_vector,
-                using=vector_name,  # Specify which named vector to use
+                query_vector=(vector_name, query_vector),  # Tuple for named vectors
                 query_filter=query_filter,
                 limit=limit,
                 score_threshold=score_threshold
-            ).points
+            )
             
             chunks = []
             for result in results:

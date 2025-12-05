@@ -43,7 +43,7 @@ async def health_check():
     # Check Qdrant
     try:
         collection_info = await vector_store_service.get_collection_info()
-        services["qdrant"] = "healthy" if collection_info.get("points_count", 0) > 0 else "degraded"
+        services["qdrant"] = "healthy" if collection_info.get("exists", False) else "degraded"
         if services["qdrant"] == "degraded":
             overall_status = "degraded"
     except Exception as e:

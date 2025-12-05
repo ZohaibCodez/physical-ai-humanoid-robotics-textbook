@@ -2,8 +2,9 @@ services:
   - type: web
     name: physical-ai-robotics-backend
     runtime: docker
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
       - key: GOOGLE_API_KEY
         sync: false

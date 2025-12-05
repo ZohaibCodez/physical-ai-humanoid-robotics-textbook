@@ -7,7 +7,7 @@ python-dotenv>=1.0.0
 # AI/ML - OpenAI Agents SDK with LiteLLM
 openai-agents[litellm]>=0.1.0
 google-generativeai>=0.3.2
-sentence-transformers>=2.3.0  # Updated for better Python 3.13 compatibility
+# sentence-transformers>=2.3.0  # Disabled for Vercel deployment (too large)
 
 # Vector Database
 qdrant-client>=1.7.1

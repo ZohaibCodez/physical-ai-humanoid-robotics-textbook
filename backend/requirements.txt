@@ -11,7 +11,7 @@ python-dotenv==1.0.0
 
 # AI/ML - Cloud-only (NO local models, NO heavy frameworks)
 google-generativeai==0.3.2  # Embeddings + LLM via API (~10-15MB)
-openai==1.58.1              # API client for Gemini compatibility (~5MB)
+openai>=1.87.0              # API client for Gemini compatibility (~5MB)
 openai-agents==0.1.0        # Lightweight agent framework (~3MB)
 
 # Vector Database (client only)

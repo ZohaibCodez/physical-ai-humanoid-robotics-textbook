@@ -9,8 +9,8 @@ python-dotenv==1.0.0
 
 # AI: Cloud-only (no local models)
 google-generativeai==0.3.2  # Google Gemini embeddings + LLM
-openai==1.58.1               # API client
-openai-agents==0.1.0         # Lightweight orchestration
+openai>=1.87.0              # API client (required by openai-agents)
+openai-agents==0.1.0        # Lightweight orchestration
 
 # Data Storage (clients only)
 qdrant-client==1.7.1         # Vector DB cloud access

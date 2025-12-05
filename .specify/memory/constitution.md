@@ -1,25 +1,26 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: Initial → 1.0.0
-Type: MAJOR - Initial constitution ratification
+Version Change: 1.0.0 → 1.1.0
+Type: MINOR - New principles added for user authentication and personalization
 
 Modified Principles:
-- All principles newly defined (8 core principles established)
+- None (existing principles unchanged)
 
 Added Sections:
-- Core Principles (8 principles)
-- Technology Standards
-- Quality & Deployment Standards
-- Governance
+- Principle IX: Secure Authentication
+- Principle X: Background Profiling
+- Principle XI: Seamless UX
 
 Templates Status:
-✅ spec-template.md - Compatible (user stories align with Educational Excellence)
-✅ plan-template.md - Compatible (constitution check gates align)
-✅ tasks-template.md - Compatible (task organization supports curriculum structure)
+✅ spec-template.md - Compatible (authentication aligns with AI-Native Design principle)
+✅ plan-template.md - Compatible (security & UX considerations already covered)
+✅ tasks-template.md - Compatible (supports new authentication/personalization tasks)
+⚠ Pending Review: Backend authentication implementation (Better-Auth integration)
 
 Follow-up TODOs:
-- None - all placeholders resolved
+- Verify Better-Auth integration with existing backend architecture
+- Ensure user profiling data model aligns with RAG chatbot personalization requirements
 -->
 
 # Physical AI & Humanoid Robotics Textbook Constitution
@@ -76,6 +77,24 @@ Maintain clear directory structure. Create reusable components and templates. En
 
 **Rationale**: Educational content evolves. A maintainable structure allows updates to keep pace with technological advances in robotics and AI.
 
+### IX. Secure Authentication
+
+Use Better-Auth for modern, secure authentication. Collect user background during signup for personalization. Protect user data and privacy with industry-standard practices.
+
+**Rationale**: Personalized learning requires knowing the learner. Secure authentication enables adaptive content delivery while maintaining user trust through robust privacy protections.
+
+### X. Background Profiling
+
+Ask about software experience (beginner/intermediate/advanced). Ask about hardware access (cloud-only/basic-hardware/full-lab). Store preferences for content adaptation.
+
+**Rationale**: Students have diverse backgrounds and resources. Profiling enables the platform to deliver appropriate content difficulty and hardware-specific guidance, maximizing learning effectiveness.
+
+### XI. Seamless UX
+
+Optional authentication (guest users can still read). Single sign-on ready. Fast, non-intrusive signup flow.
+
+**Rationale**: Friction in authentication drives users away. Guest access lowers barriers to exploration while registered users gain personalization benefits, optimizing for both discovery and engagement.
+
 ## Technology Standards
 
 **Platform**: Docusaurus v3.x (REQUIRED)  
@@ -121,4 +140,4 @@ This constitution supersedes all other project practices and decisions. Any amen
 
 **Compliance**: All content contributions, pull requests, and reviews MUST verify compliance with these principles. Deviations require explicit justification and approval. For runtime development guidance, refer to `.github/copilot-instructions.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-03
+**Version**: 1.1.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-05

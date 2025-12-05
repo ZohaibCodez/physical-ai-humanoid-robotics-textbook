@@ -1,24 +1,44 @@
-# Core Framework
-fastapi>=0.104.1
-uvicorn[standard]>=0.24.0
-pydantic>=2.10.3
-python-dotenv>=1.0.0
+# ==========================================
+# OPTIMIZED FOR FREE-TIER DEPLOYMENT
+# Total size: ~100-150MB (Vercel/Render/Railway compatible)
+# ==========================================
 
-# AI/ML - OpenAI Agents SDK with LiteLLM
-openai-agents[litellm]>=0.1.0
-google-generativeai>=0.3.2
-# sentence-transformers>=2.3.0  # Disabled for Vercel deployment (too large)
+# Core Framework (Lightweight)
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.10.3
+python-dotenv==1.0.0
 
-# Vector Database
-qdrant-client>=1.7.1
+# AI/ML - Cloud-only (NO local models, NO heavy frameworks)
+google-generativeai==0.3.2  # Embeddings + LLM via API (~10-15MB)
+openai==1.58.1              # API client for Gemini compatibility (~5MB)
+openai-agents==0.1.0        # Lightweight agent framework (~3MB)
 
-# Database
-psycopg2-binary>=2.9.10
-asyncpg>=0.29.0
+# Vector Database (client only)
+qdrant-client==1.7.1        # Cloud Qdrant access (~10MB)
+
+# Database (precompiled binaries)
+psycopg2-binary==2.9.10     # Neon Postgres (~5MB)
+asyncpg==0.29.0             # Async Postgres (~2MB)
 
 # HTTP Client
-httpx>=0.25.2
+httpx==0.25.2               # HTTP requests (~3MB)
 
 # Utilities
-tiktoken>=0.5.2
-python-multipart>=0.0.6
+tiktoken==0.5.2             # Token counting (~2MB)
+python-multipart==0.0.6     # Form data (~1MB)
+
+# ==========================================
+# ❌ HEAVY PACKAGES EXCLUDED (500MB+ each):
+# ==========================================
+# - sentence-transformers (PyTorch + local models)
+# - torch / tensorflow (ML frameworks)
+# - transformers (HuggingFace models)
+# - langchain (many dependencies)
+# - litellm (not needed, using openai SDK directly)
+#
+# 💡 Why cloud-only embeddings?
+# - Textbook data already embedded in Qdrant
+# - Only need embeddings for user queries at runtime
+# - Google Generative AI: free, fast, lightweight
+# - No model loading = fast cold starts (~2-3s)

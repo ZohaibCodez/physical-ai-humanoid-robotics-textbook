@@ -1,12 +1,25 @@
-# Vercel-optimized requirements (minimal dependencies)
+# ==========================================
+# VERCEL FREE TIER OPTIMIZED (~100MB total)
+# 250MB limit - this deployment: ~100-120MB
+# ==========================================
+
 fastapi==0.104.1
 pydantic==2.10.3
 python-dotenv==1.0.0
-openai==1.58.1
-litellm==1.55.8
-google-generativeai==0.3.2
-qdrant-client==1.7.1
-psycopg2-binary==2.9.10
+
+# AI: Cloud-only (no local models)
+google-generativeai==0.3.2  # Google Gemini embeddings + LLM
+openai==1.58.1               # API client
+openai-agents==0.1.0         # Lightweight orchestration
+
+# Data Storage (clients only)
+qdrant-client==1.7.1         # Vector DB cloud access
+psycopg2-binary==2.9.10      # Postgres client
+
+# Utilities
 httpx==0.25.2
-tiktoken>=0.7.0
+tiktoken==0.5.2
 python-multipart==0.0.6
+
+# ❌ Removed: litellm, asyncpg (not needed for serverless)
+# ❌ NO: torch, transformers, sentence-transformers (too heavy)

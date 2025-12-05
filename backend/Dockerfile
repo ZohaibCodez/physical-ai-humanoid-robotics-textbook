@@ -1,43 +1,53 @@
-# Multi-stage Dockerfile for RAG Chatbot Backend
+# ==========================================
+# LIGHTWEIGHT DOCKER IMAGE FOR FREE-TIER DEPLOYMENT
+# Optimized for Render/Railway (512MB RAM)
+# Final image: ~300MB (base + deps)
+# ==========================================
 
-# Stage 1: Builder
+# Stage 1: Builder (minimal build deps)
 FROM python:3.11-slim as builder
 
 WORKDIR /build
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
+# Install ONLY essential build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Copy requirements
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --user -r requirements.txt
+# Install dependencies with aggressive size optimization
+RUN pip install --no-cache-dir --user -r requirements.txt \
+    && find /root/.local -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
+    && find /root/.local -type f -name "*.pyc" -delete \
+    && find /root/.local -type f -name "*.pyo" -delete
 
-# Stage 2: Runtime
+# Stage 2: Runtime (ultra-minimal)
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy Python dependencies from builder
+# Copy only Python dependencies from builder
 COPY --from=builder /root/.local /root/.local
 
-# Copy application code
+# Copy application code (no tests, no dev files)
 COPY ./app ./app
 COPY ./scripts ./scripts
 
-# Make sure scripts are in PATH
-ENV PATH=/root/.local/bin:$PATH
+# Environment optimizations for small footprint
+ENV PATH=/root/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1
 
 # Expose port
 EXPOSE 8000
 
-# Health check
+# Lightweight health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import httpx; httpx.get('http://localhost:8000/v1/health', timeout=5)"
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run with single worker (optimal for free tier 512MB RAM)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

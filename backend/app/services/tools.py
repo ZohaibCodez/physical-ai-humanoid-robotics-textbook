@@ -6,10 +6,10 @@ Defines tools that the agent can use to search the textbook.
 
 from agents import function_tool
 from typing import Optional, List, Dict
-# from agents import function_tool
 from app.services.vector_store import vector_store_service
 from app.services.embeddings import google_embedding_service
-from app.services.embeddings_local import local_embedding_service
+# Removed: local_embedding_service (heavy sentence-transformers - 500MB+)
+# For production: Only Google Generative AI (lightweight, API-based)
 from app.services.citation_resolver import citation_resolver
 from app.utils.logger import app_logger as logger
 from app.utils.exceptions import VectorStoreError, EmbeddingError
@@ -40,19 +40,13 @@ async def search_textbook(
     try:
         logger.info(f"Tool: search_textbook called with query: {query[:100]}...")
         
-        # Generate query embedding
-        try:
-            # Try Google embeddings first
-            query_embedding = await google_embedding_service.generate_embedding(
-                query, task_type="RETRIEVAL_QUERY"
-            )
-            vector_name = "google"
-            logger.debug("Using Google embeddings for search")
-        except EmbeddingError:
-            # Fallback to local embeddings
-            logger.warning("Google embeddings unavailable, using local fallback")
-            query_embedding = await local_embedding_service.generate_embedding(query)
-            vector_name = "local"
+        # Generate query embedding using Google Generative AI (lightweight, API-based)
+        # No local models loaded - perfect for free-tier deployment
+        query_embedding = await google_embedding_service.generate_embedding(
+            query, task_type="RETRIEVAL_QUERY"
+        )
+        vector_name = "google"
+        logger.debug("Using Google embeddings for search")
         
         # Perform search
         if chapter or section:

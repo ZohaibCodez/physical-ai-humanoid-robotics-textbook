@@ -207,51 +207,69 @@ Remember: Only use information from the textbook. Do not use external knowledge.
             
             logger.info(f"Running streamed agent for session {session_id}")
             
-            # Run agent with streaming
-            stream_result = Runner.run_streamed(
-                starting_agent=self.agent,
-                input=input_message
-            )
-            
-            # Stream events following OpenAI Agents SDK pattern
-            async for event in stream_result.stream_events():
-                logger.debug(f"Event type: {event.type}")
+            # Run agent with streaming - wrap in try-except for Pydantic validation issues
+            try:
+                stream_result = Runner.run_streamed(
+                    starting_agent=self.agent,
+                    input=input_message
+                )
                 
-                # Handle raw response events (actual LLM token deltas)
-                if event.type == "raw_response_event":
-                    logger.debug(f"Raw response event: {event}")
-                    # Try to extract content from the raw response
+                # Stream events following OpenAI Agents SDK pattern
+                async for event in stream_result.stream_events():
+                    logger.debug(f"Event type: {event.type}")
+                    
                     try:
-                        if hasattr(event, 'data') and event.data:
-                            chunk = event.data
-                            logger.debug(f"Chunk: {chunk}")
-                            if hasattr(chunk, 'choices') and len(chunk.choices) > 0:
-                                delta = chunk.choices[0].delta
-                                if hasattr(delta, 'content') and delta.content:
-                                    logger.debug(f"Yielding token: {delta.content}")
-                                    yield delta.content
-                    except Exception as e:
-                        logger.debug(f"Error extracting from raw_response_event: {e}")
-                # Handle agent updates
-                elif event.type == "agent_updated_stream_event":
-                    logger.debug(f"Agent updated: {event.new_agent.name}")
-                    continue
-                # Handle run item stream events (tool calls, outputs, messages)
-                elif event.type == "run_item_stream_event":
-                    if event.item.type == "tool_call_item":
-                        logger.debug("Tool was called")
-                    elif event.item.type == "tool_call_output_item":
-                        logger.debug(f"Tool output: {event.item.output}")
-                    elif event.item.type == "message_output_item":
-                        # Fallback: use complete message if raw events don't work
-                        message_text = ItemHelpers.text_message_output(event.item)
-                        if message_text:
-                            logger.info(f"Using message_output_item fallback, yielding: {len(message_text)} chars")
-                            # Yield in chunks to simulate streaming
-                            for i in range(0, len(message_text), 10):
-                                yield message_text[i:i+10]
-            
-            logger.info(f"Streamed agent completed for session {session_id}")
+                        # Handle raw response events (actual LLM token deltas)
+                        if event.type == "raw_response_event":
+                            logger.debug(f"Raw response event: {event}")
+                            # Try to extract content from the raw response
+                            if hasattr(event, 'data') and event.data:
+                                chunk = event.data
+                                logger.debug(f"Chunk: {chunk}")
+                                if hasattr(chunk, 'choices') and len(chunk.choices) > 0:
+                                    delta = chunk.choices[0].delta
+                                    if hasattr(delta, 'content') and delta.content:
+                                        logger.debug(f"Yielding token: {delta.content}")
+                                        yield delta.content
+                        # Handle agent updates
+                        elif event.type == "agent_updated_stream_event":
+                            logger.debug(f"Agent updated: {event.new_agent.name}")
+                            continue
+                        # Handle run item stream events (tool calls, outputs, messages)
+                        elif event.type == "run_item_stream_event":
+                            if event.item.type == "tool_call_item":
+                                logger.debug("Tool was called")
+                            elif event.item.type == "tool_call_output_item":
+                                logger.debug(f"Tool output: {event.item.output}")
+                            elif event.item.type == "message_output_item":
+                                # Fallback: use complete message if raw events don't work
+                                message_text = ItemHelpers.text_message_output(event.item)
+                                if message_text:
+                                    logger.info(f"Using message_output_item fallback, yielding: {len(message_text)} chars")
+                                    # Yield in chunks to simulate streaming
+                                    for i in range(0, len(message_text), 10):
+                                        yield message_text[i:i+10]
+                    except Exception as event_error:
+                        # Catch Pydantic validation errors and other event-specific issues
+                        logger.debug(f"Event processing error (non-fatal): {event_error}")
+                        continue
+                
+                logger.info(f"Streamed agent completed for session {session_id}")
+                
+            except Exception as stream_error:
+                # If streaming completely fails, fallback to non-streamed
+                logger.warning(f"Streaming failed: {stream_error}, falling back to non-streamed response")
+                result = await self.run_agent(
+                    question=question,
+                    session_id=session_id,
+                    search_results=search_results,
+                    context_mode=context_mode,
+                    conversation_history=conversation_history
+                )
+                # Yield the complete answer in small chunks
+                answer = result.get("answer", "")
+                for i in range(0, len(answer), 10):
+                    yield answer[i:i+10]
             
         except Exception as e:
             logger.error(f"Streamed agent execution failed: {str(e)}")

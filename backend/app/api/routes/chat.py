@@ -13,7 +13,7 @@ from app.services.agent_service import agent_service
 from app.services.postgres_service import postgres_service
 from app.services.rate_limiter import rate_limiter
 from app.services.embeddings import google_embedding_service
-from app.services.embeddings_local import local_embedding_service
+# Removed: embeddings_local (heavy model, using cloud-only Google AI)
 from app.services.vector_store import vector_store_service
 from app.services.citation_resolver import citation_resolver
 from app.utils.logger import app_logger as logger

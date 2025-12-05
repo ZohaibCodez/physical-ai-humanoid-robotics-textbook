@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: physical-ai-robotics-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: QDRANT_URL
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: QDRANT_COLLECTION_NAME
+        value: robotics_textbook_embeddings
+      - key: NEON_DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://zohaibcodez.github.io,http://localhost:3000
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: OPENAI_DEFAULT_MODEL
+        value: gemini-2.0-flash
+      - key: LITELLM_MODEL
+        value: gemini-2.0-flash
+    healthCheckPath: /health

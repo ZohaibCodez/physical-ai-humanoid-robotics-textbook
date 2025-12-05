@@ -8,5 +8,5 @@ google-generativeai==0.3.2
 qdrant-client==1.7.1
 psycopg2-binary==2.9.10
 httpx==0.25.2
-tiktoken==0.5.2
+tiktoken>=0.7.0
 python-multipart==0.0.6

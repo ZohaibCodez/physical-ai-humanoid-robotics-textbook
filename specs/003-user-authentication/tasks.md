@@ -84,28 +84,28 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 ### Backend Implementation
 
-- [ ] T024 [US2] Create LoginRequest Pydantic model in backend/app/models/user.py with fields: email (EmailStr), password (str)
-- [ ] T025 [US2] Implement login_user() function in backend/app/services/auth_service.py: verify email exists, verify password hash, update last_login timestamp, return user data with preferences
-- [ ] T026 [US2] Create POST /v1/auth/login endpoint in backend/app/api/routes/auth.py: accept LoginRequest, call login_user(), generate JWT tokens, set HTTP-only cookies, return AuthResponse
-- [ ] T027 [US2] Create GET /v1/auth/session endpoint in backend/app/api/routes/auth.py: verify JWT token, return current user data with preferences (used for session restoration)
-- [ ] T028 [US2] Create POST /v1/auth/logout endpoint in backend/app/api/routes/auth.py: clear HTTP-only cookies, return success response
-- [ ] T029 [US2] Create GET /v1/auth/refresh endpoint in backend/app/api/routes/auth.py: verify refresh token, generate new access token, return new tokens
+- [X] T024 [US2] Create LoginRequest Pydantic model in backend/app/models/user.py with fields: email (EmailStr), password (str)
+- [X] T025 [US2] Implement login_user() function in backend/app/services/auth_service.py: verify email exists, verify password hash, update last_login timestamp, return user data with preferences
+- [X] T026 [US2] Create POST /v1/auth/login endpoint in backend/app/api/routes/auth.py: accept LoginRequest, call login_user(), generate JWT tokens, set HTTP-only cookies, return AuthResponse
+- [X] T027 [US2] Create GET /v1/auth/session endpoint in backend/app/api/routes/auth.py: verify JWT token, return current user data with preferences (used for session restoration)
+- [X] T028 [US2] Create POST /v1/auth/logout endpoint in backend/app/api/routes/auth.py: clear HTTP-only cookies, return success response
+- [X] T029 [US2] Create GET /v1/auth/refresh endpoint in backend/app/api/routes/auth.py: verify refresh token, generate new access token, return new tokens
 
 ### Frontend Implementation
 
-- [ ] T030 [P] [US2] Create src/components/auth/LoginForm.jsx with form fields: email (input), password (password input)
-- [ ] T031 [P] [US2] Create src/pages/Login.jsx page component wrapping LoginForm with Docusaurus theme layout
-- [ ] T032 [US2] Implement handleLogin() function in LoginForm.jsx: call POST /v1/auth/login API, handle success (update AuthContext, redirect to intended destination or home), handle errors (display generic "Invalid email or password" message)
-- [ ] T033 [US2] Implement session restoration in AuthProvider: call GET /v1/auth/session on app mount, restore user state if valid token exists
-- [ ] T034 [US2] Implement logout functionality in AuthProvider: call POST /v1/auth/logout API, clear auth state, redirect to home
-- [ ] T035 [US2] Style LoginForm.jsx to match Docusaurus theme: use Infima CSS classes, responsive design, WCAG 2.1 AA compliant
-- [ ] T036 [US2] Add redirect logic to Login page: if user already authenticated, redirect to home page automatically
+- [X] T030 [P] [US2] Create src/components/auth/LoginForm.jsx with form fields: email (input), password (password input)
+- [X] T031 [P] [US2] Create src/pages/Login.jsx page component wrapping LoginForm with Docusaurus theme layout
+- [X] T032 [US2] Implement handleLogin() function in LoginForm.jsx: call POST /v1/auth/login API, handle success (update AuthContext, redirect to intended destination or home), handle errors (display generic "Invalid email or password" message)
+- [X] T033 [US2] Implement session restoration in AuthProvider: call GET /v1/auth/session on app mount, restore user state if valid token exists
+- [X] T034 [US2] Implement logout functionality in AuthProvider: call POST /v1/auth/logout API, clear auth state, redirect to home
+- [X] T035 [US2] Style LoginForm.jsx to match Docusaurus theme: use Infima CSS classes, responsive design, WCAG 2.1 AA compliant
+- [X] T036 [US2] Add redirect logic to Login page: if user already authenticated, redirect to home page automatically
 
 ### Integration
 
-- [ ] T037 [US2] Add /login route to Docusaurus routing in docusaurus.config.js
-- [ ] T038 [US2] Create src/components/ProtectedRoute.jsx wrapper component: check AuthContext.isAuthenticated, redirect to /login with returnUrl if not authenticated
-- [ ] T039 [US2] Implement token refresh mechanism in AuthProvider: automatically call /v1/auth/refresh when access token expires
+- [X] T037 [US2] Add /login route to Docusaurus routing in docusaurus.config.js
+- [X] T038 [US2] Create src/components/ProtectedRoute.jsx wrapper component: check AuthContext.isAuthenticated, redirect to /login with returnUrl if not authenticated
+- [X] T039 [US2] Implement token refresh mechanism in AuthProvider: automatically call /v1/auth/refresh when access token expires
 
 ---
 

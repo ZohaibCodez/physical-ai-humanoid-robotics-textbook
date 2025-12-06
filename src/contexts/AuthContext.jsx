@@ -190,6 +190,35 @@ export function AuthProvider({ children }) {
     restoreSession();
   }, [restoreSession]);
 
+  // Automatic token refresh every 25 minutes (before 30-minute expiry)
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return; // Don't refresh if not logged in
+    }
+
+    const refreshInterval = setInterval(async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/v1/auth/refresh`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          // Refresh failed, logout user
+          console.warn('Token refresh failed, logging out');
+          logout();
+        }
+      } catch (error) {
+        console.error('Token refresh error:', error);
+      }
+    }, 25 * 60 * 1000); // 25 minutes
+
+    return () => clearInterval(refreshInterval);
+  }, [isAuthenticated, logout]);
+
   const value = {
     user,
     preferences,

@@ -149,6 +149,18 @@ const config = {
             label: 'Textbook',
           },
           {
+            to: '/signup',
+            label: 'Sign Up',
+            position: 'right',
+            className: 'button button--primary button--sm',
+          },
+          {
+            to: '/login',
+            label: 'Login',
+            position: 'right',
+            className: 'button button--secondary button--sm',
+          },
+          {
             href: 'https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook',
             label: 'GitHub',
             position: 'right',

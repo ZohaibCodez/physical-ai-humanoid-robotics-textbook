@@ -2,9 +2,8 @@
   "label": "Part 1: Foundations of Physical AI",
   "position": 1,
   "link": {
-    "type": "generated-index",
-    "description": "Build your conceptual foundation for Physical AI: understand embodied intelligence, master coordinate systems, and review essential AI concepts. Your journey into humanoid robotics begins here.",
-    "slug": "/part-01-foundations"
+    "type": "doc",
+    "id": "part-01-foundations/index"
   },
   "collapsed": false
 }

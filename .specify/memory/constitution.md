@@ -1,26 +1,32 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: 1.0.0 → 1.1.0
-Type: MINOR - New principles added for user authentication and personalization
+Version Change: 1.1.0 → 1.2.0
+Type: MINOR - New UI/UX design principles added
 
 Modified Principles:
 - None (existing principles unchanged)
 
 Added Sections:
-- Principle IX: Secure Authentication
-- Principle X: Background Profiling
-- Principle XI: Seamless UX
+- Principle XII: Visual Consistency
+- Principle XIII: User Experience First
+- Principle XIV: Color Psychology
+- Principle XV: Professional Polish
+- Principle XVI: User Empowerment
 
 Templates Status:
-✅ spec-template.md - Compatible (authentication aligns with AI-Native Design principle)
-✅ plan-template.md - Compatible (security & UX considerations already covered)
-✅ tasks-template.md - Compatible (supports new authentication/personalization tasks)
-⚠ Pending Review: Backend authentication implementation (Better-Auth integration)
+✅ spec-template.md - Compatible (UI/UX requirements can be captured in functional requirements)
+✅ plan-template.md - Compatible (Performance Goals and Constraints sections support UX metrics)
+✅ tasks-template.md - Compatible (UI/UX tasks can be organized by user story)
+⚠ Pending Review: Frontend component consistency audit needed
+⚠ Pending Review: Accessibility compliance verification (WCAG 2.1 AA)
 
 Follow-up TODOs:
-- Verify Better-Auth integration with existing backend architecture
-- Ensure user profiling data model aligns with RAG chatbot personalization requirements
+- Audit existing UI components for visual consistency violations
+- Establish color palette constants in theme configuration
+- Implement dark mode theming system
+- Add accessibility testing to quality gates
+- Create UI component library documentation
 -->
 
 # Physical AI & Humanoid Robotics Textbook Constitution
@@ -95,6 +101,36 @@ Optional authentication (guest users can still read). Single sign-on ready. Fast
 
 **Rationale**: Friction in authentication drives users away. Guest access lowers barriers to exploration while registered users gain personalization benefits, optimizing for both discovery and engagement.
 
+### XII. Visual Consistency
+
+Use a single cohesive color palette throughout the entire platform. Maintain consistent spacing and typography across all pages and components. Present a professional, modern aesthetic that reflects the technical sophistication of the subject matter. Optimize for dark mode by default to reduce eye strain during extended reading sessions. Implement smooth transitions and animations that enhance rather than distract from the learning experience.
+
+**Rationale**: Visual consistency reduces cognitive load and builds trust. Students focus on learning when the interface is predictable and polished. Dark mode optimization is essential for technical education where users spend hours reading and coding.
+
+### XIII. User Experience First
+
+Prioritize intuitive navigation that allows students to find content effortlessly. Establish clear visual hierarchy to guide attention to key information. Ensure accessibility to all users by meeting WCAG 2.1 AA standards. Optimize for fast loading times to maintain engagement. Design mobile-responsive layouts that work seamlessly across devices from 320px width upward.
+
+**Rationale**: Educational platforms fail when navigation is confusing or content is inaccessible. UX excellence directly impacts learning outcomes—frustrated students disengage, while empowered students thrive.
+
+### XIV. Color Psychology
+
+Select primary colors that convey professionalism and trustworthiness in technical education. Use accent colors that engage attention without causing distraction from content. Choose background colors that are easy on the eyes for extended reading sessions. Ensure text colors provide high contrast for optimal readability. Design interactive elements with clear affordances that signal clickability and state changes.
+
+**Rationale**: Color choices impact learning psychology. Technical content demands colors that reduce fatigue and maintain focus. Proper contrast ensures accessibility and reduces comprehension barriers.
+
+### XV. Professional Polish
+
+Eliminate jarring color transitions that disrupt the reading experience. Maintain consistent button styles, sizes, and behaviors across all interactions. Apply proper spacing and whitespace to improve content scannability. Use professional typography that balances readability with technical aesthetics. Implement smooth micro-interactions that provide feedback and delight without overwhelming users.
+
+**Rationale**: Polish differentiates amateur from professional educational platforms. Students perceive polished interfaces as more credible and are more likely to invest time and effort in the curriculum.
+
+### XVI. User Empowerment
+
+Display clear authentication status so users always know their login state. Provide easy profile access with minimal clicks from any page. Design intuitive logout flows that respect user intent. Ensure the chatbot is always accessible for instant help. Show progress indicators where needed to give students a sense of achievement and direction.
+
+**Rationale**: Empowered users feel in control of their learning journey. Clear system status and easy access to tools reduce anxiety and enable students to focus on mastering robotics concepts rather than fighting the interface.
+
 ## Technology Standards
 
 **Platform**: Docusaurus v3.x (REQUIRED)  
@@ -116,14 +152,21 @@ Optional authentication (guest users can still read). Single sign-on ready. Fast
 **Performance Requirements**:
 - Page load times <3 seconds on standard connections
 - Mobile-responsive on devices 320px width and above
-- WCAG 2.1 Level AA accessibility compliance
+- WCAG 2.1 Level AA accessibility compliance (REQUIRED)
 - SEO score >90 on Lighthouse audits
+- Color contrast ratios meeting WCAG AA standards (4.5:1 for normal text, 3:1 for large text)
+- Smooth animations at 60fps with no janky transitions
+- Consistent UI rendering across modern browsers (Chrome, Firefox, Safari, Edge)
 
 **Testing Gates**:
 - All code examples must execute without errors
 - Navigation structure must be validated
 - Broken links detected and fixed before deployment
 - Spelling and grammar checked
+- Visual consistency audit (color palette, spacing, typography)
+- Accessibility compliance verification (WCAG 2.1 AA automated + manual testing)
+- Mobile responsiveness tested on viewport widths 320px-1920px
+- Dark mode rendering verified across all pages
 
 ## Governance
 
@@ -140,4 +183,4 @@ This constitution supersedes all other project practices and decisions. Any amen
 
 **Compliance**: All content contributions, pull requests, and reviews MUST verify compliance with these principles. Deviations require explicit justification and approval. For runtime development guidance, refer to `.github/copilot-instructions.md`.
 
-**Version**: 1.1.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-05
+**Version**: 1.2.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-07

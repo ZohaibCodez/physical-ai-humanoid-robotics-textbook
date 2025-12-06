@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 import asyncpg
 import traceback
 
-from app.models.user import SignupRequest, LoginRequest, AuthResponse, AuthTokenResponse, UserProfileResponse, ProfileUpdateRequest
+from app.models.user import SignupRequest, LoginRequest, AuthResponse, AuthTokenResponse, UserProfileResponse, ProfileUpdateRequest, PasswordResetRequest
 from app.services.auth_service import signup_user, login_user, get_user_profile, update_user_preferences
 from app.utils.security import create_access_token, create_refresh_token, verify_token
 from app.utils.dependencies import get_settings, get_current_user
@@ -345,4 +345,28 @@ async def update_profile(
             )
     
     return profile
+
+
+@router.post("/reset-password", status_code=status.HTTP_501_NOT_IMPLEMENTED)
+async def reset_password(request_data: PasswordResetRequest):
+    """
+    Password reset flow (stub - not implemented).
+    
+    Request body:
+    - email: User's email address
+    
+    Returns:
+    - 501: Feature not implemented (deferred per spec out-of-scope)
+    
+    Note: Full implementation requires email service integration,
+    token generation/validation, and password update workflow.
+    This endpoint is stubbed for future development.
+    """
+    raise HTTPException(
+        status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        detail={
+            "message": "Password reset is not yet implemented. Please contact support for assistance.",
+            "code": "NOT_IMPLEMENTED"
+        }
+    )
 

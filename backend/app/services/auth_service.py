@@ -7,6 +7,7 @@ from uuid import UUID
 from datetime import datetime
 import asyncpg
 import traceback
+import logging
 
 from app.models.user import (
     SignupRequest,
@@ -19,6 +20,9 @@ from app.models.user import (
 )
 from app.utils.security import get_password_hash, verify_password
 from app.utils.validators import validate_email, validate_password
+
+# Security event logger
+security_logger = logging.getLogger("security")
 
 
 async def signup_user(
@@ -110,6 +114,13 @@ async def signup_user(
         )
         
         profile = UserProfileResponse(user=user, preferences=preferences)
+        
+        # Log security event
+        security_logger.info(
+            f"Account created: user_id={user_row['id']}, email={signup_data.email}",
+            extra={"event": "account_created", "user_id": str(user_row['id']), "email": signup_data.email}
+        )
+        
         return profile, None
         
     except asyncpg.UniqueViolationError:
@@ -162,10 +173,18 @@ async def login_user(
         
         if not row:
             # Generic error message (don't reveal if email exists)
+            security_logger.warning(
+                f"Failed login attempt: email={email} (user not found)",
+                extra={"event": "login_failed", "email": email, "reason": "user_not_found"}
+            )
             return None, "Invalid email or password"
         
         # Verify password
         if not verify_password(password, row['hashed_password']):
+            security_logger.warning(
+                f"Failed login attempt: email={email} (invalid password)",
+                extra={"event": "login_failed", "email": email, "reason": "invalid_password"}
+            )
             return None, "Invalid email or password"
         
         # Update last_login timestamp
@@ -194,6 +213,13 @@ async def login_user(
         )
         
         profile = UserProfileResponse(user=user, preferences=preferences)
+        
+        # Log security event
+        security_logger.info(
+            f"Successful login: user_id={row['id']}, email={email}",
+            extra={"event": "login_success", "user_id": str(row['id']), "email": email}
+        )
+        
         return profile, None
         
     except asyncpg.PostgresError as e:
@@ -327,6 +353,22 @@ async def update_user_preferences(
         
         if not updated_profile:
             return None, "User not found"
+        
+        # Log security event
+        updated_fields = []
+        if update_data.name is not None:
+            updated_fields.append("name")
+        if update_data.software_level is not None:
+            updated_fields.append("software_level")
+        if update_data.hardware_access is not None:
+            updated_fields.append("hardware_access")
+        if update_data.preferred_language is not None:
+            updated_fields.append("preferred_language")
+        
+        security_logger.info(
+            f"Profile updated: user_id={user_id}, fields={','.join(updated_fields)}",
+            extra={"event": "profile_updated", "user_id": str(user_id), "updated_fields": updated_fields}
+        )
         
         return updated_profile, None
         

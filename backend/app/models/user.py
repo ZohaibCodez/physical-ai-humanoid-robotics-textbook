@@ -91,6 +91,11 @@ class PasswordChangeRequest(BaseModel):
         return v
 
 
+class PasswordResetRequest(BaseModel):
+    """Password reset request (stub for future implementation)."""
+    email: EmailStr
+
+
 # ==========================================
 # API Response Models
 # ==========================================

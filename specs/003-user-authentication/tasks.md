@@ -166,15 +166,15 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 **Purpose**: Error handling, security hardening, performance optimization, documentation
 
-- [ ] T059 [P] Add rate limiting middleware to auth endpoints in backend/app/main.py: limit POST /v1/auth/signup and POST /v1/auth/login to 5 requests per minute per IP
-- [ ] T060 [P] Implement comprehensive error handling in backend/app/api/routes/auth.py: catch database errors, return user-friendly messages, log errors for monitoring
-- [ ] T061 [P] Add password reset flow preparation: create PasswordResetRequest model, stub POST /v1/auth/reset-password endpoint (full implementation deferred per spec out-of-scope)
-- [ ] T062 [P] Add logging for security events in backend/app/services/auth_service.py: log failed login attempts, account creation, preference updates
-- [ ] T063 [P] Create API documentation for auth endpoints: add OpenAPI/Swagger annotations to all routes in backend/app/api/routes/auth.py
-- [ ] T064 [P] Add loading states to all forms: show spinner during API calls in SignupForm, LoginForm, ProfileForm
-- [ ] T065 [P] Implement form field accessibility: add proper labels, ARIA attributes, keyboard navigation support in all auth forms
-- [ ] T066 [P] Add environment variable validation in backend/app/config.py: ensure JWT_SECRET_KEY is set and strong (min 32 characters)
-- [ ] T067 Write README section in backend/README.md documenting authentication setup: environment variables, database migration steps, testing instructions
+- [X] T059 [P] Add rate limiting middleware to auth endpoints in backend/app/main.py: limit POST /v1/auth/signup and POST /v1/auth/login to 5 requests per minute per IP
+- [X] T060 [P] Implement comprehensive error handling in backend/app/api/routes/auth.py: catch database errors, return user-friendly messages, log errors for monitoring
+- [X] T061 [P] Add password reset flow preparation: create PasswordResetRequest model, stub POST /v1/auth/reset-password endpoint (full implementation deferred per spec out-of-scope)
+- [X] T062 [P] Add logging for security events in backend/app/services/auth_service.py: log failed login attempts, account creation, preference updates
+- [X] T063 [P] Create API documentation for auth endpoints: add OpenAPI/Swagger annotations to all routes in backend/app/api/routes/auth.py
+- [X] T064 [P] Add loading states to all forms: show spinner during API calls in SignupForm, LoginForm, ProfileForm
+- [X] T065 [P] Implement form field accessibility: add proper labels, ARIA attributes, keyboard navigation support in all auth forms
+- [X] T066 [P] Add environment variable validation in backend/app/config.py: ensure JWT_SECRET_KEY is set and strong (min 32 characters)
+- [X] T067 Write README section in backend/README.md documenting authentication setup: environment variables, database migration steps, testing instructions
 
 ---
 

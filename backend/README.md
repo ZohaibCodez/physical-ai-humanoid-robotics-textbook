@@ -36,14 +36,59 @@ pip install -r requirements-dev.txt  # For development
 
 ```bash
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env with your API keys and configuration
+```
+
+**Required Environment Variables:**
+```env
+# Google AI API Key
+GOOGLE_API_KEY=your_google_ai_api_key_here
+
+# Qdrant Vector Database
+QDRANT_URL=https://your-cluster.gcp.cloud.qdrant.io
+QDRANT_API_KEY=your_qdrant_api_key
+QDRANT_COLLECTION_NAME=textbook_chunks
+
+# Neon Postgres Database
+NEON_DATABASE_URL=postgresql://user:password@host/database
+
+# JWT Authentication (REQUIRED)
+JWT_SECRET_KEY=your_32_char_minimum_secret_key_here
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=30
+
+# CORS Origins
+CORS_ORIGINS=http://localhost:3000,http://localhost:8000
+
+# Application Settings
+ENVIRONMENT=development
+LOG_LEVEL=INFO
+RATE_LIMIT_PER_MINUTE=10
+```
+
+**Generate secure JWT secret:**
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
 3. **Initialize database:**
 
+Run the authentication table migrations:
+
 ```bash
+# Execute SQL migration script
+psql $NEON_DATABASE_URL -f scripts/create_auth_tables.sql
+
+# Or use the migration script
 python scripts/migrate_db.py
 ```
+
+This creates:
+- `users` table (id, email, hashed_password, name, is_active, is_verified, timestamps)
+- `user_preferences` table (user_id, software_level, hardware_access, preferred_language, timestamps)
+- Indexes and foreign key constraints
+- Triggers for updated_at timestamps
 
 4. **Index textbook content:**
 
@@ -60,6 +105,145 @@ uvicorn app.main:app --reload --port 8000
 Access API docs at: http://localhost:8000/v1/docs
 
 ## 🔌 API Endpoints
+
+### Authentication Endpoints
+
+#### POST /v1/auth/signup
+
+Create a new user account with background profiling.
+
+**Request:**
+```json
+{
+  "email": "user@example.com",
+  "password": "securepassword123",
+  "name": "John Doe",
+  "software_level": "intermediate",
+  "hardware_access": "basic",
+  "preferred_language": "en"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "user": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "is_active": true,
+    "is_verified": false,
+    "created_at": "2025-12-06T10:30:00Z",
+    "last_login": null
+  },
+  "preferences": {
+    "software_level": "intermediate",
+    "hardware_access": "basic",
+    "preferred_language": "en",
+    "updated_at": "2025-12-06T10:30:00Z"
+  },
+  "tokens": {
+    "access_token": "eyJhbGc...",
+    "refresh_token": "eyJhbGc...",
+    "token_type": "bearer",
+    "expires_in": 1800
+  }
+}
+```
+
+#### POST /v1/auth/login
+
+Authenticate with email and password.
+
+**Request:**
+```json
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "user": { ... },
+  "preferences": { ... },
+  "tokens": { ... }
+}
+```
+
+#### POST /v1/auth/logout
+
+Clear authentication cookies and logout.
+
+**Response (200 OK):**
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### GET /v1/auth/session
+
+Get current user session (requires authentication).
+
+**Response (200 OK):**
+```json
+{
+  "user": { ... },
+  "preferences": { ... }
+}
+```
+
+#### GET /v1/auth/refresh
+
+Refresh access token using refresh token cookie.
+
+**Response (200 OK):**
+```json
+{
+  "access_token": "eyJhbGc...",
+  "refresh_token": "eyJhbGc...",
+  "token_type": "bearer",
+  "expires_in": 1800
+}
+```
+
+#### GET /v1/user/profile
+
+Get current user's profile (requires authentication).
+
+**Response (200 OK):**
+```json
+{
+  "user": { ... },
+  "preferences": { ... }
+}
+```
+
+#### PUT /v1/user/profile
+
+Update user profile and preferences (requires authentication).
+
+**Request:**
+```json
+{
+  "name": "Jane Doe",
+  "software_level": "advanced",
+  "hardware_access": "full_lab",
+  "preferred_language": "both"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "user": { ... },
+  "preferences": { ... }
+}
+```
+
+### Chat Endpoints
 
 ### POST /v1/chat/ask
 
@@ -102,6 +286,60 @@ Health check for monitoring.
 
 ## 🧪 Testing
 
+### Authentication Testing
+
+**Manual Testing Flow:**
+
+1. **Signup:**
+```bash
+curl -X POST http://localhost:8000/v1/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "testpass123",
+    "name": "Test User",
+    "software_level": "intermediate",
+    "hardware_access": "basic",
+    "preferred_language": "en"
+  }'
+```
+
+2. **Login:**
+```bash
+curl -X POST http://localhost:8000/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -c cookies.txt \
+  -d '{
+    "email": "test@example.com",
+    "password": "testpass123"
+  }'
+```
+
+3. **Check Session:**
+```bash
+curl -X GET http://localhost:8000/v1/auth/session \
+  -b cookies.txt
+```
+
+4. **Update Profile:**
+```bash
+curl -X PUT http://localhost:8000/v1/user/profile \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{
+    "name": "Updated Name",
+    "software_level": "advanced"
+  }'
+```
+
+5. **Logout:**
+```bash
+curl -X POST http://localhost:8000/v1/auth/logout \
+  -b cookies.txt
+```
+
+### Unit Tests
+
 ```bash
 # Run all tests
 pytest
@@ -111,6 +349,9 @@ pytest --cov=app --cov-report=html
 
 # Run specific test file
 pytest tests/unit/test_agent_service.py
+
+# Run authentication tests
+pytest tests/unit/test_auth_service.py
 ```
 
 ## 📁 Project Structure

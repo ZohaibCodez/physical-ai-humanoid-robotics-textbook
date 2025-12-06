@@ -10,6 +10,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from app.config import settings
 from app.api.routes import chat, health
+from app.utils.rate_limiter import auth_rate_limiter
 import logging
 import uuid
 import time
@@ -38,6 +39,9 @@ async def add_request_id_middleware(request: Request, call_next):
     """Add unique request ID to all requests and responses."""
     request_id = str(uuid.uuid4())
     request.state.request_id = request_id
+    
+    # Apply rate limiting to auth endpoints
+    await auth_rate_limiter.check_rate_limit(request)
     
     start_time = time.time()
     

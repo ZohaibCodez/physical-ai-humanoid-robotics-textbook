@@ -7,7 +7,7 @@ Loads environment variables and provides application settings.
 import os
 from typing import List
 from pydantic_settings import BaseSettings
-from pydantic import Field
+from pydantic import Field, field_validator, ValidationError
 
 
 class Settings(BaseSettings):
@@ -49,6 +49,14 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = Field(default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
     refresh_token_expire_days: int = Field(default=30, alias="REFRESH_TOKEN_EXPIRE_DAYS")
     
+    @field_validator('jwt_secret_key')
+    @classmethod
+    def validate_jwt_secret_key(cls, v: str) -> str:
+        """Validate JWT secret key strength (minimum 32 characters)."""
+        if len(v) < 32:
+            raise ValueError('JWT_SECRET_KEY must be at least 32 characters long for security')
+        return v
+    
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS origins from comma-separated string."""
@@ -63,4 +71,12 @@ class Settings(BaseSettings):
 
 # Global settings instance
 # Pydantic BaseSettings will automatically load from environment variables
-settings = Settings(_env_file='.env', _env_file_encoding='utf-8')  # type: ignore
+try:
+    settings = Settings(_env_file='.env', _env_file_encoding='utf-8')  # type: ignore
+except ValidationError as e:
+    print("❌ Configuration validation failed:")
+    for error in e.errors():
+        field = error['loc'][0]
+        message = error['msg']
+        print(f"  - {field}: {message}")
+    raise SystemExit(1)

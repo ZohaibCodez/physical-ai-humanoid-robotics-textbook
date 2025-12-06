@@ -160,7 +160,7 @@ export function AuthProvider({ children }) {
    */
   const updateProfile = useCallback(async (profileData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/v1/user/profile`, {
+      const response = await fetch(`${API_BASE_URL}/v1/auth/user/profile`, {
         method: 'PUT',
         credentials: 'include',
         headers: {

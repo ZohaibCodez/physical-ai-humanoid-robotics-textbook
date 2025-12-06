@@ -149,6 +149,11 @@ const config = {
             label: 'Textbook',
           },
           {
+            to: '/profile',
+            label: 'Profile',
+            position: 'right',
+          },
+          {
             to: '/signup',
             label: 'Sign Up',
             position: 'right',

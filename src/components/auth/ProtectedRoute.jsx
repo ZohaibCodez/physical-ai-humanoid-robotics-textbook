@@ -1,15 +1,15 @@
 /**
  * ProtectedRoute Component - Wrapper for authenticated-only routes
  * 
- * Redirects unauthenticated users to login page with return URL.
+ * Shows friendly signup prompt to unauthenticated users instead of hard redirect.
  * Shows loading state while checking authentication status.
  */
 
 import React from 'react';
-import { Redirect } from '@docusaurus/router';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
+import SignupPrompt from './SignupPrompt';
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute({ children, promptContext = 'protected-page', customMessage }) {
   const { isAuthenticated, isLoading } = useAuth();
 
   // Show loading state while checking authentication
@@ -26,10 +26,13 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  // Redirect to login if not authenticated
+  // Show friendly signup prompt if not authenticated
   if (!isAuthenticated) {
-    const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
-    return <Redirect to={`/login?redirect=${encodeURIComponent(currentPath)}`} />;
+    return (
+      <div style={{ padding: '2rem 0' }}>
+        <SignupPrompt context={promptContext} message={customMessage} />
+      </div>
+    );
   }
 
   // Render protected content

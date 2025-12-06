@@ -14,7 +14,8 @@ from app.models.user import (
     UserPreferencesDB,
     UserResponse,
     UserPreferencesResponse,
-    UserProfileResponse
+    UserProfileResponse,
+    ProfileUpdateRequest
 )
 from app.utils.security import get_password_hash, verify_password
 from app.utils.validators import validate_email, validate_password
@@ -256,3 +257,85 @@ async def get_user_profile(
     except Exception as e:
         print(f"Error fetching user profile: {e}")
         return None
+
+
+async def update_user_preferences(
+    user_id: UUID,
+    update_data: ProfileUpdateRequest,
+    db_conn: asyncpg.Connection
+) -> Tuple[Optional[UserProfileResponse], Optional[str]]:
+    """
+    Update user profile and preferences.
+    
+    Args:
+        user_id: User's UUID
+        update_data: Profile update request (all fields optional)
+        db_conn: Database connection
+        
+    Returns:
+        Tuple of (UserProfileResponse, error_message)
+        Returns (profile, None) on success
+        Returns (None, error_message) on failure
+    """
+    try:
+        async with db_conn.transaction():
+            # Update user name if provided
+            if update_data.name is not None:
+                await db_conn.execute(
+                    "UPDATE users SET name = $1, updated_at = $2 WHERE id = $3",
+                    update_data.name,
+                    datetime.utcnow(),
+                    user_id
+                )
+            
+            # Update preferences if any provided
+            pref_updates = []
+            pref_values = []
+            pref_index = 1
+            
+            if update_data.software_level is not None:
+                pref_updates.append(f"software_level = ${pref_index}")
+                pref_values.append(update_data.software_level)
+                pref_index += 1
+            
+            if update_data.hardware_access is not None:
+                pref_updates.append(f"hardware_access = ${pref_index}")
+                pref_values.append(update_data.hardware_access)
+                pref_index += 1
+            
+            if update_data.preferred_language is not None:
+                pref_updates.append(f"preferred_language = ${pref_index}")
+                pref_values.append(update_data.preferred_language)
+                pref_index += 1
+            
+            if pref_updates:
+                pref_updates.append(f"updated_at = ${pref_index}")
+                pref_values.append(datetime.utcnow())
+                pref_index += 1
+                
+                pref_values.append(user_id)
+                
+                query = f"""
+                    UPDATE user_preferences
+                    SET {', '.join(pref_updates)}
+                    WHERE user_id = ${pref_index}
+                """
+                await db_conn.execute(query, *pref_values)
+        
+        # Fetch updated profile
+        updated_profile = await get_user_profile(user_id, db_conn)
+        
+        if not updated_profile:
+            return None, "User not found"
+        
+        return updated_profile, None
+        
+    except asyncpg.PostgresError as e:
+        print(f"Database error during profile update: {e}")
+        traceback.print_exc()
+        return None, "Unable to update profile at this time"
+    except Exception as e:
+        print(f"Unexpected error during profile update: {e}")
+        traceback.print_exc()
+        return None, "An unexpected error occurred"
+

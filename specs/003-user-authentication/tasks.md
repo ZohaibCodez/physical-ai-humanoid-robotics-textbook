@@ -117,16 +117,16 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 ### Backend Implementation
 
-- [ ] T040 [US4] Update backend/app/utils/dependencies.py to create get_current_user_optional() dependency: return user if valid token exists, return None if not authenticated (no exception raised)
-- [ ] T041 [US4] Audit all API endpoints in backend/app/api/routes/ to ensure public content routes do NOT require authentication (remove Depends(get_current_user) where applicable)
+- [X] T040 [US4] Update backend/app/utils/dependencies.py to create get_current_user_optional() dependency: return user if valid token exists, return None if not authenticated (no exception raised)
+- [X] T041 [US4] Audit all API endpoints in backend/app/api/routes/ to ensure public content routes do NOT require authentication (remove Depends(get_current_user) where applicable)
 
 ### Frontend Implementation
 
-- [ ] T042 [P] [US4] Update AuthProvider to handle guest state: set isAuthenticated=false, user=null as default state
-- [ ] T043 [P] [US4] Create src/components/auth/SignupPrompt.jsx component: dismissible, non-intrusive message "Track your progress by creating a free account" with signup link
-- [ ] T044 [US4] Update protected pages (Profile, Preferences) to show friendly message for guests: "Create an account to unlock personalized features" with signup/login links instead of hard redirect
-- [ ] T045 [US4] Add conditional rendering in navigation bar: show "Login" and "Signup" buttons for guests, show "Profile" and "Logout" for authenticated users
-- [ ] T046 [US4] Verify all textbook content pages (docs/) are accessible without authentication checks in src/theme/DocPage/ or src/pages/
+- [X] T042 [P] [US4] Update AuthProvider to handle guest state: set isAuthenticated=false, user=null as default state
+- [X] T043 [P] [US4] Create src/components/auth/SignupPrompt.jsx component: dismissible, non-intrusive message "Track your progress by creating a free account" with signup link
+- [X] T044 [US4] Update protected pages (Profile, Preferences) to show friendly message for guests: "Create an account to unlock personalized features" with signup/login links instead of hard redirect
+- [X] T045 [US4] Add conditional rendering in navigation bar: show "Login" and "Signup" buttons for guests, show "Profile" and "Logout" for authenticated users
+- [X] T046 [US4] Verify all textbook content pages (docs/) are accessible without authentication checks in src/theme/DocPage/ or src/pages/
 
 ### Integration
 
@@ -142,23 +142,23 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 ### Backend Implementation
 
-- [ ] T048 [US3] Create ProfileUpdateRequest Pydantic model in backend/app/models/user.py with optional fields: name (Optional[str]), software_level (Optional[enum]), hardware_access (Optional[enum]), preferred_language (Optional[enum])
-- [ ] T049 [US3] Implement update_user_preferences() function in backend/app/services/auth_service.py: update user_preferences table, update updated_at timestamp, return updated preferences
-- [ ] T050 [US3] Create GET /v1/user/profile endpoint in backend/app/api/routes/auth.py: require authentication with Depends(get_current_user), return UserProfileResponse with user data and preferences
-- [ ] T051 [US3] Create PUT /v1/user/profile endpoint in backend/app/api/routes/auth.py: require authentication, accept ProfileUpdateRequest, call update_user_preferences(), return updated profile
+- [X] T048 [US3] Create ProfileUpdateRequest Pydantic model in backend/app/models/user.py with optional fields: name (Optional[str]), software_level (Optional[enum]), hardware_access (Optional[enum]), preferred_language (Optional[enum])
+- [X] T049 [US3] Implement update_user_preferences() function in backend/app/services/auth_service.py: update user_preferences table, update updated_at timestamp, return updated preferences
+- [X] T050 [US3] Create GET /v1/user/profile endpoint in backend/app/api/routes/auth.py: require authentication with Depends(get_current_user), return UserProfileResponse with user data and preferences
+- [X] T051 [US3] Create PUT /v1/user/profile endpoint in backend/app/api/routes/auth.py: require authentication, accept ProfileUpdateRequest, call update_user_preferences(), return updated profile
 
 ### Frontend Implementation
 
-- [ ] T052 [P] [US3] Create src/components/profile/ProfileForm.jsx with form fields: name (input), software_level (select with current value), hardware_access (select with current value), preferred_language (select with current value)
-- [ ] T053 [P] [US3] Create src/pages/Profile.jsx page component: wrap with ProtectedRoute, fetch profile data from GET /v1/user/profile on mount, render ProfileForm with current values
-- [ ] T054 [US3] Implement handleUpdateProfile() function in ProfileForm.jsx: call PUT /v1/user/profile API with changed fields only, handle success (show toast notification, update AuthContext), handle errors (display validation messages)
-- [ ] T055 [US3] Style ProfileForm.jsx to match Docusaurus theme: use Infima CSS classes, responsive design, show loading state during API calls
-- [ ] T056 [US3] Add success/error toast notifications using react-toastify or similar library for user feedback
+- [X] T052 [P] [US3] Create src/components/profile/ProfileForm.jsx with form fields: name (input), software_level (select with current value), hardware_access (select with current value), preferred_language (select with current value)
+- [X] T053 [P] [US3] Create src/pages/Profile.jsx page component: wrap with ProtectedRoute, fetch profile data from GET /v1/user/profile on mount, render ProfileForm with current values
+- [X] T054 [US3] Implement handleUpdateProfile() function in ProfileForm.jsx: call PUT /v1/user/profile API with changed fields only, handle success (show toast notification, update AuthContext), handle errors (display validation messages)
+- [X] T055 [US3] Style ProfileForm.jsx to match Docusaurus theme: use Infima CSS classes, responsive design, show loading state during API calls
+- [X] T056 [US3] Add success/error toast notifications using react-toastify or similar library for user feedback
 
 ### Integration
 
-- [ ] T057 [US3] Add /profile route to Docusaurus routing in docusaurus.config.js
-- [ ] T058 [US3] Add "Profile" link to navigation bar for authenticated users (conditionally rendered in src/theme/Navbar/)
+- [X] T057 [US3] Add /profile route to Docusaurus routing in docusaurus.config.js
+- [X] T058 [US3] Add "Profile" link to navigation bar for authenticated users (conditionally rendered in src/theme/Navbar/)
 
 ---
 

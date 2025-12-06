@@ -7,8 +7,8 @@ from fastapi.responses import JSONResponse
 import asyncpg
 import traceback
 
-from app.models.user import SignupRequest, LoginRequest, AuthResponse, AuthTokenResponse, UserProfileResponse
-from app.services.auth_service import signup_user, login_user, get_user_profile
+from app.models.user import SignupRequest, LoginRequest, AuthResponse, AuthTokenResponse, UserProfileResponse, ProfileUpdateRequest
+from app.services.auth_service import signup_user, login_user, get_user_profile, update_user_preferences
 from app.utils.security import create_access_token, create_refresh_token, verify_token
 from app.utils.dependencies import get_settings, get_current_user
 from app.config import Settings
@@ -279,3 +279,70 @@ async def refresh_token(
         token_type="bearer",
         expires_in=settings.access_token_expire_minutes * 60
     )
+
+
+@router.get("/user/profile", response_model=UserProfileResponse)
+async def get_profile(
+    current_user: TokenData = Depends(get_current_user),
+    db: asyncpg.Connection = Depends(get_db_connection)
+):
+    """
+    Get current user's profile and preferences.
+    
+    Requires valid access token in cookie or Authorization header.
+    
+    Returns:
+    - 200: User profile with preferences
+    - 401: Not authenticated
+    - 404: User not found
+    """
+    profile = await get_user_profile(current_user.user_id, db)
+    
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"message": "User not found", "code": "USER_NOT_FOUND"}
+        )
+    
+    return profile
+
+
+@router.put("/user/profile", response_model=UserProfileResponse)
+async def update_profile(
+    update_data: ProfileUpdateRequest,
+    current_user: TokenData = Depends(get_current_user),
+    db: asyncpg.Connection = Depends(get_db_connection)
+):
+    """
+    Update current user's profile and preferences.
+    
+    Request body (all fields optional):
+    - name: User's display name
+    - software_level: beginner | intermediate | advanced
+    - hardware_access: cloud_only | basic | full_lab
+    - preferred_language: en | ur | both
+    
+    Requires valid access token in cookie or Authorization header.
+    
+    Returns:
+    - 200: Profile updated successfully
+    - 400: Validation error
+    - 401: Not authenticated
+    - 404: User not found
+    """
+    profile, error = await update_user_preferences(current_user.user_id, update_data, db)
+    
+    if error:
+        if "not found" in error:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={"message": error, "code": "USER_NOT_FOUND"}
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail={"message": error, "code": "SERVER_ERROR"}
+            )
+    
+    return profile
+

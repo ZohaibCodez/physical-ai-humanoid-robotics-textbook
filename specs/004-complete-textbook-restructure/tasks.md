@@ -25,15 +25,15 @@ description: "Task breakdown for Complete Physical AI & Humanoid Robotics Textbo
 
 **⚠️ CRITICAL**: Complete before content generation begins
 
-- [ ] T001 Create validation script scripts/validate_lesson.py (word count, sections, code blocks, admonitions, frontmatter checks)
-- [ ] T002 [P] Create validation script scripts/validate_part.py (chapter completeness, navigation integrity, consistency checks)
-- [ ] T003 [P] Create validation script scripts/validate_textbook.py (all 10 success criteria from spec.md)
-- [ ] T004 [P] Create lesson template templates/lesson-template.md (8-section structure from data-model.md)
-- [ ] T005 [P] Create chapter index template templates/chapter-index-template.md
-- [ ] T006 [P] Setup CI/CD pipeline .github/workflows/textbook-quality.yml (automated validation, build testing, link checking)
-- [ ] T007 Update docs/intro.md with textbook preface (welcome, course philosophy, target audience, prerequisites, how to use, 13-week overview, requirements, community)
-- [ ] T008 [P] Create docs/_category_.json for root-level navigation
-- [ ] T009 [P] Update sidebars.js with complete 7-Part structure skeleton
+- [X] T001 Create validation script scripts/validate_lesson.py (word count, sections, code blocks, admonitions, frontmatter checks)
+- [X] T002 [P] Create validation script scripts/validate_part.py (chapter completeness, navigation integrity, consistency checks)
+- [X] T003 [P] Create validation script scripts/validate_textbook.py (all 10 success criteria from spec.md)
+- [X] T004 [P] Create lesson template templates/lesson-template.md (8-section structure from data-model.md)
+- [X] T005 [P] Create chapter index template templates/chapter-index-template.md
+- [X] T006 [P] Setup CI/CD pipeline .github/workflows/textbook-quality.yml (automated validation, build testing, link checking)
+- [X] T007 Update docs/intro.md with textbook preface (welcome, course philosophy, target audience, prerequisites, how to use, 13-week overview, requirements, community)
+- [X] T008 [P] Create docs/_category_.json for root-level navigation
+- [X] T009 [P] Update sidebars.js with complete 7-Part structure skeleton
 
 **Checkpoint**: Infrastructure ready - content generation can begin
 

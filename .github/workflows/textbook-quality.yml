@@ -1,0 +1,188 @@
+name: Textbook Quality Validation
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'docusaurus.config.js'
+      - 'sidebars.js'
+  
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+  
+  workflow_dispatch:
+
+jobs:
+  validate-content:
+    name: Validate Textbook Content
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Add any required dependencies here
+      
+      - name: Run lesson validation
+        id: validate_lessons
+        continue-on-error: true
+        run: |
+          echo "Validating individual lessons..."
+          # Run validation on sample lessons (full validation takes too long in CI)
+          find docs -name "*.md" -path "*/part-*" ! -name "index.md" | head -10 | while read file; do
+            python scripts/validate_lesson.py "$file" || exit 1
+          done
+      
+      - name: Run part validation
+        id: validate_parts
+        continue-on-error: true
+        run: |
+          echo "Validating part structure..."
+          # Validate each part directory
+          for part in docs/part-*; do
+            if [ -d "$part" ]; then
+              python scripts/validate_part.py "$part" || exit 1
+            fi
+          done
+      
+      - name: Run comprehensive textbook validation
+        id: validate_textbook
+        continue-on-error: true
+        run: |
+          echo "Running comprehensive validation..."
+          python scripts/validate_textbook.py --docs-dir docs
+      
+      - name: Check validation results
+        run: |
+          if [ "${{ steps.validate_lessons.outcome }}" == "failure" ] || \
+             [ "${{ steps.validate_parts.outcome }}" == "failure" ] || \
+             [ "${{ steps.validate_textbook.outcome }}" == "failure" ]; then
+            echo "❌ Content validation failed"
+            exit 1
+          else
+            echo "✅ Content validation passed"
+          fi
+  
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    needs: validate-content
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build site
+        run: npm run build
+      
+      - name: Check build size
+        run: |
+          BUILD_SIZE=$(du -sm build/ | cut -f1)
+          echo "Build size: ${BUILD_SIZE}MB"
+          if [ $BUILD_SIZE -gt 10 ]; then
+            echo "⚠️  Warning: Build size exceeds 10MB"
+          fi
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/
+          retention-days: 7
+  
+  link-check:
+    name: Link Validation
+    runs-on: ubuntu-latest
+    needs: build-test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build site
+        run: npm run build
+      
+      - name: Install linkinator
+        run: npm install -g linkinator
+      
+      - name: Check internal links
+        run: |
+          echo "Checking internal links..."
+          linkinator build/ --recurse --skip "^(?!http://localhost)" --verbosity error
+      
+      - name: Check external links (sample)
+        continue-on-error: true
+        run: |
+          echo "Checking sample of external links..."
+          # Only check a few external links to avoid rate limiting
+          linkinator build/ --recurse --skip "http://localhost" --verbosity error | head -20
+  
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [validate-content, build-test, link-check]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build site
+        run: npm run build
+        env:
+          NODE_ENV: production
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          cname: ${{ secrets.CUSTOM_DOMAIN || '' }}
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy: ${{ github.event.head_commit.message }}'

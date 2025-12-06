@@ -1,0 +1,9 @@
+{
+  "label": "Physical AI & Humanoid Robotics",
+  "position": 1,
+  "link": {
+    "type": "doc",
+    "id": "intro"
+  },
+  "collapsed": false
+}

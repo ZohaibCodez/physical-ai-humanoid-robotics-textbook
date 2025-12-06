@@ -1,104 +1,132 @@
-# Implementation Plan: [FEATURE]
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+# Implementation Plan: Complete Physical AI & Humanoid Robotics Textbook Restructure & Content Generation
 
-**Note**: This template is filled in by the `/sp.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+**Branch**: `004-complete-textbook-restructure` | **Date**: 2025-12-07 | **Spec**: [spec.md](./spec.md)  
+**Input**: Feature specification from `/specs/004-complete-textbook-restructure/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Generate comprehensive graduation-level textbook for Physical AI & Humanoid Robotics curriculum covering 13 weeks of content. Restructure existing Docusaurus site with 7 Parts → 27 Chapters → 87 Lessons (104,400-156,600 words total). Content must enable students to reach graduation-level competency competitive with MIT/CMU/Stanford programs, capable of implementing algorithms from research papers, and passing technical interviews at robotics companies (Boston Dynamics, Tesla Optimus, Agility Robotics). All 87 lessons must be production-ready with zero placeholders, professional code quality, mathematical rigor, and industry relevance.
+
+**Technical Approach**: Phased content generation workflow with AI-assisted authoring, quality validation gates, and expert review. Leverage comprehensive research standards (research.md) and structural data model (data-model.md) to ensure consistent graduation-level rigor across all lessons.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+**Language/Version**: Markdown (Docusaurus 2.x), Python 3.10+ (for code examples), ROS 2 Humble  
+**Primary Dependencies**: Docusaurus 2.4.3, React 18.x, MDX support, Mermaid diagrams, KaTeX math rendering  
+**Storage**: File-based (Markdown files in `docs/` directory), Git version control  
+**Testing**: Docusaurus build validation, link checking, code syntax validation (Python AST parser), word count verification  
+**Target Platform**: Static site deployment (GitHub Pages), mobile-responsive design  
+**Project Type**: Documentation/Educational Content (Docusaurus static site)  
+**Performance Goals**: Build time <60 seconds, page load <2 seconds, search response <100ms  
+**Constraints**: 
+- 1200-1800 words per lesson (strict range)
+- 150+ complete code examples (runnable, professional quality)
+- All content accessible without authentication (public educational resource)
+- Mobile-responsive (50%+ mobile traffic expected)
+- SEO-optimized (Google Scholar, educational search visibility)
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Scale/Scope**: 
+- 87 lessons across 7 Parts, 27 Chapters
+- 104,400-156,600 total words
+- 150+ code examples (50-200 lines each)
+- 250+ exercises (20% analytical, 50% implementation, 15% debugging, 15% design)
+- 5 comprehensive appendices (hardware, installation, troubleshooting, resources, glossary)
+- Target audience: 10,000+ learners (students, self-learners, bootcamp participants)
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+✅ **Code Quality**: All code examples follow professional standards (type hints, docstrings, error handling, logging)  
+✅ **Testing Requirements**: Code examples include usage demonstrations and expected outputs  
+✅ **Performance Considerations**: Algorithm complexity specified in comments, real-time constraints documented  
+✅ **Security**: No hardcoded credentials (all examples use environment variables or placeholder configs)  
+✅ **Architecture Principles**: Modular lesson structure, single responsibility per lesson, clear separation of theory/practice  
+✅ **Documentation Standards**: All lessons follow 8-section template, consistent formatting, comprehensive cross-references  
+✅ **Simplicity**: Smallest viable content per lesson (no scope creep), progressive complexity scaffolding  
+✅ **Maintainability**: Standardized templates, version-controlled, automated validation, clear contribution guidelines
+
+**Re-check Status**: ✅ All constitution principles satisfied for content generation workflow
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/sp.plan command output)
-├── research.md          # Phase 0 output (/sp.plan command)
-├── data-model.md        # Phase 1 output (/sp.plan command)
-├── quickstart.md        # Phase 1 output (/sp.plan command)
-├── contracts/           # Phase 1 output (/sp.plan command)
-└── tasks.md             # Phase 2 output (/sp.tasks command - NOT created by /sp.plan)
+specs/004-complete-textbook-restructure/
+├── plan.md              # This file (architecture and implementation strategy)
+├── spec.md              # Feature requirements (39 FRs, 10 success criteria)
+├── research.md          # Graduation-level pedagogical standards (25,000+ words)
+├── data-model.md        # Content entity definitions and relationships
+├── checklists/
+│   └── requirements.md  # Quality validation (all items PASSED)
+└── tasks.md             # Phase 2 output (/sp.tasks command - TO BE CREATED)
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
+# Docusaurus Static Site Structure
+docs/                           # All textbook content (Markdown)
+├── intro.md                    # Preface: Welcome to Physical AI
+├── part-01-foundations/        # Part 1: Foundations (Chapters 1-2, ~10 lessons)
+│   ├── _category_.json         # Part navigation config
+│   ├── chapter-01-introduction-to-physical-ai/
+│   │   ├── _category_.json
+│   │   ├── index.md            # Chapter overview
+│   │   ├── 01-digital-to-physical.md
+│   │   ├── 02-robotics-revolution.md
+│   │   └── ...
+│   └── chapter-02-ai-fundamentals-review/
+│       └── ...
+├── part-02-ros2-ecosystem/     # Part 2: ROS 2 (Chapters 3-6, ~17 lessons)
+│   ├── chapter-03-ros2-architecture/
+│   ├── chapter-04-nodes-topics-services/
+│   ├── chapter-05-actionlib-and-goals/
+│   └── chapter-06-tf2-transformations/
+├── part-03-simulation-environments/  # Part 3: Simulation (Chapters 7-9, ~12 lessons)
+├── part-04-nvidia-isaac-platform/    # Part 4: NVIDIA Isaac (Chapters 10-13, ~16 lessons)
+├── part-05-humanoid-development/     # Part 5: Humanoid Dev (Chapters 14-17, ~16 lessons)
+├── part-06-conversational-robotics/  # Part 6: Conversational (Chapters 18-21, ~12 lessons)
+├── part-07-capstone-project/         # Part 7: Capstone (Chapter 22, ~8 lessons)
+└── appendices/                 # 5 appendices (hardware, installation, troubleshooting, resources, glossary)
+    ├── _category_.json
+    ├── hardware-guide.md
+    ├── installation-guide.md
+    ├── troubleshooting.md
+    ├── resources.md
+    └── glossary.md
+
+static/
+├── img/
+│   └── diagrams/               # Mermaid-generated or custom diagrams
+└── files/                      # Downloadable resources (if needed)
+
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── components/                 # Existing Docusaurus React components
+├── pages/                      # Custom pages (assessments, about, etc.)
+└── css/                        # Custom styling
 
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+sidebars.js                     # Top-level navigation configuration
+docusaurus.config.js            # Site configuration
+package.json                    # Dependencies and build scripts
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Docusaurus static site with hierarchical markdown content. Chosen because:
+1. Native support for technical documentation with code highlighting, math rendering (KaTeX), diagrams (Mermaid)
+2. Mobile-responsive out-of-box with accessible navigation
+3. Static site generation enables GitHub Pages deployment (zero hosting cost)
+4. SEO-optimized with sitemap generation, meta tags, OpenGraph support
+5. Versioning support for future editions (v1.0, v2.0, etc.)
+6. Existing infrastructure already in place (features 001-003 deployed)
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+> **No constitution violations**. All content follows documented principles.
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+No complexity exceptions required. Structure aligns with Docusaurus best practices and maintains simplicity through:
+- Standardized 3-level hierarchy (Part → Chapter → Lesson)
+- Consistent 8-section lesson template
+- Automated validation at multiple checkpoints
+- Single source of truth (Markdown files)

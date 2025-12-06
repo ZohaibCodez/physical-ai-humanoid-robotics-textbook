@@ -1,0 +1,193 @@
+/**
+ * Auth Forms CSS - Styles for login and signup forms
+ * Matches Docusaurus theme (Infima CSS framework)
+ */
+
+.authForm {
+  background: var(--ifm-card-background-color);
+  padding: 2rem;
+  border-radius: var(--ifm-global-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.authForm h2 {
+  margin-bottom: 0.5rem;
+  color: var(--ifm-heading-color);
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.sectionTitle {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--ifm-heading-color);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  padding-bottom: 0.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  font-size: 0.95rem;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 0.625rem;
+  font-size: 1rem;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px var(--ifm-color-primary-lighter);
+}
+
+.formGroup input:disabled,
+.formGroup select:disabled {
+  background-color: var(--ifm-color-emphasis-200);
+  cursor: not-allowed;
+}
+
+.inputError {
+  border-color: var(--ifm-color-danger) !important;
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px var(--ifm-color-danger-lighter) !important;
+}
+
+.errorMessage {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--ifm-color-danger);
+  font-size: 0.875rem;
+}
+
+.helpText {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.85rem;
+}
+
+.submitError {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: var(--ifm-color-danger-lightest);
+  border-left: 4px solid var(--ifm-color-danger);
+  border-radius: var(--ifm-global-radius);
+  color: var(--ifm-color-danger-darker);
+  font-size: 0.9rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: var(--ifm-color-primary);
+  border: none;
+  border-radius: var(--ifm-global-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitButton:disabled {
+  background-color: var(--ifm-color-emphasis-400);
+  cursor: not-allowed;
+}
+
+.switchForm {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.9rem;
+}
+
+.switchForm a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.switchForm a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .authForm {
+    padding: 1.5rem;
+  }
+
+  .authForm h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Accessibility Enhancements */
+.formGroup input:focus-visible,
+.formGroup select:focus-visible,
+.submitButton:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Loading State */
+.submitButton[aria-busy="true"] {
+  position: relative;
+  color: transparent;
+}
+
+.submitButton[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid white;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

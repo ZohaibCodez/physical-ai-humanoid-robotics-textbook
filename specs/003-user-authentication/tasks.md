@@ -22,10 +22,10 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 **Purpose**: Project initialization and dependency installation
 
-- [ ] T001 Create Python virtual environment using uv: `cd backend && uv venv`
-- [ ] T002 Install authentication dependencies in backend/requirements.txt: python-jose[cryptography]==3.3.0, passlib[bcrypt]==1.7.4, python-multipart>=0.0.9
-- [ ] T003 [P] Update backend/app/config.py to add JWT configuration: JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS
-- [ ] T004 Create database migration script backend/scripts/create_auth_tables.sql with users and user_preferences tables per data-model.md
+- [X] T001 Create Python virtual environment using uv: `cd backend && uv venv`
+- [X] T002 Install authentication dependencies in backend/requirements.txt: python-jose[cryptography]==3.3.0, passlib[bcrypt]==1.7.4, python-multipart>=0.0.9
+- [X] T003 [P] Update backend/app/config.py to add JWT configuration: JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS
+- [X] T004 Create database migration script backend/scripts/create_auth_tables.sql with users and user_preferences tables per data-model.md
 
 ---
 
@@ -35,12 +35,12 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Execute database migration: Run backend/scripts/create_auth_tables.sql on Neon Postgres to create users and user_preferences tables
-- [ ] T006 Create backend/app/models/user.py with Pydantic models: UserDB, UserPreferencesDB, UserResponse, UserPreferencesResponse, UserProfileResponse
-- [ ] T007 Create backend/app/utils/security.py with functions: verify_password(), get_password_hash(), create_access_token(), create_refresh_token(), verify_token()
-- [ ] T008 Create backend/app/utils/dependencies.py with get_current_user() dependency for protected route authentication
-- [ ] T009 [P] Create src/contexts/AuthContext.jsx with React Context for auth state management (user, isAuthenticated, isLoading)
-- [ ] T010 [P] Create src/hooks/useAuth.js custom hook to access AuthContext
+- [X] T005 Execute database migration: Run backend/scripts/create_auth_tables.sql on Neon Postgres to create users and user_preferences tables
+- [X] T006 Create backend/app/models/user.py with Pydantic models: UserDB, UserPreferencesDB, UserResponse, UserPreferencesResponse, UserProfileResponse
+- [X] T007 Create backend/app/utils/security.py with functions: verify_password(), get_password_hash(), create_access_token(), create_refresh_token(), verify_token()
+- [X] T008 Create backend/app/utils/dependencies.py with get_current_user() dependency for protected route authentication
+- [X] T009 [P] Create src/contexts/AuthContext.jsx with React Context for auth state management (user, isAuthenticated, isLoading)
+- [X] T010 [P] Create src/hooks/useAuth.js custom hook to access AuthContext
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -54,25 +54,25 @@ description: "Implementation tasks for User Authentication with Background Profi
 
 ### Backend Implementation
 
-- [ ] T011 [US1] Create SignupRequest Pydantic model in backend/app/models/user.py with fields: email (EmailStr), password (min 8 chars), name (str), software_level (enum), hardware_access (enum), preferred_language (enum)
-- [ ] T012 [US1] Implement signup_user() function in backend/app/services/auth_service.py: validate email uniqueness, hash password, create user record, create preferences record, return user data
-- [ ] T013 [US1] Create POST /v1/auth/signup endpoint in backend/app/api/routes/auth.py: accept SignupRequest, call signup_user(), generate JWT tokens, set HTTP-only cookies, return AuthResponse
-- [ ] T014 [US1] Add email validation logic in backend/app/utils/validators.py: check email format, domain validity
-- [ ] T015 [US1] Add password validation logic in backend/app/utils/validators.py: enforce minimum 8 characters, optional complexity requirements
+- [X] T011 [US1] Create SignupRequest Pydantic model in backend/app/models/user.py with fields: email (EmailStr), password (min 8 chars), name (str), software_level (enum), hardware_access (enum), preferred_language (enum)
+- [X] T012 [US1] Implement signup_user() function in backend/app/services/auth_service.py: validate email uniqueness, hash password, create user record, create preferences record, return user data
+- [X] T013 [US1] Create POST /v1/auth/signup endpoint in backend/app/api/routes/auth.py: accept SignupRequest, call signup_user(), generate JWT tokens, set HTTP-only cookies, return AuthResponse
+- [X] T014 [US1] Add email validation logic in backend/app/utils/validators.py: check email format, domain validity
+- [X] T015 [US1] Add password validation logic in backend/app/utils/validators.py: enforce minimum 8 characters, optional complexity requirements
 
 ### Frontend Implementation
 
-- [ ] T016 [P] [US1] Create src/components/auth/SignupForm.jsx with form fields: email (input), password (password input), name (input), software_level (select), hardware_access (select), preferred_language (select)
-- [ ] T017 [P] [US1] Create src/pages/Signup.jsx page component wrapping SignupForm with Docusaurus theme layout
-- [ ] T018 [US1] Implement handleSignup() function in SignupForm.jsx: call POST /v1/auth/signup API, handle success (store tokens, update AuthContext, redirect to home), handle errors (display validation messages)
-- [ ] T019 [US1] Add client-side validation to SignupForm.jsx: email format check, password length check, required fields check before submission
-- [ ] T020 [US1] Style SignupForm.jsx to match Docusaurus theme: use Infima CSS classes, responsive design, WCAG 2.1 AA compliant
+- [X] T016 [P] [US1] Create src/components/auth/SignupForm.jsx with form fields: email (input), password (password input), name (input), software_level (select), hardware_access (select), preferred_language (select)
+- [X] T017 [P] [US1] Create src/pages/Signup.jsx page component wrapping SignupForm with Docusaurus theme layout
+- [X] T018 [US1] Implement handleSignup() function in SignupForm.jsx: call POST /v1/auth/signup API, handle success (store tokens, update AuthContext, redirect to home), handle errors (display validation messages)
+- [X] T019 [US1] Add client-side validation to SignupForm.jsx: email format check, password length check, required fields check before submission
+- [X] T020 [US1] Style SignupForm.jsx to match Docusaurus theme: use Infima CSS classes, responsive design, WCAG 2.1 AA compliant
 
 ### Integration
 
-- [ ] T021 [US1] Register auth router in backend/app/main.py: app.include_router(auth_router, prefix="/v1/auth", tags=["auth"])
-- [ ] T022 [US1] Update src/theme/Root.jsx to wrap app with AuthProvider component for global auth state
-- [ ] T023 [US1] Add /signup route to Docusaurus routing in docusaurus.config.js
+- [X] T021 [US1] Register auth router in backend/app/main.py: app.include_router(auth_router, prefix="/v1/auth", tags=["auth"])
+- [X] T022 [US1] Update src/theme/Root.jsx to wrap app with AuthProvider component for global auth state
+- [X] T023 [US1] Add /signup route to Docusaurus routing in docusaurus.config.js
 
 ---
 

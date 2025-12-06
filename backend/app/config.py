@@ -43,6 +43,12 @@ class Settings(BaseSettings):
     # OpenAI Agents SDK / LiteLLM
     litellm_model: str = Field(default="gemini-1.5-flash", alias="LITELLM_MODEL")
     
+    # JWT Authentication
+    jwt_secret_key: str = Field(..., alias="JWT_SECRET_KEY")
+    jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
+    access_token_expire_minutes: int = Field(default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    refresh_token_expire_days: int = Field(default=30, alias="REFRESH_TOKEN_EXPIRE_DAYS")
+    
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS origins from comma-separated string."""

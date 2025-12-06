@@ -24,6 +24,10 @@ asyncpg==0.29.0             # Async Postgres (~2MB)
 # HTTP Client
 httpx>=0.27.0               # HTTP requests (~3MB) - Required by mcp>=0.27
 
+# Authentication & Security
+python-jose[cryptography]==3.3.0  # JWT tokens (~5MB)
+passlib[bcrypt]==1.7.4            # Password hashing (~2MB)
+
 # Utilities
 tiktoken==0.5.2             # Token counting (~2MB)
 python-multipart>=0.0.9     # Form data (~1MB) - Required by mcp>=0.0.9

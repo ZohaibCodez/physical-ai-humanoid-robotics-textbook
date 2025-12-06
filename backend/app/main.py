@@ -83,6 +83,10 @@ app.add_middleware(
 app.include_router(chat.router, prefix="/v1", tags=["chat"])
 app.include_router(health.router, prefix="/v1", tags=["health"])
 
+# Authentication routes
+from app.api.routes import auth
+app.include_router(auth.router, tags=["auth"])
+
 # Add validation error handler for better debugging
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):

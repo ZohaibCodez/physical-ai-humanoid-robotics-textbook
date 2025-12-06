@@ -9,7 +9,7 @@ import React, { createContext, useState, useEffect, useCallback } from 'react';
 
 // API base URL - use window.location for production compatibility
 const API_BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'zohaibcodez.github.io'
-  ? 'https://your-backend-url.railway.app' // Replace with actual production backend URL
+  ? 'https://physical-ai-humanoid-robotics-textb-two.vercel.app' // Replace with actual production backend URL
   : 'http://localhost:8000';
 
 /**

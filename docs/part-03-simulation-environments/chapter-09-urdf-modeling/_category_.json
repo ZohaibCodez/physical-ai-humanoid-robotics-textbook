@@ -1,0 +1,9 @@
+﻿{
+  "label": "Chapter 9: URDF and Robot Modeling",
+  "position": 09,
+  "link": {
+    "type": "doc",
+    "id": "part-03-simulation-environments/chapter-09-urdf-modeling/index"
+  },
+  "collapsed": false
+}

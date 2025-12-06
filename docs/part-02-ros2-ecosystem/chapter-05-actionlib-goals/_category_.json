@@ -1,0 +1,9 @@
+﻿{
+  "label": "Chapter 5: ActionLib and Goal-Based Control",
+  "position": 05,
+  "link": {
+    "type": "doc",
+    "id": "part-02-ros2-ecosystem/chapter-05-actionlib-goals/index"
+  },
+  "collapsed": false
+}

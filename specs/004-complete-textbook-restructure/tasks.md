@@ -53,10 +53,10 @@ description: "Task breakdown for Complete Physical AI & Humanoid Robotics Textbo
 
 ### Chapter 1: Introduction to Physical AI (~5 lessons)
 
-- [ ] T010 [P] [US1] Create docs/part-01-foundations/_category_.json
-- [ ] T011 [P] [US1] Create docs/part-01-foundations/chapter-01-introduction-to-physical-ai/_category_.json
-- [ ] T012 [P] [US1] Create docs/part-01-foundations/chapter-01-introduction-to-physical-ai/index.md (chapter overview)
-- [ ] T013 [P] [US1] Generate lesson: docs/part-01-foundations/chapter-01-introduction-to-physical-ai/01-digital-to-physical.md (1200-1800 words, 8 sections, 2+ code examples, 3+ exercises)
+- [X] T010 [P] [US1] Create docs/part-01-foundations/_category_.json
+- [X] T011 [P] [US1] Create docs/part-01-foundations/chapter-01-introduction-to-physical-ai/_category_.json
+- [X] T012 [P] [US1] Create docs/part-01-foundations/chapter-01-introduction-to-physical-ai/index.md (chapter overview)
+- [X] T013 [P] [US1] Generate lesson: docs/part-01-foundations/chapter-01-introduction-to-physical-ai/01-digital-to-physical.md (1200-1800 words, 8 sections, 2+ code examples, 3+ exercises)
 - [ ] T014 [P] [US1] Generate lesson: docs/part-01-foundations/chapter-01-introduction-to-physical-ai/02-robotics-revolution.md
 - [ ] T015 [P] [US1] Generate lesson: docs/part-01-foundations/chapter-01-introduction-to-physical-ai/03-embodied-intelligence.md
 - [ ] T016 [P] [US1] Generate lesson: docs/part-01-foundations/chapter-01-introduction-to-physical-ai/04-robotics-applications.md

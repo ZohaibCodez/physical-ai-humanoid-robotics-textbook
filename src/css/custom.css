@@ -86,10 +86,18 @@ html {
   transition: background-color var(--ifm-transition-slow), color var(--ifm-transition-slow);
 }
 
-/* Enhanced navbar with subtle shadow */
+/* Enhanced navbar with glassmorphism effect */
 .navbar {
-  box-shadow: var(--ifm-navbar-shadow);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 4px 16px rgba(0, 0, 0, 0.05);
+  backdrop-filter: saturate(180%) blur(20px);
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgba(30, 41, 59, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Improved button styles */
@@ -108,14 +116,55 @@ html {
   background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
 }
 
-/* Enhanced sidebar */
+/* Enhanced sidebar with better styling */
 .theme-doc-sidebar-container {
-  border-right: 1px solid var(--ifm-toc-border-color);
-  background-color: var(--ifm-background-surface-color, #f9fafb);
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+  background-color: var(--ifm-background-surface-color);
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.03);
 }
 
 [data-theme='dark'] .theme-doc-sidebar-container {
   background-color: var(--ifm-background-surface-color);
+  border-right-color: var(--ifm-color-emphasis-300);
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Sidebar menu items */
+.menu__link {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.menu__link:hover {
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-primary);
+}
+
+.menu__link--active {
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.1) 0%, transparent 100%);
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+  border-left: 3px solid var(--ifm-color-primary);
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
+}
+
+/* Sidebar category styling */
+.menu__list-item-collapsible {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.menu__list-item-collapsible:hover {
+  background-color: var(--ifm-color-emphasis-50);
+}
+
+.menu__caret::before {
+  transition: transform 0.2s ease;
+}
+
+.menu__list-item-collapsible--active .menu__caret::before {
+  transform: rotate(90deg);
 }
 
 /* Improved code blocks */
@@ -315,42 +364,70 @@ html {
 }
 
 /* ============================================
-   SIDEBAR TOGGLE BUTTON & COLLAPSIBLE SIDEBAR
+   SIDEBAR COLLAPSE BUTTON STYLING
    ============================================ */
-.theme-doc-sidebar-container {
-  transition: width var(--ifm-transition-slow) ease-in-out;
+
+/* Style the default Docusaurus collapse button at bottom of sidebar */
+button[class*='collapseSidebarButton'] {
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+  margin: 0.5rem !important;
+  transition: all 0.3s ease !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
 }
 
-.theme-doc-sidebar-container-collapsed {
-  width: 0;
+button[class*='collapseSidebarButton']:hover {
+  background: linear-gradient(135deg, var(--ifm-color-primary-dark) 0%, var(--ifm-color-primary-darker) 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4) !important;
 }
 
-[class*='docSidebar_'] {
-  transition: transform var(--ifm-transition-slow) ease-in-out;
+button[class*='collapseSidebarButton'] svg {
+  color: white !important;
+  fill: white !important;
 }
 
-.docSidebar--hidden {
-  transform: translateX(-100%);
+/* Style expand button when sidebar is collapsed */
+button[class*='expandButton'] {
+  position: fixed !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 0 50% 50% 0 !important;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%) !important;
+  border: none !important;
+  box-shadow: 2px 2px 12px rgba(37, 99, 235, 0.4) !important;
+  z-index: 999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
 }
 
-.collapseSidebarButton {
-  background: var(--ifm-background-surface-color);
-  border: 1px solid var(--ifm-toc-border-color);
-  border-radius: 50% !important;
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  top: 1.5rem;
-  right: -16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  box-shadow: var(--ifm-global-shadow-md);
-  transition: all var(--ifm-transition-fast);
+button[class*='expandButton']:hover {
+  background: linear-gradient(135deg, var(--ifm-color-primary-dark) 0%, var(--ifm-color-primary-darker) 100%) !important;
+  width: 56px !important;
+  box-shadow: 2px 2px 16px rgba(37, 99, 235, 0.5) !important;
 }
 
-.collapseSidebarButton:hover {
-  border-color: var(--ifm-color-primary);
-  box-shadow: var(--ifm-global-shadow-tl);
+button[class*='expandButton'] svg {
+  color: white !important;
+  fill: white !important;
+}
+
+[data-theme='dark'] button[class*='collapseSidebarButton'],
+[data-theme='dark'] button[class*='expandButton'] {
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.3) !important;
+}
+
+[data-theme='dark'] button[class*='collapseSidebarButton']:hover,
+[data-theme='dark'] button[class*='expandButton']:hover {
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4) !important;
 }

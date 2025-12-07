@@ -8,6 +8,7 @@ fastapi>=0.115.0           # Updated for anyio>=4.5 compatibility
 uvicorn[standard]>=0.24.0
 pydantic>=2.10.3
 pydantic-settings>=2.0.0   # Required for BaseSettings in Pydantic v2
+email-validator>=2.0.0     # Required for EmailStr validation
 python-dotenv==1.0.0
 
 # AI/ML - Cloud-only (NO local models, NO heavy frameworks)

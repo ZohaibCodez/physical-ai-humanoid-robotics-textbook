@@ -83,11 +83,11 @@ export default function SignupForm({ onSuccess }) {
       const result = await signup(formData);
 
       if (result.success) {
-        // Redirect to home page or call onSuccess callback
+        // Redirect to intro page or call onSuccess callback
         if (onSuccess) {
           onSuccess();
         } else {
-          window.location.href = '/';
+          window.location.href = '/physical-ai-humanoid-robotics-textbook/docs/intro';
         }
       } else {
         // Display error message

@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { useHistory } from '@docusaurus/router';
+import { useHistory, useLocation } from '@docusaurus/router';
 import Link from '@docusaurus/Link';
 import styles from './ModernSignup.module.css';
 
@@ -25,6 +25,13 @@ export default function ModernSignup() {
   
   const { signup } = useAuth();
   const history = useHistory();
+  const location = useLocation();
+
+  // Get redirect URL from query params or use intro as default
+  const getRedirectUrl = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('redirect') || '/docs/intro';
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +61,7 @@ export default function ModernSignup() {
     setError('');
 
     try {
-      await signup({
+      const result = await signup({
         email: formData.email,
         password: formData.password,
         name: formData.name,
@@ -63,7 +70,11 @@ export default function ModernSignup() {
         preferred_language: formData.preferred_language
       });
       
-      history.push('/docs/intro');
+      if (result.success) {
+        history.push(getRedirectUrl());
+      } else {
+        setError(result.error || 'Signup failed. Please try again.');
+      }
     } catch (err) {
       setError(err.message || 'Signup failed. Please try again.');
     } finally {

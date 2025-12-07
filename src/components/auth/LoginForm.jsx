@@ -84,8 +84,8 @@ export default function LoginForm() {
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
-        // Redirect to intended destination or home
-        const redirectPath = new URLSearchParams(window.location.search).get('redirect') || '/';
+        // Redirect to intended destination or docs intro
+        const redirectPath = new URLSearchParams(window.location.search).get('redirect') || '/docs/intro';
         history.push(redirectPath);
       } else {
         // Display generic error message (don't reveal which field is wrong for security)

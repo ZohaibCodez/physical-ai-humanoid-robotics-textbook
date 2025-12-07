@@ -22,6 +22,12 @@ export default function NavbarItems() {
                      location.pathname.includes('/signup') ||
                      location.pathname.includes('/profile');
 
+  // Create redirect URL with current page
+  const getAuthUrl = (path) => {
+    if (isAuthPage) return path;
+    return `${path}?redirect=${encodeURIComponent(location.pathname)}`;
+  };
+
   if (isLoading) {
     return (
       <div className={styles.authButtons}>
@@ -44,10 +50,10 @@ export default function NavbarItems() {
 
   return (
     <div className={styles.authButtons}>
-      <Link to="/login" className={styles.loginButton}>
+      <Link to={getAuthUrl('/login')} className={styles.loginButton}>
         Login
       </Link>
-      <Link to="/signup" className={styles.signupButton}>
+      <Link to={getAuthUrl('/signup')} className={styles.signupButton}>
         Sign Up
       </Link>
     </div>

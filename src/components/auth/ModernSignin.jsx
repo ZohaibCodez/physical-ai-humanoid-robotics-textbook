@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { useHistory } from '@docusaurus/router';
+import { useHistory, useLocation } from '@docusaurus/router';
 import Link from '@docusaurus/Link';
 import styles from './ModernSignin.module.css';
 
@@ -20,6 +20,13 @@ export default function ModernSignin() {
   
   const { login } = useAuth();
   const history = useHistory();
+  const location = useLocation();
+
+  // Get redirect URL from query params or use intro as default
+  const getRedirectUrl = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('redirect') || '/docs/intro';
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -36,8 +43,12 @@ export default function ModernSignin() {
     setError('');
 
     try {
-      await login(formData.email, formData.password);
-      history.push('/docs/intro');
+      const result = await login(formData.email, formData.password);
+      if (result.success) {
+        history.push(getRedirectUrl());
+      } else {
+        setError(result.error || 'Login failed. Please check your credentials.');
+      }
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {

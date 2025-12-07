@@ -181,9 +181,9 @@ export default function LoginForm() {
       <div className={styles.formFooter}>
         <p className={styles.footerText}>
           Don't have an account?{' '}
-          <a href="/signup" className={styles.footerLink}>
+          <Link to="/signup" className={styles.footerLink}>
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </form>

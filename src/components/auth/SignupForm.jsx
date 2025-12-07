@@ -3,6 +3,7 @@
  */
 
 import React, { useState } from 'react';
+import Link from '@docusaurus/Link';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './AuthForms.module.css';
 
@@ -260,7 +261,7 @@ export default function SignupForm({ onSuccess }) {
 
       {/* Login Link */}
       <p className={styles.switchForm}>
-        Already have an account? <a href="/login">Log in</a>
+        Already have an account? <Link to="/login">Log in</Link>
       </p>
     </form>
   );

@@ -226,3 +226,111 @@ html {
 [data-theme='dark'] code {
   background-color: rgba(100, 116, 139, 0.2);
 }
+
+/* ============================================
+   ENHANCED NAVBAR STYLING
+   ============================================ */
+
+/* Remove old navbar button styles */
+.navbar__items .button--primary,
+.navbar__items .button--secondary {
+  display: none !important;
+}
+
+/* Improve navbar spacing */
+.navbar__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.navbar__items {
+  gap: 1rem;
+}
+
+.navbar__link {
+  font-weight: 500;
+  transition: color 150ms ease-in-out;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Navbar logo enhancement */
+.navbar__logo {
+  transition: transform 150ms ease-in-out;
+}
+
+.navbar__logo:hover {
+  transform: scale(1.05);
+}
+
+/* Theme toggle button enhancement */
+.navbar__item button[aria-label="Switch between dark and light mode"] {
+  border-radius: 0.5rem;
+  transition: all 150ms ease-in-out;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__item button[aria-label="Switch between dark and light mode"]:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+[data-theme='dark'] .navbar__item button[aria-label="Switch between dark and light mode"]:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile menu enhancements */
+@media (max-width: 996px) {
+  .navbar-sidebar {
+    background: var(--ifm-navbar-background-color);
+    backdrop-filter: blur(16px);
+  }
+  
+  .navbar-sidebar__brand {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  }
+  
+  .navbar-sidebar__items {
+    padding: 1rem;
+  }
+  
+  .menu__link {
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.25rem;
+    transition: all 150ms ease-in-out;
+  }
+  
+  .menu__link:hover,
+  .menu__link--active {
+    background-color: var(--ifm-color-emphasis-100);
+  }
+}
+
+/* Sticky navbar enhancement */
+.navbar--fixed-top {
+  position: sticky;
+}
+
+/* Navbar animation on scroll */
+@media (min-width: 997px) {
+  .navbar--fixed-top {
+    animation: navbarSlideDown 300ms ease-out;
+  }
+}
+
+@keyframes navbarSlideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

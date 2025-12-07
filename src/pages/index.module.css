@@ -700,6 +700,9 @@
 @media (max-width: 768px) {
   .comparisonTable {
     table-layout: auto;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
   
   .comparisonTable th,
@@ -715,6 +718,12 @@
   .comparisonTable th:first-child {
     width: auto;
     min-width: 80px;
+  }
+
+  .spectrumGrid,
+  .featuresGrid,
+  .coursePartsGrid {
+    grid-template-columns: 1fr;
   }
 }
 

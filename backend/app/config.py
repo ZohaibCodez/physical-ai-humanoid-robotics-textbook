@@ -6,7 +6,7 @@ Loads environment variables and provides application settings.
 
 import os
 from typing import List
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator, ValidationError
 
 
@@ -62,17 +62,18 @@ class Settings(BaseSettings):
         """Parse CORS origins from comma-separated string."""
         return [origin.strip() for origin in self.cors_origins.split(",")]
     
-    model_config = {
-        "env_file": ".env",
-        "case_sensitive": False,
-        "extra": "ignore"  # Ignore extra fields in .env
-    }
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore"
+    )
 
 
 # Global settings instance
 # Pydantic BaseSettings will automatically load from environment variables
 try:
-    settings = Settings(_env_file='.env', _env_file_encoding='utf-8')  # type: ignore
+    settings = Settings()
 except ValidationError as e:
     print("❌ Configuration validation failed:")
     for error in e.errors():

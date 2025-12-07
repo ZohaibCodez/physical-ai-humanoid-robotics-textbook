@@ -1,54 +1,98 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import { useHistory, useLocation } from '@docusaurus/router';
 import Layout from '@theme/Layout';
+import { AuthContext } from '../contexts/AuthContext';
 import styles from './index.module.css';
 
 function HeroSection() {
   const introUrl = useBaseUrl('/docs/intro');
+  const signupUrl = useBaseUrl('/signup');
+  const { isAuthenticated } = useContext(AuthContext);
+  const location = useLocation();
+  const history = useHistory();
+  
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      history.push(introUrl);
+    } else {
+      // Add redirect parameter to return to home after signup
+      history.push(`${signupUrl}?redirect=${encodeURIComponent(location.pathname)}`);
+    }
+  };
   
   return (
     <div className={styles.hero}>
       <div className={styles.heroContent}>
         <div className={styles.badge}>
+          <span className={styles.badgeIcon}>🎓</span>
           PANAVERSITY PHYSICAL AI BOOK SERIES
         </div>
         
         <h1 className={styles.heroTitle}>
-          Physical AI & Humanoid Robotics
+          Master Physical AI &<br />Humanoid Robotics
         </h1>
         
         <p className={styles.heroSubtitle}>
-          Master embodied intelligence — A comprehensive 13-week journey from ROS 2 fundamentals to deploying autonomous humanoid robots with AI-native development
+          Build autonomous robots from scratch. Learn ROS 2, NVIDIA Isaac Sim, and AI-native development in a complete 13-week hands-on curriculum.
         </p>
         
-        <div className={styles.featureBadges}>
-          <div className={styles.featureBadge}>
-            ✨ <strong>Open Source</strong>
+        <div className={styles.heroStats}>
+          <div className={styles.statItem}>
+            <div className={styles.statNumber}>7</div>
+            <div className={styles.statLabel}>Parts</div>
           </div>
-          <div className={styles.featureBadge}>
-            🤝 <strong>Co-Learning with AI</strong>
+          <div className={styles.statDivider}></div>
+          <div className={styles.statItem}>
+            <div className={styles.statNumber}>13</div>
+            <div className={styles.statLabel}>Weeks</div>
           </div>
-          <div className={styles.featureBadge}>
-            🎯 <strong>Spec-Driven Development</strong>
+          <div className={styles.statDivider}></div>
+          <div className={styles.statItem}>
+            <div className={styles.statNumber}>100%</div>
+            <div className={styles.statLabel}>Free</div>
           </div>
         </div>
 
         <div className={styles.ctaButtons}>
-          <Link
-            className={styles.ctaPrimary}
-            to={introUrl}>
-            Start Reading →
-          </Link>
+          <button 
+            className={styles.ctaPrimary} 
+            onClick={handleGetStarted}
+          >
+            {isAuthenticated ? '📖 Continue Learning' : '🚀 Get Started Free'}
+          </button>
           <a
             className={styles.ctaSecondary}
-            href="https://panaversity.org/"
+            href="https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook"
             target="_blank"
             rel="noopener noreferrer">
-            Explore Panaversity 🎓
+            ⭐ View on GitHub
           </a>
         </div>
+        
+        <div className={styles.featureBadges}>
+          <div className={styles.featureBadge}>
+            <span>✨</span> Open Source
+          </div>
+          <div className={styles.featureBadge}>
+            <span>🤖</span> AI Co-Learning
+          </div>
+          <div className={styles.featureBadge}>
+            <span>🏗️</span> Industry Tools
+          </div>
+          <div className={styles.featureBadge}>
+            <span>💰</span> Budget Friendly
+          </div>
+        </div>
+      </div>
+      
+      {/* Animated Background Elements */}
+      <div className={styles.heroBackground}>
+        <div className={styles.heroCircle1}></div>
+        <div className={styles.heroCircle2}></div>
+        <div className={styles.heroCircle3}></div>
       </div>
     </div>
   );
@@ -80,6 +124,20 @@ function FeatureCard({ icon, title, description, badge }) {
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
+  );
+}
+
+function CoursePartCard({ number, title, description, weeks, linkUrl }) {
+  return (
+    <Link to={linkUrl} className={styles.coursePartCard}>
+      <div className={styles.partNumber}>Part {number}</div>
+      <h3 className={styles.partTitle}>{title}</h3>
+      <p className={styles.partDescription}>{description}</p>
+      <div className={styles.partMeta}>
+        <span className={styles.partWeeks}>📅 {weeks}</span>
+        <span className={styles.partLink}>Explore →</span>
+      </div>
+    </Link>
   );
 }
 
@@ -213,6 +271,72 @@ export default function Home() {
               title="Flexible Hardware Options"
               description="Start with free simulation. Progress to $200 Jetson setup. Scale to full humanoid hardware ($5k+). Learn at your budget level."
               badge="MOST VALUABLE"
+            />
+          </div>
+        </section>
+
+        {/* Course Overview Section */}
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Complete 7-Part Curriculum</h2>
+          <p className={styles.sectionSubtitle}>
+            A structured journey from fundamentals to building advanced autonomous humanoid robots
+          </p>
+          
+          <div className={styles.coursePartsGrid}>
+            <CoursePartCard
+              number="1"
+              title="Foundations"
+              description="Introduction to Physical AI, robotics fundamentals, and AI review"
+              weeks="Week 1"
+              linkUrl={useBaseUrl('/part-01-foundations/')}
+            />
+            
+            <CoursePartCard
+              number="2"
+              title="ROS 2 Ecosystem"
+              description="Master Robot Operating System 2 architecture and development"
+              weeks="Weeks 2-3"
+              linkUrl={useBaseUrl('/part-02-ros2-ecosystem/')}
+            />
+            
+            <CoursePartCard
+              number="3"
+              title="Simulation Environments"
+              description="Learn Gazebo and Isaac Sim for robot testing and validation"
+              weeks="Weeks 4-5"
+              linkUrl={useBaseUrl('/part-03-simulation-environments/')}
+            />
+            
+            <CoursePartCard
+              number="4"
+              title="NVIDIA Isaac Platform"
+              description="Deep dive into Isaac Sim, ROS integration, and AI workflows"
+              weeks="Weeks 6-7"
+              linkUrl={useBaseUrl('/part-04-nvidia-isaac-platform/')}
+            />
+            
+            <CoursePartCard
+              number="5"
+              title="Humanoid Development"
+              description="Build complete humanoid robots with manipulation and locomotion"
+              weeks="Weeks 8-10"
+              linkUrl={useBaseUrl('/part-05-humanoid-development/')}
+            />
+            
+            <CoursePartCard
+              number="6"
+              title="Conversational Robotics"
+              description="Integrate LLMs, voice interfaces, and multimodal AI"
+              weeks="Week 11"
+              linkUrl={useBaseUrl('/part-06-conversational-robotics/')}
+            />
+            
+            <CoursePartCard
+              number="7"
+              title="Capstone Project"
+              description="Build and deploy a complete autonomous humanoid system"
+              weeks="Weeks 12-13"
+              linkUrl={useBaseUrl('/part-07-capstone-project/')}
             />
           </div>
         </section>

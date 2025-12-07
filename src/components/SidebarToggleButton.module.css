@@ -1,0 +1,23 @@
+.toggleButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ifm-color-content);
+  transition: all var(--ifm-transition-fast);
+}
+
+.toggleButton:hover {
+  color: var(--ifm-color-primary);
+}
+
+.toggleButton svg {
+  transition: transform var(--ifm-transition-slow);
+}
+
+.toggleButton.collapsed svg {
+  transform: rotate(180deg);
+}

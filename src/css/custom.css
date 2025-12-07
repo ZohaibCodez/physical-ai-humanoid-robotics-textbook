@@ -314,23 +314,43 @@ html {
   }
 }
 
-/* Sticky navbar enhancement */
-.navbar--fixed-top {
-  position: sticky;
+/* ============================================
+   SIDEBAR TOGGLE BUTTON & COLLAPSIBLE SIDEBAR
+   ============================================ */
+.theme-doc-sidebar-container {
+  transition: width var(--ifm-transition-slow) ease-in-out;
 }
 
-/* Navbar animation on scroll */
-@media (min-width: 997px) {
-  .navbar--fixed-top {
-    animation: navbarSlideDown 300ms ease-out;
-  }
+.theme-doc-sidebar-container-collapsed {
+  width: 0;
 }
 
-@keyframes navbarSlideDown {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+[class*='docSidebar_'] {
+  transition: transform var(--ifm-transition-slow) ease-in-out;
+}
+
+.docSidebar--hidden {
+  transform: translateX(-100%);
+}
+
+.collapseSidebarButton {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 50% !important;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 1.5rem;
+  right: -16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  box-shadow: var(--ifm-global-shadow-md);
+  transition: all var(--ifm-transition-fast);
+}
+
+.collapseSidebarButton:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: var(--ifm-global-shadow-tl);
 }

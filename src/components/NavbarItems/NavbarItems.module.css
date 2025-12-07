@@ -94,7 +94,11 @@
   border-color: var(--ifm-color-primary);
 }
 
-/* Mobile responsive */
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Tablet and mobile responsive */
 @media (max-width: 996px) {
   .authButtons {
     gap: 0.5rem;
@@ -109,12 +113,43 @@
   }
 }
 
+@media (max-width: 768px) {
+  .authButtons {
+    gap: 0.375rem;
+    margin-left: 0.375rem;
+  }
+  
+  .loginButton,
+  .signupButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    min-height: 34px;
+  }
+}
+
 @media (max-width: 480px) {
+  .authButtons {
+    margin-left: 0.25rem;
+  }
+  
   .loginButton {
     display: none;
   }
   
   .signupButton {
     padding: 0.375rem 1rem;
+    font-size: 0.8125rem;
+    min-height: 36px;
+  }
+  
+  .userSection {
+    margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .signupButton {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
   }
 }

@@ -418,7 +418,11 @@
   font-size: 0.875rem;
 }
 
-/* Responsive design */
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Tablet Devices (max-width: 768px) */
 @media (max-width: 768px) {
   .chat-widget-container {
     width: 100vw;
@@ -431,6 +435,15 @@
   .chat-toggle-button {
     bottom: 1rem;
     right: 1rem;
+    width: 56px;
+    height: 56px;
+    font-size: 1.375rem;
+  }
+  
+  .selection-badge {
+    width: 22px;
+    height: 22px;
+    font-size: 0.6875rem;
   }
   
   .selection-controls {
@@ -453,10 +466,228 @@
   .mode-btn {
     justify-content: center;
     width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
   }
   
   .clear-selection-btn {
     align-self: center;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .chat-widget-header {
+    padding: 1rem 1.25rem;
+  }
+  
+  .chat-widget-header h3 {
+    font-size: 1rem;
+  }
+  
+  .selection-indicator {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.6875rem;
+  }
+  
+  .chat-welcome {
+    padding: 1.5rem 1rem;
+  }
+  
+  .welcome-icon {
+    font-size: 2.5rem;
+  }
+  
+  .welcome-header h4 {
+    font-size: 1rem;
+  }
+  
+  .quick-action-btn {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+  
+  .assistant-message {
+    max-width: 90%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .chat-citations {
+    margin: 0.5rem 0.75rem 1rem 2rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+  .chat-toggle-button {
+    width: 52px;
+    height: 52px;
+    font-size: 1.25rem;
+    bottom: 0.75rem;
+    right: 0.75rem;
+  }
+  
+  .selection-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 0.625rem;
+    top: -2px;
+    right: -2px;
+  }
+  
+  .chat-widget-header {
+    padding: 0.875rem 1rem;
+  }
+  
+  .chat-widget-header h3 {
+    font-size: 0.9375rem;
+  }
+  
+  .chat-close-button {
+    width: 28px;
+    height: 28px;
+    font-size: 1.25rem;
+  }
+  
+  .selection-controls {
+    padding: 0.625rem 0.875rem;
+  }
+  
+  .selection-text strong {
+    font-size: 0.8125rem;
+  }
+  
+  .selection-length {
+    font-size: 0.6875rem;
+  }
+  
+  .selection-icon {
+    font-size: 1.125rem;
+  }
+  
+  .mode-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .mode-icon {
+    font-size: 0.875rem;
+  }
+  
+  .clear-selection-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8125rem;
+  }
+  
+  .chat-welcome {
+    padding: 1.25rem 0.875rem;
+  }
+  
+  .welcome-icon {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .welcome-header h4 {
+    font-size: 0.9375rem;
+  }
+  
+  .quick-actions {
+    gap: 0.625rem;
+  }
+  
+  .quick-action-btn {
+    padding: 0.75rem;
+    font-size: 0.8125rem;
+    gap: 0.625rem;
+  }
+  
+  .quick-action-btn .action-icon {
+    font-size: 1.125rem;
+  }
+  
+  .context-notice {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  .assistant-message-wrapper {
+    margin: 0.375rem 0.75rem;
+  }
+  
+  .assistant-message {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    max-width: 92%;
+  }
+  
+  .assistant-message code {
+    font-size: 0.8em;
+  }
+  
+  .assistant-message blockquote {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+  
+  .chat-citations {
+    margin: 0.375rem 0.5rem 0.75rem 1.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .chat-error {
+    padding: 0.625rem;
+    margin: 0.375rem;
+    font-size: 0.8125rem;
+  }
+  
+  /* Make message input more touch-friendly */
+  .cs-message-input {
+    min-height: 56px;
+  }
+  
+  .cs-message-input textarea {
+    font-size: 0.9375rem !important;
+    min-height: 44px !important;
+  }
+}
+
+/* Small Mobile Devices (max-width: 360px) */
+@media (max-width: 360px) {
+  .chat-toggle-button {
+    width: 48px;
+    height: 48px;
+    font-size: 1.125rem;
+  }
+  
+  .chat-widget-header h3 {
+    font-size: 0.875rem;
+  }
+  
+  .selection-indicator {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.625rem;
+    gap: 0.25rem;
+  }
+  
+  .mode-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.625rem;
+  }
+  
+  .quick-action-btn {
+    padding: 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .assistant-message {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
   }
 }
 

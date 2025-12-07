@@ -259,6 +259,16 @@ html {
   .button {
     min-height: 44px; /* Touch-friendly target */
   }
+  
+  /* Improve sidebar on tablets */
+  .theme-doc-sidebar-container {
+    width: 280px;
+  }
+  
+  /* Better spacing for cards and containers */
+  .card {
+    margin-bottom: 1rem;
+  }
 }
 
 /* ============================================
@@ -267,18 +277,138 @@ html {
 
 /* Small Mobile Devices */
 @media (max-width: 480px) {
+  :root {
+    --ifm-spacing-horizontal: 0.75rem;
+    --ifm-spacing-vertical: 0.75rem;
+  }
+  
   .markdown > h1 {
     font-size: var(--text-3xl);
+    line-height: 1.2;
+    margin-top: 1.5rem;
   }
+  
   .markdown > h2 {
     font-size: var(--text-2xl);
+    line-height: 1.3;
+    margin-top: 1.25rem;
   }
+  
+  .markdown > h3 {
+    font-size: var(--text-xl);
+    margin-top: 1rem;
+  }
+  
+  .markdown > p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+  
   .main-wrapper {
     padding: 0.5rem;
   }
   
   .container {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
+  }
+  
+  /* Touch-friendly buttons */
+  .button {
+    min-height: 48px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+  
+  /* Navbar adjustments */
+  .navbar {
+    padding: 0.5rem 0;
+  }
+  
+  .navbar__inner {
+    padding: 0 0.75rem;
+  }
+  
+  .navbar__brand {
+    margin-right: 0.5rem;
+  }
+  
+  .navbar__logo img {
+    max-height: 28px;
+  }
+  
+  .navbar__title {
+    font-size: 0.9375rem;
+  }
+  
+  /* Sidebar improvements */
+  .menu {
+    font-size: 0.9375rem;
+    padding: 0.5rem;
+  }
+  
+  .menu__link {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .menu__list-item-collapsible {
+    font-size: 0.875rem;
+  }
+  
+  /* Code blocks */
+  div[class^='codeBlockContainer'] {
+    font-size: 0.8125rem;
+  }
+  
+  code {
+    font-size: 0.8125rem;
+  }
+  
+  /* Better table overflow */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    min-width: 500px;
+    font-size: 0.875rem;
+  }
+  
+  th, td {
+    padding: 0.5rem;
+  }
+  
+  /* Pagination */
+  .pagination-nav {
+    font-size: 0.875rem;
+  }
+  
+  .pagination-nav__link {
+    padding: 0.75rem;
+  }
+  
+  /* Breadcrumbs */
+  .breadcrumbs {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0;
+  }
+  
+  /* TOC mobile optimization */
+  .table-of-contents {
+    font-size: 0.875rem;
+  }
+  
+  /* Admonitions */
+  .admonition {
+    font-size: 0.9375rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Footer */
+  footer {
+    font-size: 0.875rem;
+    padding: 1.5rem 0;
   }
 }
 
@@ -306,6 +436,25 @@ html {
   .col--3 {
     display: none; /* Hide TOC on mobile */
   }
+  
+  /* Adjust main content area */
+  .main-wrapper {
+    padding: 1rem 0;
+  }
+  
+  article {
+    padding: 1rem;
+  }
+  
+  /* Better card stacking */
+  .row {
+    margin: 0 -0.5rem;
+  }
+  
+  .col {
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
+  }
 }
 
 /* Small Desktops and Large Tablets */
@@ -320,13 +469,14 @@ html {
 
   .theme-doc-sidebar-container {
     transform: translateX(-100%);
-    transition: transform var(--transition-slow);
+    transition: transform var(--ifm-transition-slow);
     position: fixed;
     top: var(--ifm-navbar-height);
     height: calc(100% - var(--ifm-navbar-height));
-    z-index: var(--z-modal);
+    z-index: 100;
     background-color: var(--ifm-background-color);
     border-right: 1px solid var(--ifm-color-emphasis-200);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   }
 
   html[data-theme-doc-sidebar-show='true'] .theme-doc-sidebar-container {
@@ -336,11 +486,73 @@ html {
   .main-wrapper {
     padding-left: 0;
   }
+  
+  /* Improve doc item wrapper */
+  .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module {
+    max-width: 100%;
+  }
 }
 
 @media (min-width: 1025px) {
   .navbar__toggle {
     display: none;
+  }
+}
+
+/* Extra small devices (landscape phones) */
+@media (max-width: 360px) {
+  :root {
+    --ifm-spacing-horizontal: 0.5rem;
+    --ifm-spacing-vertical: 0.5rem;
+  }
+  
+  .markdown > h1 {
+    font-size: 1.75rem;
+  }
+  
+  .markdown > h2 {
+    font-size: 1.5rem;
+  }
+  
+  .markdown > h3 {
+    font-size: 1.25rem;
+  }
+  
+  .markdown > p {
+    font-size: 0.875rem;
+  }
+  
+  .button {
+    font-size: 0.875rem;
+    padding: 0.625rem 1rem;
+  }
+  
+  .navbar__title {
+    font-size: 0.875rem;
+  }
+  
+  .menu__link {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.625rem;
+  }
+}
+
+/* Landscape orientation optimizations */
+@media (max-height: 600px) and (orientation: landscape) {
+  .navbar {
+    height: 48px;
+  }
+  
+  .theme-doc-sidebar-container {
+    top: 48px;
+    height: calc(100vh - 48px);
+  }
+  
+  .chat-toggle-button {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    width: 48px;
+    height: 48px;
   }
 }
 

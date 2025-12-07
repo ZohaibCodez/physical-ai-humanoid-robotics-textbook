@@ -198,6 +198,129 @@ html[data-theme='dark'] .errorBanner {
   color: #fca5a5;
 }
 
+/* Success Banner */
+.successBanner {
+  background: #d1fae5;
+  color: #059669;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+html[data-theme='dark'] .successBanner {
+  background: rgba(5, 150, 105, 0.2);
+  color: #6ee7b7;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Tablet Devices (max-width: 768px) */
+@media (max-width: 768px) {
+  .signinContainer {
+    padding: 1.5rem 1rem;
+  }
+  
+  .signinCard {
+    padding: 2.5rem 2rem;
+  }
+  
+  .header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .formOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+  .signinContainer {
+    padding: 1rem 0.75rem;
+    min-height: calc(100vh - 56px);
+  }
+  
+  .signinCard {
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+  }
+  
+  .header {
+    margin-bottom: 2rem;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header p {
+    font-size: 0.9375rem;
+  }
+  
+  .form {
+    gap: 1.25rem;
+  }
+  
+  .formGroup label {
+    font-size: 0.875rem;
+  }
+  
+  .formGroup input {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9375rem;
+    /* Touch-friendly input size */
+    min-height: 44px;
+  }
+  
+  .btnPrimary {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9375rem;
+    /* Touch-friendly button size */
+    min-height: 48px;
+  }
+  
+  .formOptions {
+    font-size: 0.8125rem;
+  }
+  
+  .divider {
+    margin: 1.5rem 0;
+  }
+  
+  .errorBanner,
+  .successBanner {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Small Mobile Devices (max-width: 360px) */
+@media (max-width: 360px) {
+  .signinContainer {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .signinCard {
+    padding: 1.5rem 1rem;
+  }
+  
+  .header h1 {
+    font-size: 1.375rem;
+  }
+  
+  .formGroup input {
+    font-size: 0.875rem;
+  }
+}
+
 /* Footer */
 .footer {
   text-align: center;

@@ -1,4 +1,4 @@
-import React, {type ComponentProps, type ReactNode} from 'react';
+import React, {type ComponentProps, type ReactNode, useEffect} from 'react';
 import clsx from 'clsx';
 import {ThemeClassNames, useThemeConfig} from '@docusaurus/theme-common';
 import {
@@ -27,6 +27,15 @@ export default function NavbarLayout({children}: Props): ReactNode {
   } = useThemeConfig();
   const mobileSidebar = useNavbarMobileSidebar();
   const {navbarRef, isNavbarVisible} = useHideableNavbar(hideOnScroll);
+
+  useEffect(() => {
+    if (mobileSidebar.shown) {
+      document.documentElement.setAttribute('data-theme-doc-sidebar-show', 'true');
+    } else {
+      document.documentElement.removeAttribute('data-theme-doc-sidebar-show');
+    }
+  }, [mobileSidebar.shown]);
+
   return (
     <nav
       ref={navbarRef}

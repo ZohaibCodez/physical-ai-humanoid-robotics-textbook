@@ -261,6 +261,91 @@ html {
   }
 }
 
+/* ============================================
+   COMPREHENSIVE RESPONSIVE STYLES
+   ============================================ */
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .markdown > h1 {
+    font-size: var(--text-3xl);
+  }
+  .markdown > h2 {
+    font-size: var(--text-2xl);
+  }
+  .main-wrapper {
+    padding: 0.5rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* Tablet Devices */
+@media (max-width: 768px) {
+  .theme-doc-toc-desktop {
+    display: none;
+  }
+  
+  .markdown-toc {
+    display: none;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .col--9 {
+    flex: 1 0 100%;
+    max-width: 100%;
+  }
+  
+  .col--3 {
+    display: none; /* Hide TOC on mobile */
+  }
+}
+
+/* Small Desktops and Large Tablets */
+@media (max-width: 1024px) {
+  .navbar__inner {
+    padding: 0 1rem;
+  }
+
+  .navbar__toggle {
+    display: block;
+  }
+
+  .theme-doc-sidebar-container {
+    transform: translateX(-100%);
+    transition: transform var(--transition-slow);
+    position: fixed;
+    top: var(--ifm-navbar-height);
+    height: calc(100% - var(--ifm-navbar-height));
+    z-index: var(--z-modal);
+    background-color: var(--ifm-background-color);
+    border-right: 1px solid var(--ifm-color-emphasis-200);
+  }
+
+  html[data-theme-doc-sidebar-show='true'] .theme-doc-sidebar-container {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 1025px) {
+  .navbar__toggle {
+    display: none;
+  }
+}
+
+
+
 /* Dark mode specific improvements */
 [data-theme='dark'] {
   /* Better contrast for dark mode */

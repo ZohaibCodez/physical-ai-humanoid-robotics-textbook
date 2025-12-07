@@ -2,27 +2,34 @@
   position: absolute;
   z-index: 10000;
   transform: translateX(-50%);
-  animation: tooltipFadeIn 0.2s ease-out;
+  animation: tooltipFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes tooltipFadeIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(-5px);
+    transform: translateX(-50%) translateY(-8px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
 .tooltip-content {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  border: 2px solid #0EA5E9;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 2px solid #2563eb;
   padding: 0.75rem;
   min-width: 280px;
+  backdrop-filter: blur(10px);
+}
+
+[data-theme='dark'] .tooltip-content {
+  background: #1e293b;
+  border-color: #60a5fa;
+  box-shadow: 0 8px 32px rgba(96, 165, 250, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .tooltip-buttons {
@@ -45,15 +52,15 @@
 }
 
 .ask-btn {
-  background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   color: white;
   flex: 1;
   justify-content: center;
 }
 
 .ask-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
 }
 
 .ask-btn:active {
@@ -65,8 +72,8 @@
 }
 
 .close-btn {
-  background: #F1F5F9;
-  color: #64748B;
+  background: #f1f5f9;
+  color: #64748b;
   width: 36px;
   height: 36px;
   padding: 0;
@@ -75,8 +82,18 @@
 }
 
 .close-btn:hover {
-  background: #FEE2E2;
-  color: #DC2626;
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+[data-theme='dark'] .close-btn {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .close-btn:hover {
+  background: #450a0a;
+  color: #fca5a5;
 }
 
 .tooltip-input-form {
@@ -88,21 +105,33 @@
 .tooltip-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #E2E8F0;
+  border: 2px solid #e2e8f0;
   border-radius: 8px;
   font-size: 0.875rem;
   font-family: inherit;
   transition: all 0.2s ease;
+  background: white;
+}
+
+[data-theme='dark'] .tooltip-input {
+  background: #0f172a;
+  border-color: #475569;
+  color: #f1f5f9;
 }
 
 .tooltip-input:focus {
   outline: none;
-  border-color: #0EA5E9;
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+[data-theme='dark'] .tooltip-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
 .tooltip-input::placeholder {
-  color: #94A3B8;
+  color: #94a3b8;
 }
 
 .tooltip-input-actions {
@@ -123,13 +152,13 @@
 }
 
 .tooltip-submit-btn {
-  background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   color: white;
 }
 
 .tooltip-submit-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 .tooltip-submit-btn:disabled {
@@ -138,13 +167,23 @@
 }
 
 .tooltip-cancel-btn {
-  background: #F1F5F9;
-  color: #64748B;
+  background: #f1f5f9;
+  color: #64748b;
 }
 
 .tooltip-cancel-btn:hover {
-  background: #E2E8F0;
+  background: #e2e8f0;
   color: #475569;
+}
+
+[data-theme='dark'] .tooltip-cancel-btn {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .tooltip-cancel-btn:hover {
+  background: #475569;
+  color: #f1f5f9;
 }
 
 .tooltip-arrow {
@@ -156,7 +195,11 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid #0EA5E9;
+  border-top: 8px solid #2563eb;
+}
+
+[data-theme='dark'] .tooltip-arrow {
+  border-top-color: #60a5fa;
 }
 
 .tooltip-arrow::after {
@@ -169,6 +212,10 @@
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
   border-top: 7px solid white;
+}
+
+[data-theme='dark'] .tooltip-arrow::after {
+  border-top-color: #1e293b;
 }
 
 /* Mobile Responsive */

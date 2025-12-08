@@ -252,8 +252,29 @@ html {
     --ifm-spacing-horizontal: 1rem;
   }
   
+  /* Navbar mobile optimization */
+  .navbar__inner {
+    padding: 0 1rem;
+  }
+  
   .navbar__items {
     gap: 0.5rem;
+  }
+  
+  .navbar__brand {
+    margin-right: 0.5rem;
+  }
+  
+  .navbar__logo img {
+    max-height: 32px;
+  }
+  
+  .navbar__title {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
   }
   
   .button {
@@ -337,7 +358,11 @@ html {
   }
   
   .navbar__title {
-    font-size: 0.9375rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
   }
   
   /* Sidebar improvements */
@@ -371,7 +396,6 @@ html {
   }
   
   table {
-    min-width: 500px;
     font-size: 0.875rem;
   }
   
@@ -399,6 +423,31 @@ html {
     font-size: 0.875rem;
   }
   
+  /* Mobile TOC collapsible */
+  .theme-doc-toc-mobile {
+    margin-bottom: 1.5rem;
+  }
+  
+  .tocCollapsible_node_modules-\@docusaurus-theme-classic-lib-theme-TOCCollapsible-styles-module {
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .tocCollapsibleButton_node_modules-\@docusaurus-theme-classic-lib-theme-TOCCollapsible-styles-module {
+    background: var(--ifm-color-emphasis-50);
+    padding: 0.875rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .tocCollapsibleContent_node_modules-\@docusaurus-theme-classic-lib-theme-TOCCollapsible-styles-module {
+    padding: 1rem;
+  }
+  
   /* Admonitions */
   .admonition {
     font-size: 0.9375rem;
@@ -414,27 +463,92 @@ html {
 
 /* Tablet Devices */
 @media (max-width: 768px) {
+  /* Hide desktop TOC sidebar on mobile */
   .theme-doc-toc-desktop {
     display: none;
   }
   
-  .markdown-toc {
+  /* Show mobile TOC at top of content */
+  .theme-doc-toc-mobile {
+    display: block !important;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Ensure TOC collapsible is visible */
+  div[class*='tocCollapsible'] {
+    display: block !important;
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 8px;
+    background: var(--ifm-background-surface-color);
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Style mobile TOC button */
+  button[class*='tocCollapsibleButton'] {
+    background: var(--ifm-color-emphasis-100);
+    border: none;
+    border-radius: 8px 8px 0 0;
+    padding: 0.875rem 1rem;
+    font-weight: 600;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.2s ease;
+  }
+  
+  button[class*='tocCollapsibleButton']:hover {
+    background: var(--ifm-color-emphasis-200);
+  }
+  
+  /* Style TOC content */
+  div[class*='tocCollapsibleContent'] {
+    padding: 1rem;
+  }
+  
+  /* Ensure table of contents list is visible */
+  .table-of-contents {
+    display: block !important;
+    font-size: 0.875rem;
+  }
+  
+  .table-of-contents li {
+    margin: 0.5rem 0;
+  }
+  
+  .table-of-contents__link {
+    display: block;
+    padding: 0.375rem 0;
+    color: var(--ifm-font-color-base);
+    text-decoration: none;
+  }
+  
+  .table-of-contents__link:hover {
+    color: var(--ifm-color-primary);
+  }
+  
+  .table-of-contents__link--active {
+    color: var(--ifm-color-primary);
+    font-weight: 600;
+  }
+  
+  /* Hide right sidebar column on mobile */
+  .col--3 {
     display: none;
+  }
+  
+  /* Expand main content to full width */
+  .col--9 {
+    flex: 1 0 100%;
+    max-width: 100%;
   }
 
   table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
-  }
-
-  .col--9 {
-    flex: 1 0 100%;
-    max-width: 100%;
-  }
-  
-  .col--3 {
-    display: none; /* Hide TOC on mobile */
   }
   
   /* Adjust main content area */
@@ -463,20 +577,26 @@ html {
     padding: 0 1rem;
   }
 
+  /* Ensure hamburger button is visible and clickable */
   .navbar__toggle {
-    display: block;
+    display: block !important;
   }
 
+  /* Left sidebar (doc navigation) */
   .theme-doc-sidebar-container {
     transform: translateX(-100%);
     transition: transform var(--ifm-transition-slow);
     position: fixed;
     top: var(--ifm-navbar-height);
+    left: 0;
     height: calc(100% - var(--ifm-navbar-height));
+    width: 300px;
+    max-width: 80vw;
     z-index: 100;
     background-color: var(--ifm-background-color);
     border-right: 1px solid var(--ifm-color-emphasis-200);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
   }
 
   html[data-theme-doc-sidebar-show='true'] .theme-doc-sidebar-container {
@@ -528,7 +648,7 @@ html {
   }
   
   .navbar__title {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
   
   .menu__link {

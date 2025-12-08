@@ -2,8 +2,22 @@
 
 [![Deploy to GitHub Pages](https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook/actions/workflows/deploy.yml/badge.svg)](https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook/actions/workflows/deploy.yml)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fzohaibcodez.github.io%2Fphysical-ai-humanoid-robotics-textbook%2F)](https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-A comprehensive, graduation-level textbook for Physical AI and Humanoid Robotics with 87 interactive lessons across 7 parts, built with Docusaurus.
+> **A comprehensive, graduation-level textbook for mastering Physical AI and Humanoid Robotics** — featuring 87 interactive lessons, hands-on projects, AI-powered chatbot, and real-world applications using ROS 2, NVIDIA Isaac Sim, Gazebo, and Python.
+
+## 🌟 What You'll Learn
+
+Build autonomous humanoid robots from scratch in this complete 13-week curriculum:
+
+- ⚡ **Physical AI Fundamentals** - Bridge digital AI to physical world
+- 🤖 **ROS 2 Mastery** - Professional robot development framework
+- 🎮 **Advanced Simulation** - Gazebo, Unity, NVIDIA Isaac Sim
+- 🧠 **AI Integration** - Computer vision, NLP, reinforcement learning
+- 🦾 **Humanoid Development** - Balance, inverse kinematics, motion planning
+- 💬 **Conversational Robotics** - Voice, vision, and gesture interaction
+- 🎯 **Real-World Projects** - Build complete autonomous systems
 
 ## 🎯 Textbook Structure
 

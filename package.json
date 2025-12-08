@@ -1,7 +1,40 @@
 {
   "name": "physical-ai-humanoid-robotics-textbook",
   "version": "1.0.0",
-  "description": "A comprehensive textbook for teaching Physical AI & Humanoid Robotics over 13 weeks",
+  "description": "Complete Physical AI & Humanoid Robotics textbook with 87 interactive lessons, AI chatbot, ROS 2, NVIDIA Isaac Sim, and hands-on projects",
+  "keywords": [
+    "physical-ai",
+    "humanoid-robotics",
+    "ros2",
+    "nvidia-isaac-sim",
+    "robotics-education",
+    "ai-textbook",
+    "docusaurus",
+    "interactive-learning",
+    "robotics-tutorial",
+    "python-robotics",
+    "gazebo-simulation",
+    "robot-programming",
+    "autonomous-robots",
+    "machine-learning",
+    "rag-chatbot",
+    "educational-resources",
+    "stem-education",
+    "open-source-education"
+  ],
+  "author": {
+    "name": "Muhammad Zohaib Khan",
+    "url": "https://github.com/ZohaibCodez"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ZohaibCodez/physical-ai-humanoid-robotics-textbook/issues"
+  },
+  "homepage": "https://zohaibcodez.github.io/physical-ai-humanoid-robotics-textbook/",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",

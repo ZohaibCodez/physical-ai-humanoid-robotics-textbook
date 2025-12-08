@@ -96,13 +96,29 @@ app.include_router(auth.router, tags=["auth"])
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Log and format validation errors for debugging."""
     error_details = exc.errors()
+    
+    # Get request body for debugging
+    body = None
+    if request.method in ["POST", "PUT", "PATCH"]:
+        try:
+            body_bytes = await request.body()
+            body = body_bytes.decode('utf-8')
+        except Exception:
+            body = "Could not decode body"
+    
     logger.error(
         f"Validation error on {request.method} {request.url.path}",
         extra={
             "errors": error_details,
-            "body": await request.body() if request.method in ["POST", "PUT", "PATCH"] else None
+            "request_body": body
         }
     )
+    
+    # Also print to console for immediate debugging
+    print(f"\n❌ VALIDATION ERROR on {request.method} {request.url.path}")
+    print(f"Request Body: {body}")
+    print(f"Validation Errors: {error_details}\n")
+    
     return JSONResponse(
         status_code=422,
         content={

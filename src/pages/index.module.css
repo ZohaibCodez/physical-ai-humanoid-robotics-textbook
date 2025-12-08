@@ -621,6 +621,7 @@
   border-radius: 12px;
   margin: 3rem 0;
   -webkit-overflow-scrolling: touch;
+  padding: 0;
 }
 
 .comparisonTable {
@@ -628,6 +629,8 @@
   border-collapse: collapse;
   background: var(--ifm-background-surface-color);
   min-width: 600px;
+  margin: 0;
+  display: table;
 }
 
 .comparisonTable thead tr {

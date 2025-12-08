@@ -27,10 +27,12 @@ export default function ModernSignup() {
   const history = useHistory();
   const location = useLocation();
 
-  // Get redirect URL from query params or use intro as default
+  // Get redirect URL from query params or use home as default
   const getRedirectUrl = () => {
     const params = new URLSearchParams(location.search);
-    return params.get('redirect') || '/docs/intro';
+    const redirect = params.get('redirect');
+    console.log('🔄 Redirect parameter:', redirect);
+    return redirect || '/';
   };
 
   const handleInputChange = (e) => {
@@ -60,15 +62,41 @@ export default function ModernSignup() {
     setIsLoading(true);
     setError('');
 
+    // Validate required fields
+    if (!formData.software_level) {
+      setError('Please select your software experience level');
+      setIsLoading(false);
+      return;
+    }
+    
+    if (!formData.hardware_access) {
+      setError('Please select your hardware access level');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const result = await signup({
+      const signupData = {
         email: formData.email,
         password: formData.password,
         name: formData.name,
         software_level: formData.software_level,
         hardware_access: formData.hardware_access,
-        preferred_language: formData.preferred_language
+        preferred_language: formData.preferred_language || 'en'
+      };
+      
+      // Debug: Log the data being sent
+      console.log('🔍 Signup data being sent:', signupData);
+      console.log('📊 Data types:', {
+        email: typeof signupData.email,
+        password: typeof signupData.password,
+        name: typeof signupData.name,
+        software_level: typeof signupData.software_level,
+        hardware_access: typeof signupData.hardware_access,
+        preferred_language: typeof signupData.preferred_language
       });
+      
+      const result = await signup(signupData);
       
       if (result.success) {
         history.push(getRedirectUrl());
@@ -267,60 +295,60 @@ export default function ModernSignup() {
               </div>
 
               <div className={styles.formGroup}>
-                <label>What hardware and OS do you use?</label>
+                <label>What robotics hardware do you have access to?</label>
                 <div className={styles.optionCards}>
-                  <label className={`${styles.optionCard} ${formData.hardware_access === 'windows' ? styles.optionCardSelected : ''}`}>
+                  <label className={`${styles.optionCard} ${formData.hardware_access === 'cloud_only' ? styles.optionCardSelected : ''}`}>
                     <input
                       type="radio"
                       name="hardware_access"
-                      value="windows"
-                      checked={formData.hardware_access === 'windows'}
+                      value="cloud_only"
+                      checked={formData.hardware_access === 'cloud_only'}
                       onChange={handleInputChange}
                       required
                     />
                     <div className={styles.optionContent}>
-                      <div className={styles.optionTitle}>Windows PC</div>
-                      <div className={styles.optionDesc}>Desktop or laptop</div>
+                      <div className={styles.optionTitle}>Cloud Only</div>
+                      <div className={styles.optionDesc}>Simulation and cloud-based environments</div>
                     </div>
-                    {formData.hardware_access === 'windows' && (
+                    {formData.hardware_access === 'cloud_only' && (
                       <svg className={styles.checkIcon} width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
                       </svg>
                     )}
                   </label>
 
-                  <label className={`${styles.optionCard} ${formData.hardware_access === 'mac' ? styles.optionCardSelected : ''}`}>
+                  <label className={`${styles.optionCard} ${formData.hardware_access === 'basic' ? styles.optionCardSelected : ''}`}>
                     <input
                       type="radio"
                       name="hardware_access"
-                      value="mac"
-                      checked={formData.hardware_access === 'mac'}
+                      value="basic"
+                      checked={formData.hardware_access === 'basic'}
                       onChange={handleInputChange}
                     />
                     <div className={styles.optionContent}>
-                      <div className={styles.optionTitle}>Mac</div>
-                      <div className={styles.optionDesc}>MacBook or iMac</div>
+                      <div className={styles.optionTitle}>Basic Hardware</div>
+                      <div className={styles.optionDesc}>Entry-level robots or dev kits</div>
                     </div>
-                    {formData.hardware_access === 'mac' && (
+                    {formData.hardware_access === 'basic' && (
                       <svg className={styles.checkIcon} width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
                       </svg>
                     )}
                   </label>
 
-                  <label className={`${styles.optionCard} ${formData.hardware_access === 'linux' ? styles.optionCardSelected : ''}`}>
+                  <label className={`${styles.optionCard} ${formData.hardware_access === 'full_lab' ? styles.optionCardSelected : ''}`}>
                     <input
                       type="radio"
                       name="hardware_access"
-                      value="linux"
-                      checked={formData.hardware_access === 'linux'}
+                      value="full_lab"
+                      checked={formData.hardware_access === 'full_lab'}
                       onChange={handleInputChange}
                     />
                     <div className={styles.optionContent}>
-                      <div className={styles.optionTitle}>Linux</div>
-                      <div className={styles.optionDesc}>Ubuntu, Fedora, etc.</div>
+                      <div className={styles.optionTitle}>Full Lab Access</div>
+                      <div className={styles.optionDesc}>Complete robotics lab or advanced hardware</div>
                     </div>
-                    {formData.hardware_access === 'linux' && (
+                    {formData.hardware_access === 'full_lab' && (
                       <svg className={styles.checkIcon} width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
                       </svg>
